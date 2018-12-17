@@ -15,7 +15,8 @@ def website_context(request):
     try:
         current_site = Site.objects.get_current(request)
     except Site.DoesNotExist:
-        current_site = Site.objects.get(pk=settings.SITE_ID)
+        if settings.SITE_ID:
+            current_site = Site.objects.get(pk=settings.SITE_ID)
 
     site_url = current_site.domain
 

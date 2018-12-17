@@ -1,3 +1,5 @@
+import datetime
+import json
 import pprint
 import re
 
@@ -5,7 +7,7 @@ import requests
 import xmltodict
 from dateutil.parser import parse
 
-from firefox.models import NewsFeed
+from firefox.models import NewsFeed, NewsItem
 
 
 def snake_to_camel(value, **kwargs):
@@ -81,37 +83,68 @@ def convert_keys_list(input_list):
     return retn_list
 
 
-def get_feed(url):
+def to_dict(input_ordered_dict):
+    return json.loads(json.dumps(input_ordered_dict))
+
+
+def get_feed(feed):
+    url = feed.url
     retn = dict()
 
     response = requests.get(url)
 
+    channel = None
+    feed_items = None
+
     if response.status_code == 200:
         feed_dict = xmltodict.parse(response.text)
 
-        pprint.pprint(feed_dict)
-
         if feed_dict:
             rss_dict = feed_dict.get('rss')
+            rdf_dict = feed_dict.get('rdf:RDF')
 
-            if rss_dict:
+            if rdf_dict:
+                channel = rdf_dict.get('channel')
+                feed_items = rdf_dict.get('item')
+
+            elif rss_dict:
                 channel = rss_dict.get('channel')
+                feed_items = rss_dict.get('item', rss_dict.get('items'))
 
-                if channel:
-                    retn['title'] = channel.get('title')
-                    retn['link'] = channel.get('link')
-                    retn['description'] = channel.get('description')
+            if channel:
+                retn['title'] = channel.get('title')
+                retn['link'] = channel.get('link')
+                retn['description'] = channel.get('description')
 
-                    items = []
-                    for item in channel.get('item'):
-                        append_item = convert_keys(dict(item))
-                        append_item['date'] = parse(append_item.get('pub_date'))
-                        items.append(append_item)
+            if feed_items:
+                items = []
+                for item in feed_items:
+                    append_item = convert_keys(dict(item))
 
-                    retn['items'] = items
+                    item_date = datetime.datetime.now()
+                    if 'pub_date' in append_item:
+                        item_date = parse(append_item.get('pub_date'))
 
-        else:
-            print(feed_dict)
+                    elif 'dc:date' in append_item:
+                        item_date = parse(append_item.get('dc:date'))
+
+                    append_dict = dict(
+                        feed_id=feed.pk,
+                        title=append_item.get('title'),
+                        abstract=append_item.get('description'),
+                        link=append_item.get('link'),
+                        date=item_date
+                    )
+
+                    try:
+                        news_item = NewsItem.objects.get(**append_dict)
+
+                    except NewsItem.DoesNotExist:
+                        NewsItem.objects.create(**append_dict)
+
+                    items.append(append_dict)
+
+                retn['items'] = items
 
     return retn
 
@@ -122,7 +155,7 @@ def get_feeds():
     feeds = NewsFeed.objects.filter(active=True)
 
     for feed in feeds:
-        feed_items = get_feed(feed.url)
+        feed_items = get_feed(feed)
 
         items += feed_items
 

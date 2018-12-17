@@ -23,8 +23,9 @@ class NewsImage(Model):
 
 
 class NewsItem(Model):
+    feed = ForeignKey(NewsFeed, blank=True, null=True, on_delete=DO_NOTHING)
     title = CharField(max_length=255)
-    poster = ForeignKey(NewsImage, blank=True, on_delete=DO_NOTHING)
+    poster = ForeignKey(NewsImage, blank=True, null=True, on_delete=DO_NOTHING)
     abstract = TextField(blank=True, null=True)
     link = URLField(blank=True, null=True)
     comments = URLField(blank=True, null=True)
