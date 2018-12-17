@@ -1,0 +1,28 @@
+{% load static bootstrap4 %}
+{% if navmenu %}
+    {% for menu_item in navmenu %}
+        {% if not menu_item.submenu %}
+            <div class="nav-item">
+                <a class="nav-link" href="{{ menu_item.link }}" target="{{ menu_item.target }}">
+                    {{ menu_item.title }}
+                </a>
+            </div>
+        {% else %}
+            <div class="nav-item">
+                <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    {{ menu_item.title }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for submenu_item in menu_item.submenu %}
+                        <div class="nav-item">
+                            <a class="nav-link" href="{{ submenu_item.link }}" target="{{ submenu_item.target }}">
+                                {{ submenu_item.title }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
