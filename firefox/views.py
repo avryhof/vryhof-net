@@ -9,7 +9,6 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 
 from firefox.models import NewsItem
-from firefox.utilities import get_feeds
 
 
 class FirefoxHomeView(TemplateView):
@@ -34,8 +33,6 @@ class FirefoxHomeView(TemplateView):
         self.request = request
         context = self.get_context_data()
 
-        get_feeds()
-
         yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
         context['news'] = NewsItem.objects.filter(date__gte=yesterday)
 
@@ -43,5 +40,4 @@ class FirefoxHomeView(TemplateView):
 
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
-
         return super(FirefoxHomeView, self).dispatch(*args, **kwargs)
