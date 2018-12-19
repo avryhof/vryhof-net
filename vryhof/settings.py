@@ -87,24 +87,24 @@ WSGI_APPLICATION = 'vryhof.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': os.environ['VRYHOF_DB_ENGINE'],
-#         'NAME': os.environ['VRYHOF_DB_NAME'],
-#         'USER': os.environ['VRYHOF_DB_USER'],
-#         'PASSWORD': os.environ['VRYHOF_DB_PASSWORD'],
-#         'HOST': os.environ['VRYHOF_DB_HOST'],
-#         'PORT': os.environ['VRYHOF_DB_PORT'],
-#         'CONN_MAX_AGE': 600,
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': os.environ['VRYHOF_DB_ENGINE'],
+        'NAME': os.environ['VRYHOF_DB_NAME'],
+        'USER': os.environ['VRYHOF_DB_USER'],
+        'PASSWORD': os.environ['VRYHOF_DB_PASSWORD'],
+        'HOST': os.environ['VRYHOF_DB_HOST'],
+        'PORT': os.environ['VRYHOF_DB_PORT'],
+        'CONN_MAX_AGE': 600,
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
