@@ -1,15 +1,12 @@
 import datetime
 import hashlib
 import json
-import pprint
 import re
 
 import requests
 import xmltodict
-from dateutil.parser import parse
-
 from bs4 import BeautifulSoup
-from django.utils.html import strip_tags
+from dateutil.parser import parse
 
 from firefox.models import NewsFeed, NewsItem, NewsImage
 
