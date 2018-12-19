@@ -1,4 +1,5 @@
 import datetime
+import hashlib
 import json
 import pprint
 import re
@@ -7,7 +8,16 @@ import requests
 import xmltodict
 from dateutil.parser import parse
 
-from firefox.models import NewsFeed, NewsItem
+from bs4 import BeautifulSoup
+from django.utils.html import strip_tags
+
+from firefox.models import NewsFeed, NewsItem, NewsImage
+
+
+def get_bytes(value):
+    retn = value.encode('utf8')
+
+    return retn
 
 
 def snake_to_camel(value, **kwargs):
@@ -87,6 +97,39 @@ def to_dict(input_ordered_dict):
     return json.loads(json.dumps(input_ordered_dict))
 
 
+def get_poster_image(html):
+    newsimage = None
+    if html:
+        soup = BeautifulSoup(html, 'html.parser')
+
+        posters = []
+        images = soup.find_all('img')
+        for image in images:
+            src = image['src']
+            if 'feedburner' not in src:
+                posters.append(src)
+
+        if len(posters) > 0:
+            posterfile = posters[0]
+            poster_guid = hashlib.md5(get_bytes(posterfile)).hexdigest()
+            try:
+                newsimage = NewsImage.objects.get(
+                    url=posterfile,
+                    guid=poster_guid
+                )
+            except NewsImage.DoesNotExist:
+                newsimage = NewsImage.objects.create(
+                    url=posterfile,
+                    guid=poster_guid
+                )
+
+    return newsimage
+
+
+def get_first_paragraph(url):
+    return ''
+
+
 def get_feed(feed):
     url = feed.url
     retn = dict()
@@ -109,17 +152,37 @@ def get_feed(feed):
 
             elif rss_dict:
                 channel = rss_dict.get('channel')
-                feed_items = rss_dict.get('item', rss_dict.get('items'))
+                feed_items = channel.get('item', rss_dict.get('items'))
 
             if channel:
-                retn['title'] = channel.get('title')
-                retn['link'] = channel.get('link')
-                retn['description'] = channel.get('description')
+                feed_changes = False
+
+                if not feed.title:
+                    feed.title = channel.get('title')
+                    feed_changes = True
+
+                if not feed.link:
+                    feed.link = channel.get('link')
+                    feed_changes = True
+
+                if not feed.description:
+                    feed.description = channel.get('description')
+                    feed_changes = True
+
+                if feed_changes:
+                    feed.save()
 
             if feed_items:
-                items = []
                 for item in feed_items:
                     append_item = convert_keys(dict(item))
+
+                    content = None
+                    poster = None
+                    for key, val in item.items():
+                        if 'content' in key:
+                            poster = get_poster_image(content)
+                            content = val
+                            break
 
                     item_date = datetime.datetime.now()
                     if 'pub_date' in append_item:
@@ -132,31 +195,21 @@ def get_feed(feed):
                         feed_id=feed.pk,
                         title=append_item.get('title'),
                         abstract=append_item.get('description'),
+                        content=content,
+                        poster=poster,
                         link=append_item.get('link'),
                         date=item_date
                     )
 
                     try:
-                        news_item = NewsItem.objects.get(**append_dict)
+                        NewsItem.objects.get(**append_dict)
 
                     except NewsItem.DoesNotExist:
                         NewsItem.objects.create(**append_dict)
 
-                    items.append(append_dict)
-
-                retn['items'] = items
-
-    return retn
-
 
 def get_feeds():
-    items = []
-
     feeds = NewsFeed.objects.filter(active=True)
 
     for feed in feeds:
-        feed_items = get_feed(feed)
-
-        items += feed_items
-
-    return items
+        get_feed(feed)

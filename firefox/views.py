@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import datetime
+
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 
+from firefox.models import NewsItem
 from firefox.utilities import get_feeds
 
 
 class FirefoxHomeView(TemplateView):
-    extra_css = []
+    extra_css = ['css/ff-style.css']
     extra_javascript = []
 
     template_name = 'firefox-start.html'
@@ -31,7 +34,10 @@ class FirefoxHomeView(TemplateView):
         self.request = request
         context = self.get_context_data()
 
-        context['news'] = get_feeds()
+        get_feeds()
+
+        yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+        context['news'] = NewsItem.objects.filter(date__gte=yesterday)
 
         return render(request, self.template_name, context)
 

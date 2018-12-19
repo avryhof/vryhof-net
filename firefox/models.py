@@ -5,6 +5,8 @@ class NewsFeed(Model):
     active = BooleanField(default=True)
     title = CharField(max_length=255, blank=True, null=True)
     url = URLField(blank=True, null=True)
+    link = URLField(blank=True, null=True)
+    description = TextField(blank=True, null=True)
 
     def __str__(self):
         retn = 'NewsFeed %i' % self.pk
@@ -27,7 +29,11 @@ class NewsItem(Model):
     title = CharField(max_length=255)
     poster = ForeignKey(NewsImage, blank=True, null=True, on_delete=DO_NOTHING)
     abstract = TextField(blank=True, null=True)
+    content = TextField(blank=True, null=True)
     link = URLField(blank=True, null=True)
     comments = URLField(blank=True, null=True)
     guid = TextField(blank=True, null=True)
     date = DateTimeField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['date']

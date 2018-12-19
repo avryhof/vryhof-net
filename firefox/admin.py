@@ -20,5 +20,6 @@ class NewsItemAdmin(admin.ModelAdmin):
     list_display = (
         'title',
         'date',
+        'feed',
     )
     list_filter = ('date',)

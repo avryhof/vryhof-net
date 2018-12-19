@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css?family=Pragati+Narrow');
+
+$white: #ffffff;
+$gray: #cccccc;
+$silver: #dcdcdc;
+$smoke: #f1f1f1;
+
+$gBlue: #4285F4;
+$gRed: #EA4335;
+$gGreen: #34A853;
+$gYellow: #FBBC05;
+
+$narrowfont: 'Pragati Narrow', 'Arial Narrow', 'Helvetica Condensed', Arial, Helvetica, sans-serif;
+
+* {
+  background: inherit;
+}
+
+.post {
+  width:100%;
+  display:inline-block;
+  margin:10px;
+  box-sizing:border-box;
+  border-radius: 5px;
+  border: 1px solid $gray;
+  border-bottom: 5px solid $silver;
+  background: $smoke !important;
+  overflow: auto;
+  .post-content, .post-action, .post-reveal {
+    padding:5px 10px 5px 10px;
+  }
+  .post-action {
+    border-top: 1px solid $silver;
+    a {
+      text-transform: uppercase;
+    }
+  }
+  .post-title {
+    font-size: 18px;
+    font-family: 'Roboto Condensed', Roboto, sans-serif;
+    font-weight:700;
+  }
+  .post-img, .post-reveal, .post-image {
+    img {
+      width:100%;
+    }
+  }
+  .activator, .post-reveal {
+    .fa-ellipsis-v, .fa-times {
+      cursor:pointer;
+      display:inline-block;
+      padding:5px;
+    }
+  }
+}
+
+.post-weather {
+  background: $white !important;
+  .weather-app {
+    display: block !important;
+    width: 100%;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 12px;
+  }
+}
