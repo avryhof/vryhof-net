@@ -36,4 +36,4 @@ class NewsItem(Model):
     date = DateTimeField(blank=True, null=True)
 
     class Meta:
-        ordering = ['date']
+        ordering = ['-date']
