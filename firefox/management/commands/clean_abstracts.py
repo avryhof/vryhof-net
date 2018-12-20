@@ -1,3 +1,4 @@
+import re
 from django.core.management import BaseCommand
 
 from firefox.models import NewsItem
