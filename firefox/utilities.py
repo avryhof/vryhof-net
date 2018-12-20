@@ -173,6 +173,9 @@ def get_feed(feed):
                 for item in feed_items:
                     append_item = convert_keys(dict(item))
 
+                    abstract = append_item.get('description')
+                    abstract = re.sub('\<iframe.*?iframe\>', '', abstract)
+
                     content = None
                     poster = None
                     for key, val in item.items():
@@ -191,7 +194,7 @@ def get_feed(feed):
                     append_dict = dict(
                         feed_id=feed.pk,
                         title=append_item.get('title'),
-                        abstract=append_item.get('description'),
+                        abstract=abstract,
                         content=content,
                         poster=poster,
                         link=append_item.get('link'),
