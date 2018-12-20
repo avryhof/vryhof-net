@@ -1,10 +1,6 @@
-import datetime
-
-from dateutil.relativedelta import relativedelta
 from django.core.management import BaseCommand
 
 from firefox.models import NewsItem
-from firefox.utilities import get_feeds
 
 
 class Command(BaseCommand):
@@ -17,9 +13,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.verbosity = int(options['verbosity'])
 
-        get_feeds()
+        news_items = NewsItem.objects.filter(abstract__icontains='iframe')
 
-        two_weeks_ago = datetime.datetime.now() - relativedelta(weeks=2)
-
-        NewsItem.objects.filter(date_lt=two_weeks_ago).delete()
+        for news_item in news_items:
+            abstract = news_item.abstract
+            news_item.abstract = re.sub('\<iframe.*?iframe\>', '', abstract)
+            news_item.save()
 
