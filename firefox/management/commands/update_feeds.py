@@ -21,5 +21,5 @@ class Command(BaseCommand):
 
         two_weeks_ago = datetime.datetime.now() - relativedelta(weeks=2)
 
-        NewsItem.objects.filter(date_lt=two_weeks_ago).delete()
+        NewsItem.objects.filter(date__lt=two_weeks_ago).delete()
 
