@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Pragati+Narrow");
 html {
   color: #333333;
   background: #FFFFFF;
@@ -6,6 +7,17 @@ html {
 body {
   min-height: 75rem;
   padding-top: 4.5rem;
+}
+
+.box {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  border-bottom: 5px solid #dcdcdc;
+  background: #f1f1f1 !important;
 }
 
 /*# sourceMappingURL=main.css.map */

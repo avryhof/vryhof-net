@@ -30,7 +30,6 @@ SITE_PROTO = 'http'
 ALLOWED_HOSTS = []
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,6 +45,7 @@ INSTALLED_APPS = [
     'navbar',
     'bootstrap4',
     'firefox',
+    'weather',
     'utilities',
 ]
 
@@ -67,7 +67,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'firefox', 'templates')
+            os.path.join(BASE_DIR, 'firefox', 'templates'),
+            os.path.join(BASE_DIR, 'weather', 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {

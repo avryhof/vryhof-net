@@ -23,6 +23,7 @@ from django.views.static import serve
 urlpatterns = [
     url(r'^vryhof-admin/', admin.site.urls),
     url(r'', include('firefox.urls')),
+    url(r'^weather/', include('weather.urls')),
 ]
 
 if settings.DEBUG:
