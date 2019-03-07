@@ -32,9 +32,18 @@ class WeatherView(TemplateView):
         self.request = request
         context = self.get_context_data()
 
+        weatherdata = {
+            'tempf': '--'
+        }
+
         get_weather()
 
-        context['weather'] = WeatherData.objects.latest()
+        try:
+            weatherdata = WeatherData.objects.get().latest()
+        except WeatherData.DoesNotExist:
+            pass
+
+        context['weather'] = weatherdata
 
         return render(request, self.template_name, context)
 
