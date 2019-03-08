@@ -1,17 +1,20 @@
-import pprint
-
+import pytz
 from ambient_api.ambientapi import AmbientAPI
+from ambient_aprs.ambient_aprs import AmbientAPRS
 from dateutil.parser import parse
-from django.utils import timezone
+from django.conf import settings
 
 from firefox.utilities import convert_keys
 from weather.models import WeatherStation, WeatherData
 
 
 def get_weather():
-    WeatherData.objects.all().delete()
     weather = AmbientAPI()
     devices = weather.get_devices()
+
+    utc_timezone = pytz.timezone('UTC')
+    local_timezone = pytz.timezone(settings.TIME_ZONE)
+
     for device in devices:
         try:
             station = WeatherStation.objects.get(mac_address=device.mac_address)
@@ -24,12 +27,11 @@ def get_weather():
             )
 
         if station.enabled:
-
             current_conditions = convert_keys(device.last_data)
             parsed_date = parse(current_conditions['date'])
-            print(parsed_date.tzinfo())
-            print(parsed_date)
-            current_conditions['date'] = parsed_date
+
+            current_conditions['date'] = parsed_date.astimezone(utc_timezone)
+            current_conditions['local_date'] = parsed_date.astimezone(local_timezone)
             current_conditions['station'] = station
 
             try:
@@ -43,7 +45,11 @@ def get_weather():
         for past_data in device.get_data():
             past_data = convert_keys(past_data)
             past_data['station'] = station
-            past_data['date'] = timezone.localtime(parse(past_data['date']))
+
+            past_date = parse(past_data['date'])
+
+            past_data['date'] = past_date.astimezone(utc_timezone)
+            past_data['local_date'] = past_date.astimezone(local_timezone)
             try:
                 past_entry = WeatherData.objects.get(
                     station=station,
@@ -51,3 +57,13 @@ def get_weather():
                 )
             except WeatherData.DoesNotExist:
                 past_entry = WeatherData.objects.create(**past_data)
+
+        aprs = AmbientAPRS(
+            station_id=station.name,
+            latitude=station.latitude,  # 43.131258,
+            longitude=station.longitude  # -76.155028
+        )
+
+        aprs.get_weather_data()
+        aprs.build_packet()
+        aprs.send_packet()

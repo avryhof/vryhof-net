@@ -1,5 +1,5 @@
 from django.db.models import TextField, CharField, Model, FloatField, DateTimeField, BigIntegerField, IntegerField, \
-    BooleanField, ForeignKey, DO_NOTHING
+    BooleanField, ForeignKey, DO_NOTHING, DecimalField
 
 
 class WeatherStation(Model):
@@ -7,6 +7,8 @@ class WeatherStation(Model):
     name = TextField(null=True)
     location = CharField(max_length=255, null=True)
     mac_address = CharField(max_length=17, null=True)
+    latitude = DecimalField(max_digits=9, decimal_places=6, null=True)
+    longitude = DecimalField(max_digits=9, decimal_places=6, null=True)
 
     def __str__(self):
         return '%s@%s' % (self.name, self.mac_address)
@@ -17,6 +19,7 @@ class WeatherData(Model):
     baromabsin = FloatField(null=True)
     baromrelin = FloatField(null=True)
     dailyrainin = FloatField(null=True)
+    local_date = DateTimeField(null=True)
     date = DateTimeField(null=True)
     dateutc = BigIntegerField(null=True)
     dew_point = FloatField(null=True)

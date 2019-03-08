@@ -8,7 +8,7 @@ from firefox.utilities import get_feeds
 
 
 class Command(BaseCommand):
-    help = 'Update the controlled substance flag for all drugs based on the latest controlled substance list.'
+    help = 'Pull data from news feeds, and clean up news older than two weeks.'
     verbosity = 0
     current_file = None
     log_file_name = None

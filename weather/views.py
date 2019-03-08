@@ -39,7 +39,7 @@ class WeatherView(TemplateView):
         get_weather()
 
         try:
-            weatherdata = WeatherData.objects.get().latest()
+            weatherdata = WeatherData.objects.latest()
         except WeatherData.DoesNotExist:
             pass
 
