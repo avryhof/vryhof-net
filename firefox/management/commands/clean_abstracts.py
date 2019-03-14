@@ -21,5 +21,6 @@ class Command(BaseCommand):
             news_item.abstract = re.sub('\<iframe.*?iframe\>', '', abstract)
             news_item.abstract = news_item.abstract.replace('http:', 'https:')
             news_item.guid = news_item.guid.replace('http:', 'https:')
+            news_item.link = news_item.link.replace('http:', 'https:')
             news_item.save()
 

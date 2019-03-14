@@ -112,12 +112,12 @@ def get_poster_image(html):
             try:
                 newsimage = NewsImage.objects.get(
                     url=posterfile.replace('http:', 'https:'),
-                    guid=poster_guid
+                    guid=poster_guid.replace('http:', 'https:')
                 )
             except NewsImage.DoesNotExist:
                 newsimage = NewsImage.objects.create(
                     url=posterfile.replace('http:', 'https:'),
-                    guid=poster_guid
+                    guid=poster_guid.replace('http:', 'https:')
                 )
 
     return newsimage
@@ -199,10 +199,10 @@ def get_feed(feed):
                     append_dict = dict(
                         feed_id=feed.pk,
                         title=append_item.get('title'),
-                        abstract=abstract,
-                        content=content,
-                        poster=poster,
-                        link=append_item.get('link'),
+                        abstract=abstract.replace('http:', 'https:'),
+                        content=content.replace('http:', 'https:'),
+                        poster=poster.replace('http:', 'https:'),
+                        link=append_item.get('link').replace('http:', 'https:'),
                         date=item_date
                     )
 
