@@ -199,9 +199,9 @@ def get_feed(feed):
                     append_dict = dict(
                         feed_id=feed.pk,
                         title=append_item.get('title'),
-                        abstract=abstract.replace('http:', 'https:'),
-                        content=content.replace('http:', 'https:'),
-                        poster=poster.replace('http:', 'https:'),
+                        abstract=abstract,
+                        content=content,
+                        poster=poster,
                         link=append_item.get('link').replace('http:', 'https:'),
                         date=item_date
                     )
