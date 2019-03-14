@@ -14,7 +14,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.verbosity = int(options['verbosity'])
 
-        news_items = NewsItem.objects.filter(abstract__icontains='iframe')
+        news_items = NewsItem.objects.all()
 
         for news_item in news_items:
             abstract = news_item.abstract
