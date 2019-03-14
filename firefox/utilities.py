@@ -111,12 +111,12 @@ def get_poster_image(html):
             poster_guid = hashlib.md5(get_bytes(posterfile)).hexdigest()
             try:
                 newsimage = NewsImage.objects.get(
-                    url=posterfile,
+                    url=posterfile.replace('http:', 'https:'),
                     guid=poster_guid
                 )
             except NewsImage.DoesNotExist:
                 newsimage = NewsImage.objects.create(
-                    url=posterfile,
+                    url=posterfile.replace('http:', 'https:'),
                     guid=poster_guid
                 )
 
@@ -174,7 +174,9 @@ def get_feed(feed):
                     append_item = convert_keys(dict(item))
 
                     abstract = append_item.get('description')
-                    abstract = re.sub('\<iframe.*?iframe\>', '', abstract)
+                    if abstract:
+                        abstract = abstract.replace('http:', 'https:')
+                        abstract = re.sub('\<iframe.*?iframe\>', '', abstract)
 
                     content = None
                     poster = None
@@ -183,6 +185,9 @@ def get_feed(feed):
                             poster = get_poster_image(content)
                             content = val
                             break
+
+                    if content:
+                        content = content.replace('http:', 'https:')
 
                     item_date = datetime.datetime.now()
                     if 'pub_date' in append_item:
