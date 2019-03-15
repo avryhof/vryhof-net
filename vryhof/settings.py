@@ -168,6 +168,14 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
+        'weather': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(os.path.dirname(BASE_DIR), 'logs', 'weather.log'),
+            'maxBytes': 1024 * 1024 * 100,  # 100 mb
+            'backupCount': 3
+        },
         'file': {
             'level': LOGGER_LEVEL,
             'class': 'logging.FileHandler',
@@ -175,6 +183,11 @@ LOGGING = {
         },
     },
     'loggers': {
+        '': {
+            'level': 'INFO',
+            'handlers': ['weather'],
+            'propagate': True,
+        },
         'django': {
             'handlers': ['file'],
             'level': LOGGER_LEVEL,
