@@ -76,6 +76,7 @@ def get_weather():
         if not is_aprs:
             log_message('APRS Packet failed to send.')
             log_message('%s %s %s' % (aprs.station_id, aprs.address, aprs.position))
+            log_message(aprs.packet_data)
             log_message(packet)
             log_message(weather_data)
         else:
