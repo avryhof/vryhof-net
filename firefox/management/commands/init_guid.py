@@ -1,7 +1,6 @@
 from django.core.management import BaseCommand
 
 from firefox.models import NewsItem
-from firefox.utilities import multi_clean
 
 
 class Command(BaseCommand):

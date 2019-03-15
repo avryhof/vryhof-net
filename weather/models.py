@@ -5,6 +5,8 @@ from django.db.models import TextField, CharField, Model, FloatField, DateTimeFi
 class WeatherStation(Model):
     enabled = BooleanField(default=True)
     name = TextField(null=True)
+    cwop_name = CharField(max_length=64, null=True)
+    weather_underground_id = CharField(max_length=100, null=True)
     location = CharField(max_length=255, null=True)
     mac_address = CharField(max_length=17, null=True)
     latitude = DecimalField(max_digits=9, decimal_places=6, null=True)

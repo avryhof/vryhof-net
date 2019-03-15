@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
 
     'django_extensions',
+    'leaflet',
 
     'navbar',
     'bootstrap4',
@@ -207,4 +208,15 @@ LOGGING = {
             'propagate': True,
         },
     },
+}
+
+
+LEAFLET_CONFIG = {
+    'DEFAULT_ZOOM': 18,
+    # 'MIN_ZOOM': 3,
+    # 'MAX_ZOOM': 18,
+    # 'TILES': [
+    #     # ('Satellite', 'http://server/a/...', {'attribution': '&copy; Big eye', 'maxZoom': 16}),
+    #     ('Streets', 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {'attribution': '&copy; OpenStreetMap'})
+    # ]
 }

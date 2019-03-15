@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 
-from weather.models import WeatherData
+from weather.models import WeatherData, WeatherStation
 from weather.utilities import get_weather
 
 
@@ -32,18 +32,26 @@ class WeatherView(TemplateView):
         self.request = request
         context = self.get_context_data()
 
-        weatherdata = {
-            'tempf': '--'
-        }
-
         get_weather()
 
-        try:
-            weatherdata = WeatherData.objects.latest()
-        except WeatherData.DoesNotExist:
-            pass
+        weather_stations = []
 
-        context['weather'] = weatherdata
+        for station in WeatherStation.objects.all():
+            weatherdata = {
+                'tempf': '--'
+            }
+
+            try:
+                weatherdata = WeatherData.objects.filter(station=station).latest()
+            except WeatherData.DoesNotExist:
+                pass
+
+            weather_stations.append({
+                'station': station,
+                'data': weatherdata
+            })
+
+        context['weather_stations'] = weather_stations
 
         return render(request, self.template_name, context)
 
