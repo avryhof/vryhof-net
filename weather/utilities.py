@@ -69,12 +69,14 @@ def get_weather():
             longitude=station.longitude  # -76.155028
         )
 
-        aprs.get_weather_data()
+        weather_data = aprs.get_weather_data()
         packet = aprs.build_packet()
         is_aprs = aprs.send_packet()
 
         if not is_aprs:
             log_message('APRS Packet failed to send.')
+            log_message('%s %s %s' % (aprs.station_id, aprs.address, aprs.position))
             log_message(packet)
+            log_message(weather_data)
         else:
             log_message('APRS Packet sent successfully.')
