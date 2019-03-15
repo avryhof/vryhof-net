@@ -70,10 +70,11 @@ def get_weather():
         )
 
         aprs.get_weather_data()
-        aprs.build_packet()
+        packet = aprs.build_packet()
         is_aprs = aprs.send_packet()
 
         if not is_aprs:
             log_message('APRS Packet failed to send.')
+            log_message(packet)
         else:
             log_message('APRS Packet sent successfully.')
