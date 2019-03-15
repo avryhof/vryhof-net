@@ -22,3 +22,13 @@ class Command(BaseCommand):
             if not guid:
                 news_item.guid = multi_clean(news_item.link)
                 news_item.save()
+
+        for news_item in news_items:
+            dupes = NewsItem.objects.filter(guid=news_item.guid).order_by('-pk')
+
+            article = 1
+            for dupe in dupes:
+                if article > 1:
+                    dupe.delete()
+
+                article += 1
