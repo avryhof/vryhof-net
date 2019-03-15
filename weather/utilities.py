@@ -4,7 +4,7 @@ from ambient_aprs.ambient_aprs import AmbientAPRS
 from dateutil.parser import parse
 from django.conf import settings
 
-from firefox.utilities import convert_keys
+from firefox.utilities import convert_keys, log_message
 from weather.models import WeatherStation, WeatherData
 
 
@@ -25,6 +25,7 @@ def get_weather():
                 location=device.info.get('location'),
                 mac_address=device.mac_address
             )
+            log_message('Weather Station created: %s (%s)' % (station.mac_address, station.name))
 
         if station.enabled:
             current_conditions = convert_keys(device.last_data)
@@ -41,6 +42,8 @@ def get_weather():
                 )
             except WeatherData.DoesNotExist:
                 current_data = WeatherData.objects.create(**current_conditions)
+                log_message('Current weather data collected on %s from %s (%s)' % (
+                    current_data.date, current_data.station.mac_address, current_data.station.name))
 
         for past_data in device.get_data():
             past_data = convert_keys(past_data)
@@ -57,6 +60,8 @@ def get_weather():
                 )
             except WeatherData.DoesNotExist:
                 past_entry = WeatherData.objects.create(**past_data)
+                log_message('Past weather data collected for %s from %s (%s)' % (
+                    past_entry.date, past_entry.station.mac_address, past_entry.station.name))
 
         aprs = AmbientAPRS(
             station_id=station.name,
@@ -66,4 +71,9 @@ def get_weather():
 
         aprs.get_weather_data()
         aprs.build_packet()
-        aprs.send_packet()
+        is_aprs = aprs.send_packet()
+
+        if not is_aprs:
+            log_message('APRS Packet failed to send.')
+        else:
+            log_message('APRS Packet sent successfully.')

@@ -1,6 +1,7 @@
 import datetime
 import hashlib
 import json
+import logging
 import re
 
 import requests
@@ -9,6 +10,18 @@ from bs4 import BeautifulSoup
 from dateutil.parser import parse
 
 from firefox.models import NewsFeed, NewsItem, NewsImage
+
+logger = logging.getLogger(__name__)
+
+
+def log_date():
+    return datetime.datetime.now().isoformat()[0:19]
+
+
+def log_message(message):
+    logmessage = '%s: %s' % (log_date(), message)
+
+    logger.info(logmessage)
 
 
 def get_bytes(value):
@@ -90,6 +103,17 @@ def convert_keys_list(input_list):
     return retn_list
 
 
+def multi_clean(value):
+    if value:
+        if 'iframe' in value:
+            value = re.sub('\<iframe.*?iframe\>', '', value)
+
+        if 'http:' in value:
+            value = value.replace('http:', 'https:')
+
+    return value
+
+
 def to_dict(input_ordered_dict):
     return json.loads(json.dumps(input_ordered_dict))
 
@@ -111,13 +135,13 @@ def get_poster_image(html):
             poster_guid = hashlib.md5(get_bytes(posterfile)).hexdigest()
             try:
                 newsimage = NewsImage.objects.get(
-                    url=posterfile.replace('http:', 'https:'),
-                    guid=poster_guid.replace('http:', 'https:')
+                    url=multi_clean(posterfile),
+                    guid=multi_clean(poster_guid)
                 )
             except NewsImage.DoesNotExist:
                 newsimage = NewsImage.objects.create(
-                    url=posterfile.replace('http:', 'https:'),
-                    guid=poster_guid.replace('http:', 'https:')
+                    url=multi_clean(posterfile),
+                    guid=multi_clean(poster_guid)
                 )
 
     return newsimage
@@ -175,8 +199,7 @@ def get_feed(feed):
 
                     abstract = append_item.get('description')
                     if abstract:
-                        abstract = abstract.replace('http:', 'https:')
-                        abstract = re.sub('\<iframe.*?iframe\>', '', abstract)
+                        abstract = multi_clean(abstract)
 
                     content = None
                     poster = None
@@ -187,7 +210,7 @@ def get_feed(feed):
                             break
 
                     if content:
-                        content = content.replace('http:', 'https:')
+                        content = multi_clean(content)
 
                     item_date = datetime.datetime.now()
                     if 'pub_date' in append_item:
@@ -196,13 +219,23 @@ def get_feed(feed):
                     elif 'dc:date' in append_item:
                         item_date = parse(append_item.get('dc:date'))
 
+                    link = multi_clean(append_item.get('link'))
+
+                    guid = append_item.get('guid')
+                    if not guid:
+                        guid = link
+
+                    else:
+                        guid = multi_clean(guid)
+
                     append_dict = dict(
                         feed_id=feed.pk,
                         title=append_item.get('title'),
                         abstract=abstract,
                         content=content,
                         poster=poster,
-                        link=append_item.get('link').replace('http:', 'https:'),
+                        link=link,
+                        guid=guid,
                         date=item_date
                     )
 

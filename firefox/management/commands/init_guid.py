@@ -17,12 +17,8 @@ class Command(BaseCommand):
         news_items = NewsItem.objects.all()
 
         for news_item in news_items:
-            news_item.abstract = multi_clean(news_item.abstract)
+            guid = news_item.guid
 
-            if news_item.content:
-                news_item.content = multi_clean(news_item.content)
-            if news_item.guid:
-                news_item.guid = multi_clean(news_item.guid)
-
-            news_item.link = multi_clean(news_item.link)
-            news_item.save()
+            if not guid:
+                news_item.guid = multi_clean(news_item.link)
+                news_item.save()
