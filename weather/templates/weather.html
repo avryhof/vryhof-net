@@ -78,7 +78,9 @@
                 <div class="col-xs-12 col-sm-4">
                     <div id="{{ weather_station.station.name }}_map"></div>
                     <script>
-                        var {{ weather_station.station.name }}_coords = [{{ weather_station.station.latitude }}, {{ weather_station.station.longitude }}]
+                        var {{ weather_station.station.name }}_coords = [
+                            {{ weather_station.station.latitude }},
+                            {{ weather_station.station.longitude }}];
                         var {{ weather_station.station.name }}_map = L.map('{{ weather_station.station.name }}_map').setView({{ weather_station.station.name }}_coords, 16);
 
                         L.tileLayer(osm_tiles, {
