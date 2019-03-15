@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
 
     'django_extensions',
+    'frontend_assets',
 
     'navbar',
     'bootstrap4',

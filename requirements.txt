@@ -6,7 +6,7 @@ chardet==3.0.4
 Django>=1.11.20
 django-bootstrap4==0.0.7
 django-extensions==2.1.4
-django-leaflet>=0.24.0
+frontend-assets==0.6.3
 future==0.17.1
 idna==2.8
 psycopg2-binary==2.7.6.1
