@@ -1,8 +1,16 @@
 {% extends 'base.html' %}
-{% load leaflet_tags %}
 {% block extra_css %}
-    {% leaflet_js %}
-    {% leaflet_css %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+            integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+            crossorigin=""></script>
+    <script>
+        osm_tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        osm_attr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ';
+    </script>
 {% endblock %}
 {% block content %}
     <div class="container">
@@ -68,12 +76,19 @@
                     </table>
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <script type="text/javascript">
-                        function map_init_basic(map, options) {
-                            L.marker([{{ weather_station.station.latitude }}, {{ weather_station.station.longitude }}]).addTo(map);
-                        }
+                    <div id="{{ weather_station.station.name }}_map"></div>
+                    <script>
+                        var {{ weather_station.station.name }}_coords = [{{ weather_station.station.latitude }}, {{ weather_station.station.longitude }}]
+                        var {{ weather_station.station.name }}_map = L.map('{{ weather_station.station.name }}_map').setView({{ weather_station.station.name }}_coords, 16);
+
+                        L.tileLayer(osm_tiles, {
+                            maxZoom: 18,
+                            attribution: osm_attr,
+                            id: 'mapbox.streets'
+                        }).addTo({{ weather_station.station.name }}_map);
+
+                        L.marker({{ weather_station.station.name }}_coords).addTo({{ weather_station.station.name }}_map);
                     </script>
-                    {% leaflet_map weather_station.station.name callback="window.map_init_basic" %}
                     <ul>
                         {% if weather_station.station.weather_underground_id %}
                             <li>

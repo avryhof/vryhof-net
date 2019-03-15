@@ -11,7 +11,7 @@ from weather.utilities import get_weather
 
 
 class WeatherView(TemplateView):
-    extra_css = []
+    extra_css = ['css/weather.css']
     extra_javascript = []
 
     template_name = 'weather.html'
