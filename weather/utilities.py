@@ -28,7 +28,8 @@ def get_weather():
             log_message('Weather Station created: %s (%s)' % (station.mac_address, station.name))
 
         if station.enabled:
-            current_conditions = convert_keys(device.last_data)
+            last_data = device.last_data
+            current_conditions = convert_keys(last_data)
             parsed_date = parse(current_conditions['date'])
 
             current_conditions['date'] = parsed_date.astimezone(utc_timezone)
@@ -69,7 +70,7 @@ def get_weather():
             longitude=station.longitude  # -76.155028
         )
 
-        weather_data = aprs.get_weather_data()
+        weather_data = aprs.get_weather_data(weather_data=last_data)
         packet = aprs.build_packet()
         is_aprs = aprs.send_packet()
 
