@@ -167,6 +167,19 @@ except KeyError:
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'detailed': {
+            'format': '%(asctime)s %(levelname)s [%(name)s: %(pathname)s %(funcName)s line:%(lineno)s] -- %(message)s',
+            'datefmt': '%m-%d-%Y %H:%M:%S'
+        },
+        'verbose': {
+            'format': '%(asctime)s %(levelname)s %(name)s -- %(message)s',
+            'datefmt': '%m-%d-%Y %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(asctime)s %(levelname)s %(message)s'
+        },
+    },
     'handlers': {
         'weather': {
             'level': 'INFO',
