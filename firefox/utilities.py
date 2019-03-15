@@ -221,7 +221,8 @@ def get_feed(feed):
 
                     link = multi_clean(append_item.get('link'))
 
-                    guid = append_item.get('guid')
+                    # guid = append_item.get('guid')
+                    guid = False
                     if not guid:
                         guid = link
 

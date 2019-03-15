@@ -17,11 +17,8 @@ class Command(BaseCommand):
         news_items = NewsItem.objects.all()
 
         for news_item in news_items:
-            guid = news_item.guid
-
-            if not guid:
-                news_item.guid = multi_clean(news_item.link)
-                news_item.save()
+            news_item.guid = news_item.link
+            news_item.save()
 
         for news_item in news_items:
             dupes = NewsItem.objects.filter(guid=news_item.guid).order_by('-pk')
