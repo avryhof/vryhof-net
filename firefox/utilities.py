@@ -240,7 +240,7 @@ def get_feed(feed):
                     )
 
                     try:
-                        NewsItem.objects.get(**append_dict)
+                        NewsItem.objects.get(feed_id=feed.pk, guid=guid)
 
                     except NewsItem.DoesNotExist:
                         NewsItem.objects.create(**append_dict)
