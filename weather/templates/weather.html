@@ -74,6 +74,7 @@
                 <div class="col-xs-12 col-sm-4">
                     {% leaflet_map weather_station.station.latitude weather_station.station.longitude 16 weather_station.station.name %}
                     {% leaflet_marker weather_station.station.name weather_station.station.latitude weather_station.station.longitude %}
+                    <p>Latitude: {{ weather_station.station.latitude }}<br>Longitude: {{ weather_station.station.longitude }}</p>
                     <ul>
                         {% if weather_station.station.weather_underground_id %}
                             <li>
