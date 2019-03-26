@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-
+import datetime
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -42,6 +42,8 @@ INSTALLED_APPS = [
 
     'django_extensions',
     'frontend_assets',
+
+    'swingtime',
 
     'navbar',
     'bootstrap4',
@@ -210,3 +212,9 @@ LOGGING = {
         },
     },
 }
+
+
+# SWINGTIME = {
+#     'TIMESLOT_START_TIME': datetime.time(14),
+#     'TIMESLOT_END_TIME_DURATION': datetime.timedelta(hours=6.5)
+# }
