@@ -2,6 +2,7 @@
 
 # This is a simple Hello World Alexa Skill, built using
 # the decorators approach in skill builder.
+import datetime
 import logging
 
 from ask_sdk_core.skill_builder import SkillBuilder
@@ -30,9 +31,14 @@ def launch_request_handler(handler_input):
 @sb.request_handler(can_handle_func=is_intent_name('GetWeatherIntent'))
 def get_weather_intent_handler(handler_input):
     station = WeatherStation.objects.get(name='KD2OTL')
-    weather = WeatherData.objects.filter(station=station).latest(['date'])
+    weather = WeatherData.objects.filter(station=station).order_by('-date')[0]
 
-    speech_text = '%s says it is %s degrees fahrenheit.' % (station.name, weather.tempinf)
+    speech_text = '%s says it is %s degrees fahrenheit as of %s on %s.' % (
+        station.name,
+        weather.tempinf,
+        datetime.datetime.now().strftime('%I:%M %p'),
+        datetime.datetime.now().strftime('%B %d, %Y')
+    )
 
     return handler_input.response_builder.speak(speech_text).set_card(
         SimpleCard(skill_name, speech_text)).set_should_end_session(False).response
