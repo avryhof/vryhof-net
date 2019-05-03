@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'firefox',
     'weather',
     'utilities',
+
+    'alexa',
 ]
 
 MIDDLEWARE = [
