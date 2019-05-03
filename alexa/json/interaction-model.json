@@ -13,6 +13,16 @@
                     ]
                 },
                 {
+                    "name": "GetWeatherIntent",
+                    "samples": [
+                        "weather",
+                        "tell me the weather",
+                        "what temperature is it",
+                        "what is the weather",
+                        "what's the weather"
+                    ]
+                },
+                {
                     "name": "AMAZON.YesIntent",
                     "samples": []
                 },

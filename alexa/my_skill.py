@@ -8,20 +8,34 @@ from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_model.ui import SimpleCard
 
+from weather.models import WeatherStation, WeatherData
+
 sb = SkillBuilder()
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+skill_name = 'Vryhof Family Planner'
+
 
 @sb.request_handler(can_handle_func=is_request_type("LaunchRequest"))
 def launch_request_handler(handler_input):
     """Handler for Skill Launch."""
-    speech_text = "Welcome to the Alexa Skills Kit, you can say hello!"
+    speech_text = "Welcome to the Vryhof family Planner"
 
     return handler_input.response_builder.speak(speech_text).set_card(
-        SimpleCard("Hello World", speech_text)).set_should_end_session(
-        False).response
+        SimpleCard(skill_name, speech_text)).set_should_end_session(False).response
+
+
+@sb.request_handler(can_handle_func=is_intent_name('GetWeatherIntent'))
+def get_weather_intent_handler(handler_input):
+    station = WeatherStation.objects.get(name='KD2OTL')
+    weather = WeatherData.objects.filter(station=station).latest(['date'])
+
+    speech_text = '%s says it is %s degrees fahrenheit.' % (station.name, weather.tempinf)
+
+    return handler_input.response_builder.speak(speech_text).set_card(
+        SimpleCard(skill_name, speech_text)).set_should_end_session(False).response
 
 
 @sb.request_handler(can_handle_func=is_intent_name("HelloWorldIntent"))
@@ -30,8 +44,7 @@ def hello_world_intent_handler(handler_input):
     speech_text = "Hello Python World from Decorators!"
 
     return handler_input.response_builder.speak(speech_text).set_card(
-        SimpleCard("Hello World", speech_text)).set_should_end_session(
-        True).response
+        SimpleCard(skill_name, speech_text)).set_should_end_session(False).response
 
 
 @sb.request_handler(can_handle_func=is_intent_name("AMAZON.HelpIntent"))
@@ -41,7 +54,7 @@ def help_intent_handler(handler_input):
 
     return handler_input.response_builder.speak(speech_text).ask(
         speech_text).set_card(
-            SimpleCard("Hello World", speech_text)).response
+        SimpleCard(skill_name, speech_text)).response
 
 
 @sb.request_handler(
@@ -53,7 +66,7 @@ def cancel_and_stop_intent_handler(handler_input):
     speech_text = "Goodbye!"
 
     return handler_input.response_builder.speak(speech_text).set_card(
-        SimpleCard("Hello World", speech_text)).response
+        SimpleCard(skill_name, speech_text)).response
 
 
 @sb.request_handler(can_handle_func=is_intent_name("AMAZON.FallbackIntent"))
