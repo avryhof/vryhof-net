@@ -44,23 +44,18 @@ def get_weather_intent_handler(handler_input):
         SimpleCard(skill_name, speech_text)).set_should_end_session(False).response
 
 
-@sb.request_handler(can_handle_func=is_intent_name("HelloWorldIntent"))
-def hello_world_intent_handler(handler_input):
-    """Handler for Hello World Intent."""
-    speech_text = "Hello Python World from Decorators!"
+@sb.request_handler(can_handle_func=is_intent_name('ReadBookIntent'))
+def get_weather_intent_handler(handler_input):
+    station = WeatherStation.objects.get(name='KD2OTL')
+    weather = WeatherData.objects.filter(station=station).order_by('-date')[0]
+
+    speech_text = "A cow says moo. A sheep says Baa. Three singing pigs say la la la. No, no you say. That isn't right!" \
+                  "Pigs say oink, all day and night. Rhinoceroses snort and snuff. Little dogs go ruff ruff ruff. Some" \
+                  "other dogs go bow wow wow. And cats and kittens say meow. Quack says the duck! A horse says neigh." \
+                  "It's quiet now. What do you say?"
 
     return handler_input.response_builder.speak(speech_text).set_card(
         SimpleCard(skill_name, speech_text)).set_should_end_session(False).response
-
-
-@sb.request_handler(can_handle_func=is_intent_name("AMAZON.HelpIntent"))
-def help_intent_handler(handler_input):
-    """Handler for Help Intent."""
-    speech_text = "You can say hello to me!"
-
-    return handler_input.response_builder.speak(speech_text).ask(
-        speech_text).set_card(
-        SimpleCard(skill_name, speech_text)).response
 
 
 @sb.request_handler(
@@ -81,12 +76,10 @@ def fallback_handler(handler_input):
     This handler will not be triggered except in that locale,
     so it is safe to deploy on any locale.
     """
-    speech = (
-        "The Hello World skill can't help you with that.  "
-        "You can say hello!!")
-    reprompt = "You can say hello!!"
-    handler_input.response_builder.speak(speech).ask(reprompt)
-    return handler_input.response_builder.response
+    speech_text = "I can't help with that."
+
+    return handler_input.response_builder.speak(speech_text).set_card(
+        SimpleCard(skill_name, speech_text)).set_should_end_session(False).response
 
 
 @sb.request_handler(can_handle_func=is_request_type("SessionEndedRequest"))
