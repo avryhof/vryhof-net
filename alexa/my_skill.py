@@ -49,9 +49,9 @@ def get_weather_intent_handler(handler_input):
     station = WeatherStation.objects.get(name='KD2OTL')
     weather = WeatherData.objects.filter(station=station).order_by('-date')[0]
 
-    speech_text = "A cow says moo. A sheep says Baa. Three singing pigs say la la la. No, no you say. That isn't right!" \
-                  "Pigs say oink, all day and night. Rhinoceroses snort and snuff. Little dogs go ruff ruff ruff. Some" \
-                  "other dogs go bow wow wow. And cats and kittens say meow. Quack says the duck! A horse says neigh." \
+    speech_text = "A cow says moo. A sheep says Baa. Three singing pigs say la la la. No no you say. That isn't right! " \
+                  "Pigs say oink, all day and night. Rhinoceroses snort and snuff. Little dogs go ruff ruff ruff. Some " \
+                  "other dogs go bow wow wow. And cats and kittens say meow. Quack says the duck! A horse says neigh. " \
                   "It's quiet now. What do you say?"
 
     return handler_input.response_builder.speak(speech_text).set_card(
