@@ -45,9 +45,7 @@ def get_weather_intent_handler(handler_input):
 
 
 @sb.request_handler(can_handle_func=is_intent_name('ReadBookIntent'))
-def get_weather_intent_handler(handler_input):
-    station = WeatherStation.objects.get(name='KD2OTL')
-    weather = WeatherData.objects.filter(station=station).order_by('-date')[0]
+def get_story_intent_handler(handler_input):
 
     speech_text = "A cow says moo. A sheep says Baa. Three singing pigs say la la la. No no you say. That isn't right! " \
                   "Pigs say oink, all day and night. Rhinoceroses snort and snuff. Little dogs go ruff ruff ruff. Some " \
