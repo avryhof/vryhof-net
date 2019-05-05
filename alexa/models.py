@@ -24,7 +24,15 @@ class LanguageModel(models.Model):
         rebuild_interaction_model(self)
 
 
-class BedtimeStories(models.Model):
+class BedtimeStory(models.Model):
     enabled = models.BooleanField(default=True)
     title = models.CharField(max_length=255, blank=True, null=True)
     story = models.TextField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Bedtime Story'
+        verbose_name_plural = 'Bedtime Stories'
+
+    def __str__(self):
+
+        return self.title

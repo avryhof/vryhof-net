@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import Intent, LanguageModel, BedtimeStories
+from .models import Intent, LanguageModel, BedtimeStory
 
 
 @admin.register(Intent)
@@ -18,7 +18,7 @@ class LanguageModelAdmin(admin.ModelAdmin):
     filter_horizontal = ('intents',)
 
 
-@admin.register(BedtimeStories)
+@admin.register(BedtimeStory)
 class BedtimeStoriesAdmin(admin.ModelAdmin):
     list_display = ('title', 'enabled',)
     list_filter = ('enabled',)

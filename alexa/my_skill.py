@@ -10,7 +10,7 @@ from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_model.ui import SimpleCard
 
-from alexa.models import BedtimeStories
+from alexa.models import BedtimeStory
 from weather.models import WeatherStation, WeatherData
 
 sb = SkillBuilder()
@@ -48,7 +48,7 @@ def get_weather_intent_handler(handler_input):
 
 @sb.request_handler(can_handle_func=is_intent_name('ReadBookIntent'))
 def get_story_intent_handler(handler_input):
-    all_stories = BedtimeStories.objects.all()
+    all_stories = BedtimeStory.objects.filter(enabled=True)
 
     random_stories = random.sample(all_stories, 1)
     random_story = random.choice(random_stories)
