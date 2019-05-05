@@ -48,7 +48,7 @@ def get_weather_intent_handler(handler_input):
 
 @sb.request_handler(can_handle_func=is_intent_name('ReadBookIntent'))
 def get_story_intent_handler(handler_input):
-    all_stories = BedtimeStory.objects.filter(enabled=True)
+    all_stories = set(BedtimeStory.objects.filter(enabled=True))
 
     random_stories = random.sample(all_stories, 1)
     random_story = random.choice(random_stories)
