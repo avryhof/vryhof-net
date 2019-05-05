@@ -4,11 +4,13 @@
 # the decorators approach in skill builder.
 import datetime
 import logging
+import random
 
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_model.ui import SimpleCard
 
+from alexa.models import BedtimeStories
 from weather.models import WeatherStation, WeatherData
 
 sb = SkillBuilder()
@@ -35,7 +37,7 @@ def get_weather_intent_handler(handler_input):
 
     speech_text = '%s says it is %s degrees fahrenheit as of %s on %s.' % (
         station.name,
-        weather.tempinf,
+        weather.tempf,
         datetime.datetime.now().strftime('%I:%M %p'),
         datetime.datetime.now().strftime('%B %d, %Y')
     )
@@ -46,11 +48,12 @@ def get_weather_intent_handler(handler_input):
 
 @sb.request_handler(can_handle_func=is_intent_name('ReadBookIntent'))
 def get_story_intent_handler(handler_input):
+    all_stories = BedtimeStories.objects.all()
 
-    speech_text = "A cow says moo. A sheep says Baa. Three singing pigs say la la la. No no you say. That isn't right! " \
-                  "Pigs say oink, all day and night. Rhinoceroses snort and snuff. Little dogs go ruff ruff ruff. Some " \
-                  "other dogs go bow wow wow. And cats and kittens say meow. Quack says the duck! A horse says neigh. " \
-                  "It's quiet now. What do you say?"
+    random_stories = random.sample(all_stories, 1)
+    random_story = random.choice(random_stories)
+
+    speech_text = random_story.story
 
     return handler_input.response_builder.speak(speech_text).set_card(
         SimpleCard(skill_name, speech_text)).set_should_end_session(False).response
