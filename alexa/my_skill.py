@@ -53,7 +53,7 @@ def get_story_intent_handler(handler_input):
     random_stories = random.sample(all_stories, 1)
     random_story = random.choice(random_stories)
 
-    speech_text = random_story.story
+    speech_text = '%s. %s' % (random_story.title, random_story.story)
 
     return handler_input.response_builder.speak(speech_text).set_card(
         SimpleCard(skill_name, speech_text)).set_should_end_session(False).response
