@@ -312,3 +312,4 @@ cmake-build-release/
 # Crashlytics plugin (for Android Studio and IntelliJ)
 
 # Editor-based Rest Client
+/*/migrations/
