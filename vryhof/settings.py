@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'firefox',
     'weather',
+    'planner',
     'utilities',
 
     'alexa',
