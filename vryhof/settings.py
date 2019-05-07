@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.sitemaps',
 
+    'rest_framework',
+
     'django_extensions',
     'frontend_assets',
 
@@ -53,6 +55,7 @@ INSTALLED_APPS = [
     'utilities',
 
     'alexa',
+    'assistant',
 ]
 
 MIDDLEWARE = [
@@ -216,8 +219,26 @@ LOGGING = {
     },
 }
 
-
 # SWINGTIME = {
 #     'TIMESLOT_START_TIME': datetime.time(14),
 #     'TIMESLOT_END_TIME_DURATION': datetime.timedelta(hours=6.5)
 # }
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'assistant.api_auth.AssistantAuthentication',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'assistant.permissions.AuthorizedAgentPermission',
+        'rest_framework.permissions.IsAdminUser',
+    ),
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ]
+}
