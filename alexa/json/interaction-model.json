@@ -4,22 +4,23 @@
             "invocationName": "vryhof family planner",
             "intents": [
                 {
-                    "name": "HelloWorldIntent",
-                    "samples": [
-                        "hello",
-                        "hi",
-                        "howdy",
-                        "hey"
-                    ]
-                },
-                {
                     "name": "GetWeatherIntent",
+                    "slots": [],
                     "samples": [
                         "weather",
                         "tell me the weather",
                         "what temperature is it",
                         "what is the weather",
                         "what's the weather"
+                    ]
+                },
+                {
+                    "name": "ReadBookIntent",
+                    "slots": [],
+                    "samples": [
+                        "read a bedtime story",
+                        "read a story",
+                        "bedtime story"
                     ]
                 },
                 {
@@ -52,6 +53,10 @@
                 },
                 {
                     "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
                     "samples": []
                 }
             ],

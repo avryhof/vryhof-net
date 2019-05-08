@@ -1,3 +1,6 @@
+import pprint
+from json import JSONDecodeError
+
 import pytz
 import datetime
 import json
@@ -31,10 +34,10 @@ class Command(BaseCommand):
             'Content-Type': 'application/json; charset=utf-8',
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'ASSISTANT-AGENT': '%s' % auth.app_key
-        },
+        }
 
         data = {
-            'text': 'Hello World',
+            'text': 'weather',
             'timestamp': date_aware.isoformat()
         }
 
@@ -44,6 +47,10 @@ class Command(BaseCommand):
         # ret = requests.post('https://alexa.vryhof.net/alexa/', json=json_to_send)
         ret = requests.post(request_url, json=json.dumps(data), headers=headers)
 
-        print(ret.text)
+        try:
+            pprint.pprint(ret.json())
+
+        except JSONDecodeError:
+            print(ret.text)
 
 

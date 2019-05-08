@@ -15,8 +15,10 @@ djangorestframework
 frontend-assets==0.6.8
 future==0.17.1
 idna==2.8
+phonetisch
 psycopg2-binary==2.7.6.1
 python-dateutil==2.7.5
+python-Levenshtein
 pytz==2018.7
 requests==2.21.0
 six==1.12.0
