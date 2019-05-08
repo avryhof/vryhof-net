@@ -1,19 +1,70 @@
-import json
+import logging
 from operator import itemgetter
 
 from Levenshtein._levenshtein import distance
+from ask_sdk_core.skill_builder import SkillBuilder
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django_ask_sdk.skill_adapter import SkillAdapter
 from phonetisch import soundex
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from ssml_builder.core import Speech
 
-from alexa.models import LanguageModel
+from alexa.models import LanguageModel, Intent
+from assistant import intents
 from assistant.constants import NO_CACHE_HEADERS
 from assistant.permissions import AuthorizedAgentPermission
-from assistant.utility_functions import request_to_dict
+from assistant.utility_functions import request_to_dict, intent_response
+
+logger = logging.getLogger(__name__)
 
 speech = Speech()
+sb = SkillBuilder()
+
+
+@api_view(['GET', 'POST'])
+@permission_classes((AuthorizedAgentPermission,))
+def intent_responder(request):
+    """
+    Reads an intent request (as sent by Alexa Web services) and responds with an intent response.
+    :param request:
+    :return:
+    """
+    resp = {}
+
+    data = request_to_dict(request)
+
+    req = data.get('request', {})
+    intent_name = req.get('intent', {}).get('name')
+
+    try:
+        intent = Intent.objects.get(name=intent_name)
+
+    except Intent.DoesNotExist:
+        resp = {'error': 'Intent not found.'}
+        pass
+
+    else:
+        try:
+            interaction_model = LanguageModel.objects.get(enabled=True)
+
+        except LanguageModel.DoesNotExist:
+            resp = {'error': 'Interaction model not found.'}
+            pass
+
+        else:
+            intent_resp = 'Intent had no response.'
+
+            try:
+                intent_resp = getattr(intents, intent.name, 'Intent had no response.')
+            except:
+                pass
+
+            resp = intent_response(intent_resp, interaction_model.invocation_name.title())
+
+    return Response(resp, status=status.HTTP_200_OK, headers=NO_CACHE_HEADERS)
 
 
 @api_view(['GET', 'POST'])

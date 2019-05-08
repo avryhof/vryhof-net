@@ -1,3 +1,6 @@
+import pprint
+from json import JSONDecodeError
+
 import pytz
 import datetime
 import json
@@ -6,6 +9,9 @@ import os
 import requests
 from django.conf import settings
 from django.core.management import BaseCommand
+from django.urls import reverse
+
+from assistant.models import AuthorizedAgent
 
 
 class Command(BaseCommand):
@@ -30,10 +36,27 @@ class Command(BaseCommand):
 
             json_to_send['request']['timestamp'] = date_aware.isoformat()
 
-            ret = requests.post('https://alexa.vryhof.net/alexa/', json=json_to_send)
-            # ret = requests.post('http://127.0.0.1:8000/alexa/', json=json_to_send)
+            auth = AuthorizedAgent.objects.get(authorized=True)
+            headers = {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'ASSISTANT-AGENT': '%s' % auth.app_key
+            }
+
+            endpoint = 'http://127.0.0.1:8000'
+            request_url = '%s%s' % (endpoint, reverse('intent'))
+            # request_url = '%s%s' % (endpoint, reverse('index'))
+
+            # ret = requests.post('https://alexa.vryhof.net/alexa/', json=json_to_send)
+            # ret = requests.post(request_url, json=json_to_send)
+            ret = requests.post(request_url, json=json_to_send, headers=headers)
 
             print(ret)
-            print(ret.text)
+
+            try:
+                pprint.pprint(ret.json())
+
+            except JSONDecodeError:
+                print(ret.text)
 
 

@@ -11,6 +11,7 @@ from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_model.ui import SimpleCard
 
 from alexa.models import BedtimeStory
+from alexa.skills import launch_request, get_weather, get_story
 from weather.models import WeatherStation, WeatherData
 
 sb = SkillBuilder()
@@ -24,7 +25,7 @@ skill_name = 'Vryhof Family Planner'
 @sb.request_handler(can_handle_func=is_request_type("LaunchRequest"))
 def launch_request_handler(handler_input):
     """Handler for Skill Launch."""
-    speech_text = "Welcome to the Vryhof family Planner"
+    speech_text = launch_request()
 
     return handler_input.response_builder.speak(speech_text).set_card(
         SimpleCard(skill_name, speech_text)).set_should_end_session(False).response
@@ -32,15 +33,8 @@ def launch_request_handler(handler_input):
 
 @sb.request_handler(can_handle_func=is_intent_name('GetWeatherIntent'))
 def get_weather_intent_handler(handler_input):
-    station = WeatherStation.objects.get(name='KD2OTL')
-    weather = WeatherData.objects.filter(station=station).order_by('-date')[0]
 
-    speech_text = '%s says it is %s degrees fahrenheit as of %s on %s.' % (
-        station.name,
-        weather.tempf,
-        datetime.datetime.now().strftime('%I:%M %p'),
-        datetime.datetime.now().strftime('%B %d, %Y')
-    )
+    speech_text = get_weather()
 
     return handler_input.response_builder.speak(speech_text).set_card(
         SimpleCard(skill_name, speech_text)).set_should_end_session(False).response
@@ -48,12 +42,8 @@ def get_weather_intent_handler(handler_input):
 
 @sb.request_handler(can_handle_func=is_intent_name('ReadBookIntent'))
 def get_story_intent_handler(handler_input):
-    all_stories = set(BedtimeStory.objects.filter(enabled=True))
 
-    random_stories = random.sample(all_stories, 1)
-    random_story = random.choice(random_stories)
-
-    speech_text = '%s. %s' % (random_story.title, random_story.story)
+    speech_text = get_story()
 
     return handler_input.response_builder.speak(speech_text).set_card(
         SimpleCard(skill_name, speech_text)).set_should_end_session(False).response
