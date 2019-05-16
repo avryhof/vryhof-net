@@ -2,17 +2,13 @@
 
 # This is a simple Hello World Alexa Skill, built using
 # the decorators approach in skill builder.
-import datetime
 import logging
-import random
 
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_model.ui import SimpleCard
 
-from alexa.models import BedtimeStory
 from alexa.skills import launch_request, get_weather, get_story
-from weather.models import WeatherStation, WeatherData
 
 sb = SkillBuilder()
 
@@ -33,7 +29,6 @@ def launch_request_handler(handler_input):
 
 @sb.request_handler(can_handle_func=is_intent_name('GetWeatherIntent'))
 def get_weather_intent_handler(handler_input):
-
     speech_text = get_weather()
 
     return handler_input.response_builder.speak(speech_text).set_card(
@@ -42,8 +37,18 @@ def get_weather_intent_handler(handler_input):
 
 @sb.request_handler(can_handle_func=is_intent_name('ReadBookIntent'))
 def get_story_intent_handler(handler_input):
-
     speech_text = get_story()
+
+    return handler_input.response_builder.speak(speech_text).set_card(
+        SimpleCard(skill_name, speech_text)).set_should_end_session(False).response
+
+
+@sb.request_handler(can_handle_func=is_intent_name('ReadStoryIntent'))
+def read_story_intent_handler(handler_input):
+    attr = handler_input.attributes_manager.session_attributes
+
+    story_title = attr.get("story_title")
+    speech_text = get_story(story_title=story_title)
 
     return handler_input.response_builder.speak(speech_text).set_card(
         SimpleCard(skill_name, speech_text)).set_should_end_session(False).response

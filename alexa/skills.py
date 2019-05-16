@@ -5,16 +5,23 @@ from alexa.models import BedtimeStory
 from weather.models import WeatherStation, WeatherData
 
 
-def get_story():
-    all_stories = set(BedtimeStory.objects.filter(enabled=True))
+def get_story(**kwargs):
+    story_title = kwargs.get('story_title', False)
 
     speech_text = 'No stories found.'
 
-    if len(all_stories) > 0:
-        random_stories = random.sample(all_stories, 1)
-        random_story = random.choice(random_stories)
+    if not story_title:
+        all_stories = set(BedtimeStory.objects.filter(enabled=True))
 
-        speech_text = '%s. %s' % (random_story.title, random_story.story)
+        if len(all_stories) > 0:
+            random_stories = random.sample(all_stories, 1)
+            story = random.choice(random_stories)
+
+    else:
+        story = BedtimeStory.objects.get(enabled=True, title__icontains=story_title)
+
+    if story:
+        speech_text = '%s. %s' % (story.title, story.story)
 
     return speech_text
 
