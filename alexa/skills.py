@@ -10,6 +10,8 @@ def get_story(**kwargs):
 
     speech_text = 'No stories found.'
 
+    story = None
+    
     if not story_title:
         all_stories = set(BedtimeStory.objects.filter(enabled=True))
 
@@ -18,7 +20,11 @@ def get_story(**kwargs):
             story = random.choice(random_stories)
 
     else:
-        story = BedtimeStory.objects.get(enabled=True, title__icontains=story_title)
+        try:
+            story = BedtimeStory.objects.get(enabled=True, title__icontains=story_title)
+
+        except BedtimeStory.DoesNotExist:
+            pass
 
     if story:
         speech_text = '%s. %s' % (story.title, story.story)
