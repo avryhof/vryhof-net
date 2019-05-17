@@ -2,6 +2,7 @@ import datetime
 import random
 
 from alexa.models import BedtimeStory
+from assistant.utility_functions import search_model
 from weather.models import WeatherStation, WeatherData
 
 
@@ -11,7 +12,7 @@ def get_story(**kwargs):
     speech_text = 'No stories found.'
 
     story = None
-    
+
     if not story_title:
         all_stories = set(BedtimeStory.objects.filter(enabled=True))
 
@@ -21,6 +22,7 @@ def get_story(**kwargs):
 
     else:
         try:
+            story = search_model(story_title, model=BedtimeStory, field='title', filter={'enabled': True})
             story = BedtimeStory.objects.get(enabled=True, title__icontains=story_title)
 
         except BedtimeStory.DoesNotExist:
