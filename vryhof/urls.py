@@ -21,18 +21,23 @@ from django.urls import include
 from django.views.static import serve
 
 urlpatterns = [
-    url(r'^vryhof-admin/', admin.site.urls),
-    url(r'^alexa/', include('alexa.urls')),
-    url(r'^assistant/', include('assistant.urls')),
-    url(r'^api-auth/', include('rest_framework.urls')),
-    url(r'', include('firefox.urls')),
-    url(r'^weather/', include('weather.urls')),
+    url(r"^vryhof-admin/", admin.site.urls),
+    url(r"^alexa/", include("alexa.urls")),
+    url(r"^assistant/", include("assistant.urls")),
+    url(r"^api-auth/", include("rest_framework.urls")),
+    url(r"", include("firefox.urls")),
+    url(r"^weather/", include("weather.urls")),
 ]
 
 if settings.DEBUG:
-    urlpatterns = [
-                      url(r'^media/(?P<path>.*)$', serve, {
-                          'document_root': settings.MEDIA_ROOT,
-                          'show_indexes': True
-                      }),
-                  ] + staticfiles_urlpatterns() + urlpatterns
+    urlpatterns = (
+        [
+            url(
+                r"^media/(?P<path>.*)$",
+                serve,
+                {"document_root": settings.MEDIA_ROOT, "show_indexes": True},
+            )
+        ]
+        + staticfiles_urlpatterns()
+        + urlpatterns
+    )

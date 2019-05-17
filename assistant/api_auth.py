@@ -7,12 +7,15 @@ from assistant.models import AuthorizedAgent
 
 
 class AssistantAuthentication(authentication.BaseAuthentication):
-
     def authenticate(self, request):
         auth = None
         user = AnonymousUser()
-        allowed_agents = list(AuthorizedAgent.objects.filter(authorized=True).values_list('app_key', flat=True))
-        agent = request.META.get('HTTP_ASSISTANT_AGENT')
+        allowed_agents = list(
+            AuthorizedAgent.objects.filter(authorized=True).values_list(
+                "app_key", flat=True
+            )
+        )
+        agent = request.META.get("HTTP_ASSISTANT_AGENT")
 
         if agent in allowed_agents:
             auth = agent

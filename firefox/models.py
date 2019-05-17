@@ -1,4 +1,13 @@
-from django.db.models import Model, CharField, BooleanField, URLField, TextField, ForeignKey, DateTimeField, DO_NOTHING
+from django.db.models import (
+    Model,
+    CharField,
+    BooleanField,
+    URLField,
+    TextField,
+    ForeignKey,
+    DateTimeField,
+    DO_NOTHING,
+)
 
 from firefox.fields import LongURLField
 
@@ -11,7 +20,7 @@ class NewsFeed(Model):
     description = TextField(blank=True, null=True)
 
     def __str__(self):
-        retn = 'NewsFeed %i' % self.pk
+        retn = "NewsFeed %i" % self.pk
 
         if self.title:
             retn = self.title
@@ -38,4 +47,4 @@ class NewsItem(Model):
     date = DateTimeField(blank=True, null=True)
 
     class Meta:
-        ordering = ['-date']
+        ordering = ["-date"]

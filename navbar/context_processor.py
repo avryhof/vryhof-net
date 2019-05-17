@@ -5,11 +5,7 @@ def menu_item(nav):
     retn = {}
 
     if not nav.submenu:
-        retn = {
-            'title': nav.title,
-            'link': nav.link,
-            'target': nav.target
-        }
+        retn = {"title": nav.title, "link": nav.link, "target": nav.target}
     else:
         retn = []
         for subnav in nav.submenu:
@@ -31,6 +27,6 @@ def navmenu_context(request):
         for nav in navmenu.menu_items.iterator():
             menu.append(menu_item(nav))
 
-        return_dict['navmenu'] = menu
+        return_dict["navmenu"] = menu
 
     return return_dict

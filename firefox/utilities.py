@@ -19,13 +19,13 @@ def log_date():
 
 
 def log_message(message):
-    logmessage = '%s: %s' % (log_date(), message)
+    logmessage = "%s: %s" % (log_date(), message)
 
     logger.info(logmessage)
 
 
 def get_bytes(value):
-    retn = value.encode('utf8')
+    retn = value.encode("utf8")
 
     return retn
 
@@ -38,16 +38,16 @@ def snake_to_camel(value, **kwargs):
         reverse - Convert from camelCase to snake_case
     :return: a converted string
     """
-    do_reverse = kwargs.get('reverse', False)
+    do_reverse = kwargs.get("reverse", False)
 
-    parts_ex = '([A-Z])' if do_reverse else '(_[A-Za-z])'
+    parts_ex = "([A-Z])" if do_reverse else "(_[A-Za-z])"
     parts = re.findall(parts_ex, value)
 
     for part in parts:
         if do_reverse:
-            value = value.replace(part, '_%s' % part.lower())
+            value = value.replace(part, "_%s" % part.lower())
         else:
-            value = value.replace(part, part.upper().replace('_', ''))
+            value = value.replace(part, part.upper().replace("_", ""))
 
     return value
 
@@ -63,7 +63,7 @@ def convert_keys(input_dict):
 
     for k, v in input_dict.items():
         new_key = snake_to_camel(str(k), reverse=True)
-        new_key = new_key.replace('_i_d', '_id')
+        new_key = new_key.replace("_i_d", "_id")
         if isinstance(v, dict):
             retn[new_key] = convert_keys(v)
 
@@ -105,11 +105,11 @@ def convert_keys_list(input_list):
 
 def multi_clean(value):
     if value:
-        if 'iframe' in value:
-            value = re.sub('\<iframe.*?iframe\>', '', value)
+        if "iframe" in value:
+            value = re.sub("\<iframe.*?iframe\>", "", value)
 
-        if 'http:' in value:
-            value = value.replace('http:', 'https:')
+        if "http:" in value:
+            value = value.replace("http:", "https:")
 
     return value
 
@@ -121,13 +121,13 @@ def to_dict(input_ordered_dict):
 def get_poster_image(html):
     newsimage = None
     if html:
-        soup = BeautifulSoup(html, 'html.parser')
+        soup = BeautifulSoup(html, "html.parser")
 
         posters = []
-        images = soup.find_all('img')
+        images = soup.find_all("img")
         for image in images:
-            src = image['src']
-            if 'feedburner' not in src:
+            src = image["src"]
+            if "feedburner" not in src:
                 posters.append(src)
 
         if len(posters) > 0:
@@ -135,20 +135,18 @@ def get_poster_image(html):
             poster_guid = hashlib.md5(get_bytes(posterfile)).hexdigest()
             try:
                 newsimage = NewsImage.objects.get(
-                    url=multi_clean(posterfile),
-                    guid=multi_clean(poster_guid)
+                    url=multi_clean(posterfile), guid=multi_clean(poster_guid)
                 )
             except NewsImage.DoesNotExist:
                 newsimage = NewsImage.objects.create(
-                    url=multi_clean(posterfile),
-                    guid=multi_clean(poster_guid)
+                    url=multi_clean(posterfile), guid=multi_clean(poster_guid)
                 )
 
     return newsimage
 
 
 def get_first_paragraph(url):
-    return ''
+    return ""
 
 
 def get_feed(feed):
@@ -164,30 +162,30 @@ def get_feed(feed):
         feed_dict = xmltodict.parse(response.text)
 
         if feed_dict:
-            rss_dict = feed_dict.get('rss')
-            rdf_dict = feed_dict.get('rdf:RDF')
+            rss_dict = feed_dict.get("rss")
+            rdf_dict = feed_dict.get("rdf:RDF")
 
             if rdf_dict:
-                channel = rdf_dict.get('channel')
-                feed_items = rdf_dict.get('item')
+                channel = rdf_dict.get("channel")
+                feed_items = rdf_dict.get("item")
 
             elif rss_dict:
-                channel = rss_dict.get('channel')
-                feed_items = channel.get('item', rss_dict.get('items'))
+                channel = rss_dict.get("channel")
+                feed_items = channel.get("item", rss_dict.get("items"))
 
             if channel:
                 feed_changes = False
 
                 if not feed.title:
-                    feed.title = channel.get('title')
+                    feed.title = channel.get("title")
                     feed_changes = True
 
                 if not feed.link:
-                    feed.link = channel.get('link')
+                    feed.link = channel.get("link")
                     feed_changes = True
 
                 if not feed.description:
-                    feed.description = channel.get('description')
+                    feed.description = channel.get("description")
                     feed_changes = True
 
                 if feed_changes:
@@ -197,14 +195,14 @@ def get_feed(feed):
                 for item in feed_items:
                     append_item = convert_keys(dict(item))
 
-                    abstract = append_item.get('description')
+                    abstract = append_item.get("description")
                     if abstract:
                         abstract = multi_clean(abstract)
 
                     content = None
                     poster = None
                     for key, val in item.items():
-                        if 'content' in key:
+                        if "content" in key:
                             poster = get_poster_image(content)
                             content = val
                             break
@@ -213,13 +211,13 @@ def get_feed(feed):
                         content = multi_clean(content)
 
                     item_date = datetime.datetime.now()
-                    if 'pub_date' in append_item:
-                        item_date = parse(append_item.get('pub_date'))
+                    if "pub_date" in append_item:
+                        item_date = parse(append_item.get("pub_date"))
 
-                    elif 'dc:date' in append_item:
-                        item_date = parse(append_item.get('dc:date'))
+                    elif "dc:date" in append_item:
+                        item_date = parse(append_item.get("dc:date"))
 
-                    link = multi_clean(append_item.get('link'))
+                    link = multi_clean(append_item.get("link"))
 
                     # guid = append_item.get('guid')
                     guid = False
@@ -231,13 +229,13 @@ def get_feed(feed):
 
                     append_dict = dict(
                         feed_id=feed.pk,
-                        title=append_item.get('title'),
+                        title=append_item.get("title"),
                         abstract=abstract,
                         content=content,
                         poster=poster,
                         link=link,
                         guid=guid,
-                        date=item_date
+                        date=item_date,
                     )
 
                     try:

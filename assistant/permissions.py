@@ -11,15 +11,11 @@ from assistant.models import AuthorizedAgent
 
 
 class AuthorizedAgentPermission(permissions.BasePermission):
-
     def has_permission(self, request, view):
         is_authorized = False
 
         try:
-            AuthorizedAgent.objects.get(
-                authorized=True,
-                app_key=request.auth
-            )
+            AuthorizedAgent.objects.get(authorized=True, app_key=request.auth)
 
         except AuthorizedAgent.DoesNotExist:
             pass

@@ -11,20 +11,20 @@ from weather.utilities import get_weather
 
 
 class WeatherView(TemplateView):
-    extra_css = ['css/weather.css']
+    extra_css = ["css/weather.css"]
     extra_javascript = []
 
-    template_name = 'weather.html'
-    name = 'Weather'
+    template_name = "weather.html"
+    name = "Weather"
 
     request = None
 
     def get_context_data(self, **kwargs):
         context = super(WeatherView, self).get_context_data(**kwargs)
-        context['page_title'] = self.name
-        context['extra_css'] = self.extra_css
-        context['extra_javascript'] = self.extra_javascript
-        context['request'] = self.request
+        context["page_title"] = self.name
+        context["extra_css"] = self.extra_css
+        context["extra_javascript"] = self.extra_javascript
+        context["request"] = self.request
 
         return context
 
@@ -37,25 +37,19 @@ class WeatherView(TemplateView):
         weather_stations = []
 
         for station in WeatherStation.objects.all():
-            weatherdata = {
-                'tempf': '--'
-            }
+            weatherdata = {"tempf": "--"}
 
             try:
                 weatherdata = WeatherData.objects.filter(station=station).latest()
             except WeatherData.DoesNotExist:
                 pass
 
-            weather_stations.append({
-                'station': station,
-                'data': weatherdata
-            })
+            weather_stations.append({"station": station, "data": weatherdata})
 
-        context['weather_stations'] = weather_stations
+        context["weather_stations"] = weather_stations
 
         return render(request, self.template_name, context)
 
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
         return super(WeatherView, self).dispatch(*args, **kwargs)
-

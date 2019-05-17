@@ -12,20 +12,20 @@ from firefox.models import NewsItem
 
 
 class FirefoxHomeView(TemplateView):
-    extra_css = ['css/ff-style.css']
+    extra_css = ["css/ff-style.css"]
     extra_javascript = []
 
-    template_name = 'firefox-start.html'
-    name = 'Firefox Start page'
+    template_name = "firefox-start.html"
+    name = "Firefox Start page"
 
     request = None
 
     def get_context_data(self, **kwargs):
         context = super(FirefoxHomeView, self).get_context_data(**kwargs)
-        context['page_title'] = self.name
-        context['extra_css'] = self.extra_css
-        context['extra_javascript'] = self.extra_javascript
-        context['request'] = self.request
+        context["page_title"] = self.name
+        context["extra_css"] = self.extra_css
+        context["extra_javascript"] = self.extra_javascript
+        context["request"] = self.request
 
         return context
 
@@ -34,7 +34,7 @@ class FirefoxHomeView(TemplateView):
         context = self.get_context_data()
 
         yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
-        context['news'] = NewsItem.objects.filter(date__gte=yesterday)
+        context["news"] = NewsItem.objects.filter(date__gte=yesterday)
 
         return render(request, self.template_name, context)
 

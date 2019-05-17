@@ -7,9 +7,9 @@ from weather.models import WeatherStation, WeatherData
 
 
 def get_story(**kwargs):
-    story_title = kwargs.get('story_title', False)
+    story_title = kwargs.get("story_title", False)
 
-    speech_text = 'No stories found.'
+    speech_text = "No stories found."
 
     story = None
 
@@ -22,27 +22,29 @@ def get_story(**kwargs):
 
     else:
         try:
-            story = search_model(story_title, model=BedtimeStory, field='title', filter={'enabled': True})
+            story = search_model(
+                story_title, model=BedtimeStory, field="title", filter={"enabled": True}
+            )
             story = BedtimeStory.objects.get(enabled=True, title__icontains=story_title)
 
         except BedtimeStory.DoesNotExist:
             pass
 
     if story:
-        speech_text = '%s. %s' % (story.title, story.story)
+        speech_text = "%s. %s" % (story.title, story.story)
 
     return speech_text
 
 
 def get_weather():
-    station = WeatherStation.objects.get(name='KD2OTL')
-    weather = WeatherData.objects.filter(station=station).order_by('-date')[0]
+    station = WeatherStation.objects.get(name="KD2OTL")
+    weather = WeatherData.objects.filter(station=station).order_by("-date")[0]
 
-    speech_text = '%s says it is %s degrees fahrenheit as of %s on %s.' % (
+    speech_text = "%s says it is %s degrees fahrenheit as of %s on %s." % (
         station.name,
         weather.tempf,
-        datetime.datetime.now().strftime('%I:%M %p'),
-        datetime.datetime.now().strftime('%B %d, %Y')
+        datetime.datetime.now().strftime("%I:%M %p"),
+        datetime.datetime.now().strftime("%B %d, %Y"),
     )
 
     return speech_text

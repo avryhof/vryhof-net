@@ -24,7 +24,7 @@ speech = Speech()
 sb = SkillBuilder()
 
 
-@api_view(['GET', 'POST'])
+@api_view(["GET", "POST"])
 @permission_classes((AuthorizedAgentPermission,))
 def intent_responder(request):
     """
@@ -36,14 +36,14 @@ def intent_responder(request):
 
     data = request_to_dict(request)
 
-    req = data.get('request', {})
-    intent_name = req.get('intent', {}).get('name')
+    req = data.get("request", {})
+    intent_name = req.get("intent", {}).get("name")
 
     try:
         intent = Intent.objects.get(name=intent_name)
 
     except Intent.DoesNotExist:
-        resp = {'error': 'Intent not found.'}
+        resp = {"error": "Intent not found."}
         pass
 
     else:
@@ -51,23 +51,25 @@ def intent_responder(request):
             interaction_model = LanguageModel.objects.get(enabled=True)
 
         except LanguageModel.DoesNotExist:
-            resp = {'error': 'Interaction model not found.'}
+            resp = {"error": "Interaction model not found."}
             pass
 
         else:
-            intent_resp = 'Intent had no response.'
+            intent_resp = "Intent had no response."
 
             try:
-                intent_resp = getattr(intents, intent.name, 'Intent had no response.')
+                intent_resp = getattr(intents, intent.name, "Intent had no response.")
             except:
                 pass
 
-            resp = intent_response(intent_resp, interaction_model.invocation_name.title())
+            resp = intent_response(
+                intent_resp, interaction_model.invocation_name.title()
+            )
 
     return Response(resp, status=status.HTTP_200_OK, headers=NO_CACHE_HEADERS)
 
 
-@api_view(['GET', 'POST'])
+@api_view(["GET", "POST"])
 @permission_classes((AuthorizedAgentPermission,))
 def parse_text(request):
     """
@@ -77,19 +79,17 @@ def parse_text(request):
     """
 
     data = request_to_dict(request)
-    text = data.get('text')
+    text = data.get("text")
 
     try:
         interaction_model = LanguageModel.objects.get(enabled=True)
 
     except LanguageModel.DoesNotExist:
-        resp = {
-            '_text': text
-        }
+        resp = {"_text": text}
 
     else:
         text_soundex = soundex.encode_word(text)
-        simple_text = text.strip().replace(' ', '').lower()
+        simple_text = text.strip().replace(" ", "").lower()
 
         matches = []
 
@@ -99,42 +99,40 @@ def parse_text(request):
                 sample_soundex = soundex.encode_word(sample)
                 word_distance = distance(text, sample)
 
-                simple_sample = sample.strip().replace(' ', '').lower()
+                simple_sample = sample.strip().replace(" ", "").lower()
 
                 if text_soundex == sample_soundex:
-                    matches.append({
-                        'distance': 0,
-                        'intent': intent.name,
-                        'sample': sample
-                    })
+                    matches.append(
+                        {"distance": 0, "intent": intent.name, "sample": sample}
+                    )
 
                 elif simple_text in simple_sample:
-                    matches.append({
-                        'distance': 1,
-                        'intent': intent.name,
-                        'sample': sample
-                    })
+                    matches.append(
+                        {"distance": 1, "intent": intent.name, "sample": sample}
+                    )
 
                 else:
                     if word_distance < 10:
-                        matches.append({
-                            'distance': word_distance,
-                            'intent': intent.name,
-                            'sample': sample
-                        })
+                        matches.append(
+                            {
+                                "distance": word_distance,
+                                "intent": intent.name,
+                                "sample": sample,
+                            }
+                        )
 
-        matches = sorted(matches, key=itemgetter('distance'))
+        matches = sorted(matches, key=itemgetter("distance"))
 
-        if len(matches) > 0 and matches[0].get('distance') < 5:
+        if len(matches) > 0 and matches[0].get("distance") < 5:
             closest_match = matches[0]
 
         else:
             closest_match = None
 
         resp = {
-            '_text': text,
+            "_text": text,
             # 'closest_match': closest_match,
-            'intent': closest_match.get('intent') if closest_match else closest_match,
+            "intent": closest_match.get("intent") if closest_match else closest_match,
             # 'matches': matches
         }
 

@@ -7,6 +7,7 @@ class CalendarItemType(models.Model):
     """
     An abstract base type for Types of Calendar Items
     """
+
     name = models.CharField(max_length=200, null=True)
     description = models.TextField(blank=True, null=True)
     default_start_time = models.TimeField(blank=True, null=True)
@@ -20,6 +21,7 @@ class CalendarItem(models.Model):
     """
     An Abstract base class for calendar items, such as meals or Events.
     """
+
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     start_time = models.DateTimeField(blank=True, null=True)
@@ -33,7 +35,7 @@ class CalendarItem(models.Model):
         url = None
 
         try:
-            url = reverse('planner:event_edit', args=(self.pk,))
+            url = reverse("planner:event_edit", args=(self.pk,))
         except:
             pass
 
@@ -41,7 +43,6 @@ class CalendarItem(models.Model):
 
 
 class EventType(CalendarItemType):
-
     def __str__(self):
         return self.name
 
@@ -53,13 +54,12 @@ class Event(CalendarItem):
         retn = self.event_type.name
 
         if self.title:
-            retn = '%s: %s' % (self.event_type.name, self.title)
+            retn = "%s: %s" % (self.event_type.name, self.title)
 
         return retn
 
 
 class MealType(CalendarItemType):
-
     def __str__(self):
         return self.name
 
@@ -73,6 +73,6 @@ class Meal(CalendarItem):
         retn = self.meal.name
 
         if self.title:
-            retn = '%s: %s' % (self.meal.name, self.title)
+            retn = "%s: %s" % (self.meal.name, self.title)
 
         return retn

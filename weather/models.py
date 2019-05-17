@@ -1,5 +1,16 @@
-from django.db.models import TextField, CharField, Model, FloatField, DateTimeField, BigIntegerField, IntegerField, \
-    BooleanField, ForeignKey, DO_NOTHING, DecimalField
+from django.db.models import (
+    TextField,
+    CharField,
+    Model,
+    FloatField,
+    DateTimeField,
+    BigIntegerField,
+    IntegerField,
+    BooleanField,
+    ForeignKey,
+    DO_NOTHING,
+    DecimalField,
+)
 
 
 class WeatherStation(Model):
@@ -13,7 +24,7 @@ class WeatherStation(Model):
     longitude = DecimalField(max_digits=9, decimal_places=6, null=True)
 
     def __str__(self):
-        return '%s@%s' % (self.name, self.mac_address)
+        return "%s@%s" % (self.name, self.mac_address)
 
 
 class WeatherData(Model):
@@ -44,10 +55,10 @@ class WeatherData(Model):
     windspeedmph = FloatField(null=True)
 
     class Meta:
-        verbose_name = 'Weather Data'
-        verbose_name_plural = 'Data Points'
-        ordering = ['-date']
-        get_latest_by = 'date'
+        verbose_name = "Weather Data"
+        verbose_name_plural = "Data Points"
+        ordering = ["-date"]
+        get_latest_by = "date"
 
     def __str__(self):
-        return '%s on %s' % (self.station.name, str(self.date))
+        return "%s on %s" % (self.station.name, str(self.date))

@@ -7,50 +7,30 @@ from django.utils.text import slugify
 
 def rebuild_interaction_model(interaction_model):
     default_intents = [
-        {
-            "name": "AMAZON.YesIntent",
-            "samples": []
-        },
-        {
-            "name": "AMAZON.NoIntent",
-            "samples": []
-        },
-        {
-            "name": "AMAZON.HelpIntent",
-            "samples": []
-        },
-        {
-            "name": "AMAZON.StopIntent",
-            "samples": []
-        },
-        {
-            "name": "AMAZON.CancelIntent",
-            "samples": []
-        },
-        {
-            "name": "AMAZON.FallbackIntent",
-            "samples": []
-        }
+        {"name": "AMAZON.YesIntent", "samples": []},
+        {"name": "AMAZON.NoIntent", "samples": []},
+        {"name": "AMAZON.HelpIntent", "samples": []},
+        {"name": "AMAZON.StopIntent", "samples": []},
+        {"name": "AMAZON.CancelIntent", "samples": []},
+        {"name": "AMAZON.FallbackIntent", "samples": []},
     ]
 
     intents = []
 
     try:
         for intent in interaction_model.intents.all():
-            intents.append({
-                'name': intent.name,
-                'slots': [],
-                'samples': intent.samples
-            })
+            intents.append(
+                {"name": intent.name, "slots": [], "samples": intent.samples}
+            )
     except TypeError:
-        print('Failure')
+        print("Failure")
         pass
 
     else:
         for intent in default_intents:
             do_add = True
             for my_intent in intents:
-                if my_intent.get('name') == intent.get('name'):
+                if my_intent.get("name") == intent.get("name"):
                     do_add = False
             if do_add:
                 intents.append(intent)
@@ -60,14 +40,15 @@ def rebuild_interaction_model(interaction_model):
                 "languageModel": {
                     "invocationName": interaction_model.invocation_name.lower(),
                     "intents": intents,
-                    "types": []
+                    "types": [],
                 }
             }
-
         }
 
-        filename = '%s-interaction-model.json' % slugify(interaction_model.invocation_name)
+        filename = "%s-interaction-model.json" % slugify(
+            interaction_model.invocation_name
+        )
 
-        im = open(os.path.join(settings.BASE_DIR, 'alexa', 'json', filename), 'w')
+        im = open(os.path.join(settings.BASE_DIR, "alexa", "json", filename), "w")
         json.dump(alexa_model, im)
         im.close()
