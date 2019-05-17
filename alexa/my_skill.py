@@ -47,9 +47,8 @@ def get_story_intent_handler(handler_input):
 def read_story_intent_handler(handler_input):
     slots = handler_input.request_envelope.request.intent.slots
 
-    story_title = slots.get("story_title")
+    story_title = slots.story_title.value
     logger.info(story_title)
-    logger.info(dict(story_title).get('value'))
     speech_text = get_story(story_title=story_title)
 
     return handler_input.response_builder.speak(speech_text).set_card(
