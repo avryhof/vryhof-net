@@ -53,6 +53,7 @@ class WeatherData(Model):
     winddir = IntegerField(null=True)
     windgustmph = FloatField(null=True)
     windspeedmph = FloatField(null=True)
+    windspdmph_avg10m = FloatField(null=True)
 
     class Meta:
         verbose_name = "Weather Data"
