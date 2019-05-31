@@ -38,4 +38,4 @@ class PocketQueryAdmin(admin.ModelAdmin):
 class PointAdmin(admin.ModelAdmin):
     list_display = ("name", "urlname", "point_type", "latitude", "longitude", "country", "state")
     list_filter = ("time", "point_type", "gpx_type", "container", "difficulty", "terrain")
-    search_fields = ("name",)
+    search_fields = ("name", "urlname", "desc", "long_description",)
