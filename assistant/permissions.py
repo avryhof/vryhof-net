@@ -1,10 +1,5 @@
-"""
-@copyright Copyright KPH Healthcare Services, Inc., 2017
-
-Insert description here
-"""
 from __future__ import unicode_literals
-from django.conf import settings
+
 from rest_framework import permissions
 
 from assistant.models import AuthorizedAgent

@@ -24,9 +24,11 @@ urlpatterns = [
     url(r"^vryhof-admin/", admin.site.urls),
     url(r"^alexa/", include("alexa.urls")),
     url(r"^assistant/", include("assistant.urls")),
+    url(r"^api/mail/", include("mail.api_urls")),
     url(r"^api-auth/", include("rest_framework.urls")),
     url(r"", include("firefox.urls")),
     url(r"^weather/", include("weather.urls")),
+    url(r'^geocaching/', include('geocaching.urls')),
 ]
 
 if settings.DEBUG:

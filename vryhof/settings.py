@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     "django.contrib.sitemaps",
     "rest_framework",
     "django_extensions",
+    "easy_thumbnails",
+    "filer",
+    "mptt",
     "frontend_assets",
     "swingtime",
     "navbar",
@@ -51,6 +54,8 @@ INSTALLED_APPS = [
     "utilities",
     "alexa",
     "assistant",
+    "mail",
+    "geocaching"
 ]
 
 MIDDLEWARE = [
@@ -66,6 +71,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "vryhof.urls"
 
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+
+SENDGRID_API_KEY = os.environ['SENDGRID_API_KEY']
+SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+SENDGRID_TRACK_EMAIL_OPENS = True
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -73,6 +84,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, "templates"),
             os.path.join(BASE_DIR, "firefox", "templates"),
             os.path.join(BASE_DIR, "weather", "templates"),
+            os.path.join(BASE_DIR, "geocaching", "templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
