@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load frontend_assets %}
+{% block extra_css %}
+    {% leaflet_header %}
+    <script>
+        osm_tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        osm_attr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ';
+    </script>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        {% for weather_station in weather_stations %}
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2>{{ weather_station.station.name }}</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-8">
+                    <h3>Current Conditions</h3>
+                    <table class="table">
+                        <tr>
+                            <td>
+                                Date:
+                            </td>
+                            <td>
+                                {{ weather_station.data.date }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Temperature
+                            </td>
+                            <td>
+                                {{ weather_station.data.tempf }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Feels Like
+                            </td>
+                            <td>
+                                {{ weather_station.data.feels_like }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Rain
+                            </td>
+                            <td>
+                                <p>
+                                    Last reported: {{ weather_station.data.last_rain }}<br>
+                                    Reported Amount: {{ weather_station.data.eventrainin }} in.<br>
+                                    Reported in the last 24 hours: {{ weather_station.data.dailyrainin }} in.<br>
+                                    Reported this week: {{ weather_station.data.weeklyrainin }} in.<br>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Wind
+                            </td>
+                            <td>
+                                <p>
+                                    Current Wind Speed: {{ weather_station.data.windspeedmph }} mph<br>
+                                    Current Gust Speed: {{ weather_station.data.windgustmph }} mph<br>
+                                    Max Daily Gust speed: {{ weather_station.data.maxdailygust }} mph
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    {% leaflet_map weather_station.station.latitude weather_station.station.longitude 16 weather_station.station.name %}
+                    {% leaflet_marker weather_station.station.name weather_station.station.latitude weather_station.station.longitude %}
+                    <p>Latitude: {{ weather_station.station.latitude }}<br>Longitude: {{ weather_station.station.longitude }}</p>
+                    <ul>
+                        {% if weather_station.station.weather_underground_id %}
+                            <li>
+                                <a href="https://www.wunderground.com/personal-weather-station/dashboard?ID={{ weather_station.station.weather_underground_id }}"
+                                   target="_blank">
+                                    Weather Underground
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if weather_station.station.cwop_name %}
+                            <li>
+                                <a href="http://www.wxqa.com/sss/search1.cgi?keyword={{ weather_station.station.name }}"
+                                   target="_blank">
+                                    CWOP Details
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://www.findu.com/cgi-bin/find.cgi?{{ weather_station.station.name }}"
+                                   target="_blank">
+                                    Findu Page
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://weather.gladstonefamily.net/site/{{ weather_station.station.cwop_name }}"
+                                   target="_blank">
+                                    CWOP Data
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
