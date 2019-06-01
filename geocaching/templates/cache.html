@@ -47,12 +47,31 @@
                     <p>Latitude: {{ cache.latitude }}<br>Longitude: {{ cache.longitude }}</p>
                 </div>
             </div>
+    {% if waypoints %}
             <div class="row">
                 <div class="col-xs-12 col-sm-12">
+                <table class="table-striped">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Description</th>
+                    <th>Coordinate</th>
+                </tr>
+                </thead>
+                <tbody>
                     {% for waypoint in waypoints %}
-                        <pre>{{ waypoint|pprint }}</pre>
+                        <tr>
+                        <td>{{ waypoint.name }}</td>
+                        <td>{{ waypoint.urlname }}</td>
+                        <td>Latitude: {{ waypoint.latitude }}<br>Longitude: {{ waypoint.longitude }}</td>
+                        </tr>
+                        {% leaflet_marker cache.name waypoint.latitude waypoint.longitude %}
+
                     {% endfor %}
+                </tbody>
+                </table>
                 </div>
             </div>
+    {% endif %}
     </div>
 {% endblock %}
