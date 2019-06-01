@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load frontend_assets %}
+{% load frontend_assets geocaching %}
 {% block extra_css %}
     {% leaflet_header %}
     <script>
@@ -10,68 +10,70 @@
 {% endblock %}
 {% block content %}
     <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2>{{ cache.name }} - {{ cache.urlname }}</h2>
-                    <p>Placed By: {{ cache.placed_by }}</p>
-                </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>{{ cache.name }} - {{ cache.urlname }}</h2>
+                <p>Placed By: {{ cache.placed_by }}</p>
             </div>
-            <div class="row">
-                <div class="col-xs-12 col-sm-8">
-                    {{ cache.long_description|safe }}
-                    <hr>
-                    <h3>Hints:</h3>
-                    <p>{{ cache.hints }}</p>
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <table class="table table-bordered">
-                        <tr>
-                            <th>Link</th>
-                            <td><a href="{{ cache.url }}" target="_blank">{{ cache.name }}</a></td>
-                        </tr>
-                        <tr>
-                            <th>Container</th>
-                            <td>{{ cache.container }}</td>
-                        </tr>
-                        <tr>
-                            <th>Difficulty</th>
-                            <td>{{ cache.difficulty }}</td>
-                        </tr>
-                        <tr>
-                            <th>Terrain</th>
-                            <td>{{ cache.terrain }}</td>
-                        </tr>
-                    </table>
-                    {% leaflet_map cache.latitude cache.longitude 16 cache.name %}
-                    {% leaflet_marker cache.name cache.latitude cache.longitude %}
-                    <p>Latitude: {{ cache.latitude }}<br>Longitude: {{ cache.longitude }}</p>
-                </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-8">
+                {{ cache.long_description|safe }}
+                <hr>
+                <h3>Hints:</h3>
+                <p>{{ cache.hints }}</p>
             </div>
-    {% if waypoints %}
+            <div class="col-xs-12 col-sm-4">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Link</th>
+                        <td><a href="{{ cache.url }}" target="_blank">{{ cache.name }}</a></td>
+                    </tr>
+                    <tr>
+                        <th>Container</th>
+                        <td>{{ cache.container }}</td>
+                    </tr>
+                    <tr>
+                        <th>Difficulty</th>
+                        <td>{{ cache.difficulty }}</td>
+                    </tr>
+                    <tr>
+                        <th>Terrain</th>
+                        <td>{{ cache.terrain }}</td>
+                    </tr>
+                </table>
+                {% leaflet_map cache.latitude cache.longitude 16 cache.name %}
+                {% leaflet_marker cache.name cache.latitude cache.longitude %}
+                {% for wpt in waypoints %}
+                    {% waypoint_marker cache.name wpt.latitude wpt.longitude wpt.name %}
+                {% endfor %}
+                <p>Latitude: {{ cache.latitude }}<br>Longitude: {{ cache.longitude }}</p>
+            </div>
+        </div>
+        {% if waypoints %}
             <div class="row">
                 <div class="col-xs-12 col-sm-12">
-                <table class="table-striped">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>Description</th>
-                    <th>Coordinate</th>
-                </tr>
-                </thead>
-                <tbody>
-                    {% for waypoint in waypoints %}
+                    <table class="table table-striped">
+                        <thead>
                         <tr>
-                        <td>{{ waypoint.name }}</td>
-                        <td>{{ waypoint.urlname }}</td>
-                        <td>Latitude: {{ waypoint.latitude }}<br>Longitude: {{ waypoint.longitude }}</td>
+                            <th></th>
+                            <th>Description</th>
+                            <th>Coordinate</th>
                         </tr>
-                        {% leaflet_marker cache.name waypoint.latitude waypoint.longitude %}
+                        </thead>
+                        <tbody>
+                        {% for waypoint in waypoints %}
+                            <tr>
+                                <td>{{ waypoint.name }}</td>
+                                <td>{{ waypoint.urlname }}</td>
+                                <td>Latitude: {{ waypoint.latitude }}<br>Longitude: {{ waypoint.longitude }}</td>
+                            </tr>
 
-                    {% endfor %}
-                </tbody>
-                </table>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-    {% endif %}
+        {% endif %}
     </div>
 {% endblock %}
