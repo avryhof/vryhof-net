@@ -8,7 +8,7 @@ from geocaching.models import Point
 
 
 class ShowCachesView(TemplateView):
-    extra_css = ['css/cache.css']
+    extra_css = []
     extra_javascript = []
 
     template_name = "caches.html"
@@ -39,7 +39,7 @@ class ShowCachesView(TemplateView):
 
 
 class ShowCacheView(TemplateView):
-    extra_css = []
+    extra_css = ['css/cache.css']
     extra_javascript = []
 
     template_name = "cache.html"
