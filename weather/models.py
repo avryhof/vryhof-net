@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import (
     TextField,
     CharField,
@@ -33,7 +34,7 @@ class WeatherData(Model):
     baromrelin = FloatField(null=True)
     dailyrainin = FloatField(null=True)
     local_date = DateTimeField(null=True)
-    tz = CharField(max_length=128, null=True)
+    tz = CharField(max_length=128, default=settings.TIME_ZONE)
     date = DateTimeField(null=True)
     dateutc = BigIntegerField(null=True)
     dew_point = FloatField(null=True)
