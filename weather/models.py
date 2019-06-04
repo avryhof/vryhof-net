@@ -33,6 +33,7 @@ class WeatherData(Model):
     baromrelin = FloatField(null=True)
     dailyrainin = FloatField(null=True)
     local_date = DateTimeField(null=True)
+    tz = CharField(max_length=128, null=True)
     date = DateTimeField(null=True)
     dateutc = BigIntegerField(null=True)
     dew_point = FloatField(null=True)

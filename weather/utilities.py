@@ -1,3 +1,5 @@
+import pprint
+
 import pytz
 from ambient_api.ambientapi import AmbientAPI
 from ambient_aprs.ambient_aprs import AmbientAPRS
@@ -38,20 +40,61 @@ def get_weather():
             current_conditions["local_date"] = parsed_date.astimezone(local_timezone)
             current_conditions["station"] = station
 
+            pprint.pprint(current_conditions)
+
             try:
                 current_data = WeatherData.objects.get(
                     station=station, date=current_conditions.get("date")
                 )
             except WeatherData.DoesNotExist:
-                current_data = WeatherData.objects.create(**current_conditions)
-                log_message(
-                    "Current weather data collected on %s from %s (%s)"
-                    % (
-                        current_data.date,
-                        current_data.station.mac_address,
-                        current_data.station.name,
+                try:
+                    current_data = WeatherData.objects.create(**current_conditions)
+                    log_message(
+                        "Current weather data collected on %s from %s (%s)"
+                        % (
+                            current_data.date,
+                            current_data.station.mac_address,
+                            current_data.station.name,
+                        )
                     )
-                )
+                except TypeError as e:
+                    current_data = WeatherData.objects.create(
+                        station=station,
+                        baromabsin=current_conditions.get('baromabsin'),
+                        baromrelin=current_conditions.get('baromrelin'),
+                        dailyrainin=current_conditions.get('dailyrainin'),
+                        local_date=current_conditions.get('local_date'),
+                        date=current_conditions.get('date'),
+                        dateutc=current_conditions.get('dateutc'),
+                        dew_point=current_conditions.get('dew_point'),
+                        eventrainin=current_conditions.get('eventrainin'),
+                        feels_like=current_conditions.get('feels_like'),
+                        hourlyrainin=current_conditions.get('hourlyrainin'),
+                        humidity=current_conditions.get('humidity'),
+                        humidityin=current_conditions.get('humidityin'),
+                        last_rain=current_conditions.get('last_rain'),
+                        maxdailygust=current_conditions.get('maxdailygust'),
+                        monthlyrainin=current_conditions.get('monthlyrainin'),
+                        solarradiation=current_conditions.get('solarradiation'),
+                        tempf=current_conditions.get('tempf'),
+                        tempinf=current_conditions.get('tempinf'),
+                        totalrainin=current_conditions.get('totalrainin'),
+                        uv=current_conditions.get('uv'),
+                        weeklyrainin=current_conditions.get('weeklyrainin'),
+                        winddir=current_conditions.get('winddir'),
+                        windgustmph=current_conditions.get('windgustmph'),
+                        windspeedmph=current_conditions.get('windspeedmph'),
+                        windspdmph_avg10m=current_conditions.get('windspdmph_avg10m')
+                    )
+                    log_message(
+                        "Current weather data collected on %s from %s (%s)"
+                        % (
+                            current_data.date,
+                            current_data.station.mac_address,
+                            current_data.station.name,
+                        )
+                    )
+                    log_message("New field found in data. (%s)" % e)
 
         for past_data in device.get_data():
             past_data = convert_keys(past_data)
