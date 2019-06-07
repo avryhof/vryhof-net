@@ -1,5 +1,6 @@
 from django.db import models
 
+from api.contants import ACCURACY_CHOICES
 from gis.models import GISPoint
 
 
@@ -20,7 +21,8 @@ class PostalCode(GISPoint):
     )  # 3. order subdivision (community) varchar(100)
     admin_code3 = models.CharField(max_length=20, blank=True, null=True)  # 3. order subdivision (community) varchar(20)
     accuracy = models.IntegerField(
-        null=True
+        null=True,
+        choices=ACCURACY_CHOICES
     )  # accuracy of lat/lng from 1=estimated, 4=geonameid, 6=centroid of addresses or shape
 
     def __str__(self):
