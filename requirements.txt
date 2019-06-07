@@ -3,14 +3,15 @@ ambient_aprs>=0.11.0
 ask-sdk-core
 babel
 beautifulsoup4==4.6.3
+bleach
 certifi==2018.11.29
 chardet==3.0.4
 cryptography
-Django<2.2.0
+Django==2.2.2
 django-ask-sdk
 django-bootstrap4==0.0.7
 django-extensions==2.1.4
-django-filer==1.4.4
+django-filer==1.5.0
 django-mptt
 django-sendgrid-v5
 django-swingtime

@@ -19,3 +19,10 @@ class AuthorizedAgentPermission(permissions.BasePermission):
             is_authorized = True
 
         return is_authorized
+
+
+class AnonymousPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        is_authorized = True
+
+        return is_authorized

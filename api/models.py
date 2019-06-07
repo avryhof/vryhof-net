@@ -1,7 +1,9 @@
 from django.db import models
 
+from gis.models import GISPoint
 
-class PostalCode(models.Model):
+
+class PostalCode(GISPoint):
     country_code = models.CharField(max_length=2, blank=True, null=True)  # iso country code, 2 characters
     postal_code = models.CharField(max_length=20, blank=True, null=True)  # varchar(20)
     place_name = models.CharField(max_length=180, blank=True, null=True)  # varchar(180)
@@ -17,20 +19,11 @@ class PostalCode(models.Model):
         max_length=100, blank=True, null=True
     )  # 3. order subdivision (community) varchar(100)
     admin_code3 = models.CharField(max_length=20, blank=True, null=True)  # 3. order subdivision (community) varchar(20)
-    latitude = models.DecimalField(
-        max_digits=22, decimal_places=16, blank=True, null=True
-    )  # estimated latitude (wgs84)
-    longitude = models.DecimalField(
-        max_digits=22, decimal_places=16, blank=True, null=True
-    )  # estimated longitude (wgs84)
     accuracy = models.IntegerField(
         null=True
     )  # accuracy of lat/lng from 1=estimated, 4=geonameid, 6=centroid of addresses or shape
-    distance = models.FloatField(null=True)  # Always overwritten in distance queries
 
     def __str__(self):
 
         return self.place_name
-
-    # def within_radius(self, radius, **kwargs):
 

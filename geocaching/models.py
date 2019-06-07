@@ -4,6 +4,7 @@ from django.db.models import DO_NOTHING, CASCADE
 from filer.fields.file import FilerFileField
 
 from geocaching.constants import GPX_CHOICES
+from gis.models import GISPoint
 
 
 class GPXFile(models.Model):
@@ -30,18 +31,15 @@ class PocketQuery(models.Model):
         return self.name
 
 
-class Point(models.Model):
+class Point(GISPoint):
     gpx_files = models.ManyToManyField(GPXFile, blank=True)
     pocket_query = models.ManyToManyField(PocketQuery, blank=True)
     point_type = models.CharField(max_length=64, choices=GPX_CHOICES)
-    name = models.CharField(max_length=100, blank=True, null=True)
     gpx_type = models.CharField(max_length=100, blank=True, null=True)
     url = models.URLField(blank=True, null=True)
     urlname = models.CharField(max_length=100, blank=True, null=True)
     time = models.DateTimeField(null=True)
     sym = models.CharField(max_length=100, blank=True, null=True)
-    latitude = models.FloatField(null=True)
-    longitude = models.FloatField(null=True)
     placed_by = models.CharField(max_length=100, blank=True, null=True)
     desc = models.TextField(blank=True, null=True)
     long_description = models.TextField(blank=True, null=True)

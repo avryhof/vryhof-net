@@ -12,33 +12,16 @@ from filer.models import Folder, File
 
 from geocaching.constants import GPX_WAYPOINTS, GPX_GEOCACHES
 from geocaching.models import GPXFile, Point
+from gis.utility_functions import points_within_radius
 
 
 def get_points_in_radius(latitude, longitude, **kwargs):
-    if kwargs.get('use_miles', True):
-        distance_unit = 3959
-    else:
-        distance_unit = 6371
+    caches = points_within_radius(Point, latitude, longitude, **kwargs)
 
-    distance_unit = float(distance_unit)
-
-    if not isinstance(latitude, float):
-        latitude = float(latitude)
-
-    if not isinstance(longitude, float):
-        longitude = float(longitude)
-
-    sql = 'SELECT id, name, urlname, container, terrain, difficulty, placed_by, ' \
-          '(%f * acos(cos(radians(%f)) * cos(radians(latitude)) * cos(radians(longitude) - ' \
-          'radians(%f)) + sin(radians(%f)) * sin(radians(latitude)))) AS distance ' \
-          'FROM geocaching_point ORDER BY distance;' % (
-              distance_unit,
-              latitude,
-              longitude,
-              latitude
-          )
-
-    points = Point.objects.raw(sql)
+    points = []
+    for cache in caches:
+        if cache.point_type == GPX_GEOCACHES:
+            points.append(cache)
 
     return points
 

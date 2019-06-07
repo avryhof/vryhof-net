@@ -31,3 +31,8 @@ class AssistantAuthentication(authentication.BaseAuthentication):
             user = remote.user
 
         return (user, auth)
+
+
+class AnonymousAuthentication(authentication.BaseAuthentication):
+    def authenticate(self, request):
+        return (AnonymousUser, '')

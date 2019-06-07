@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "alexa",
     "assistant",
     "mail",
+    "gis",
     "geocaching",
     "api"
 ]

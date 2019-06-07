@@ -12,7 +12,7 @@ from geocaching.utility_functions import get_points_in_radius
 
 class ShowCachesView(TemplateView):
     extra_css = []
-    extra_javascript = ['js/caches.js']
+    extra_javascript = ["js/caches.js"]
 
     template_name = "caches.html"
     name = "GeoCaches"
@@ -32,8 +32,8 @@ class ShowCachesView(TemplateView):
         self.request = request
         context = self.get_context_data()
 
-        context['search_form'] = CacheSearchForm
-        context['caches'] = Point.objects.filter(point_type=GPX_GEOCACHES)
+        context["search_form"] = CacheSearchForm
+        context["caches"] = Point.objects.filter(point_type=GPX_GEOCACHES)
 
         return render(request, self.template_name, context)
 
@@ -45,26 +45,30 @@ class ShowCachesView(TemplateView):
         caches = []
 
         if form.is_valid():
-            terms = form.cleaned_data.get('terms')
-            latitude = form.cleaned_data.get('latitude')
-            longitude = form.cleaned_data.get('longitude')
+            terms = form.cleaned_data.get("terms")
+            latitude = form.cleaned_data.get("latitude")
+            longitude = form.cleaned_data.get("longitude")
+            radius = form.cleaned_data.get("radius", False)
 
             if latitude and longitude:
                 caches = []
-                sorted_caches = get_points_in_radius(latitude, longitude)
+                sorted_caches = get_points_in_radius(latitude, longitude, radius=radius)
 
                 for sorted_cache in sorted_caches:
-                    if sorted_cache.point_type == GPX_GEOCACHES and (
-                            terms.lower() in sorted_cache.name.lower() or terms.lower() in sorted_cache.urlname.lower()
-                            or terms.lower() in sorted_cache.long_description.lower()):
+                    if (
+                        terms.lower() in sorted_cache.name.lower()
+                        or terms.lower() in sorted_cache.urlname.lower()
+                        or terms.lower() in sorted_cache.long_description.lower()
+                    ):
                         caches.append(sorted_cache)
 
             else:
                 caches = Point.objects.filter(point_type=GPX_GEOCACHES).filter(
-                    Q(name__icontains=terms) | Q(urlname__icontains=terms) | Q(long_description__icontains=terms))
+                    Q(name__icontains=terms) | Q(urlname__icontains=terms) | Q(long_description__icontains=terms)
+                )
 
-        context['search_form'] = form
-        context['caches'] = caches
+        context["search_form"] = form
+        context["caches"] = caches
 
         return render(request, self.template_name, context)
 
@@ -74,7 +78,7 @@ class ShowCachesView(TemplateView):
 
 
 class ShowCacheView(TemplateView):
-    extra_css = ['css/cache.css']
+    extra_css = ["css/cache.css"]
     extra_javascript = []
 
     template_name = "cache.html"
@@ -95,16 +99,16 @@ class ShowCacheView(TemplateView):
         self.request = request
         context = self.get_context_data()
 
-        name = kwargs.get('name')
+        name = kwargs.get("name")
 
         cache = Point.objects.get(name=name)
-        waypoints = Point.objects.filter(point_type=GPX_WAYPOINTS, name__endswith=cache.name.replace('GC', ''))
+        waypoints = Point.objects.filter(point_type=GPX_WAYPOINTS, name__endswith=cache.name.replace("GC", ""))
 
         self.name = cache.urlname
-        context['page_title'] = '%s - %s' % (cache.name, cache.urlname)
+        context["page_title"] = "%s - %s" % (cache.name, cache.urlname)
 
-        context['cache'] = cache
-        context['waypoints'] = waypoints
+        context["cache"] = cache
+        context["waypoints"] = waypoints
 
         return render(request, self.template_name, context)
 
