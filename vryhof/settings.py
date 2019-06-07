@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     "alexa",
     "assistant",
     "mail",
-    "geocaching"
+    "geocaching",
+    "api"
 ]
 
 MIDDLEWARE = [
