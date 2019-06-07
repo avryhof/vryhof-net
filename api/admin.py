@@ -20,3 +20,5 @@ class PostalCodeAdmin(admin.ModelAdmin):
         'longitude',
         'accuracy',
     )
+    list_filter = ('admin_name1', 'admin_code1',)
+    search_fields = ("place_name", 'admin_name1', 'admin_code1', 'admin_name2',)

@@ -1,6 +1,6 @@
 from django.db import models
 
-from api.contants import ACCURACY_CHOICES
+from api.constants import ACCURACY_CHOICES
 from gis.models import GISPoint
 
 
