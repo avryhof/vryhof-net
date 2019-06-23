@@ -11,7 +11,7 @@ from django.db.models import (
     ForeignKey,
     DO_NOTHING,
     DecimalField,
-)
+    DateField)
 
 
 class WeatherStation(Model):
@@ -65,3 +65,18 @@ class WeatherData(Model):
 
     def __str__(self):
         return "%s on %s" % (self.station.name, str(self.date))
+
+
+class WeatherImages(Model):
+    added = DateTimeField(auto_now_add=True)
+    date = DateField(null=True)
+    time = DateTimeField(null=True)
+    filename = CharField(max_length=100, blank=True, null=True)
+    path = TextField(null=True)
+    url = TextField(null=True)
+
+    class Meta:
+        verbose_name = "Weather Image"
+        verbose_name_plural = "Weather Images"
+        ordering = ["-time"]
+        get_latest_by = "time"

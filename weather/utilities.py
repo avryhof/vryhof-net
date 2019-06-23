@@ -1,14 +1,19 @@
+import datetime
 import pprint
+import re
 
 import pytz
 from ambient_api.ambientapi import AmbientAPI
 from ambient_aprs.ambient_aprs import AmbientAPRS
 from dateutil.parser import parse
 from django.conf import settings
+from django.utils.timezone import make_aware
 
 from firefox.utilities import convert_keys, log_message
 from weather.models import WeatherStation, WeatherData
 
+date_pattern = '(?P<year>\d{4})(?P<month>\d{2})(?P<day>\d{2})'
+time_pattern = '(?P<hour>\d{2})(?P<minute>\d{2})(?P<second>\d{2})'
 
 def get_weather():
     weather = AmbientAPI()
@@ -137,3 +142,39 @@ def get_weather():
             log_message(weather_data)
         else:
             log_message("APRS Packet sent successfully.")
+
+
+def translate_datetime(date_string, time_string):
+    date_parts = re.search(date_pattern, date_string).groups()
+    time_parts = re.search(time_pattern, time_string)
+    date_time = make_aware(datetime.datetime(
+        year=int(date_parts[0]),
+        month=int(date_parts[1]),
+        day=int(date_parts[2]),
+        hour=int(time_parts[0]),
+        minute=int(time_parts[1]),
+        second=int(time_parts[2]),
+    ))
+
+    return date_time
+
+def translate_date(date_string):
+    date_parts = re.search(date_pattern, date_string).groups()
+    date = make_aware(datetime.datetime(
+        year=int(date_parts[0]),
+        month=int(date_parts[1]),
+        day=int(date_parts[2])
+    ))
+
+    return date
+
+
+def translate_time(time_string):
+    time_parts = re.search(time_pattern, time_string)
+    time = make_aware(datetime.time(
+        hour=int(time_parts[0]),
+        minute=int(time_parts[1]),
+        second=int(time_parts[2]),
+    ))
+
+    return time
