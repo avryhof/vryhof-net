@@ -70,6 +70,8 @@
                             </td>
                         </tr>
                     </table>
+                    <hr>
+                    <img src="{% url 'weather_image' %}" alt="Weather Cam Image" class="img-responsive" width="100%">
                 </div>
                 <div class="col-xs-12 col-sm-4">
                     {% leaflet_map weather_station.station.latitude weather_station.station.longitude 16 weather_station.station.name %}
