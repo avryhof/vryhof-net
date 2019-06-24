@@ -22,10 +22,14 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.verbosity = int(options["verbosity"])
 
-        file_date_pattern = '\D(?P<year>\d{2})(?P<month>\d{2})(?P<day>\d{2})'
-        file_time_pattern = '(?P<hour>\d{2})(?P<minute>\d{2})(?P<second>\d{2})'
+        file_date_pattern = r'\D(?P<year>\d{2})(?P<month>\d{2})(?P<day>\d{2})'
+        file_time_pattern = r'(?P<hour>\d{2})(?P<minute>\d{2})(?P<second>\d{2})'
 
-        source_folder = os.path.join('/', 'home', 'avryhof', 'weather')
+        if settings.PROFILE_DIR:
+            source_folder = os.path.join(settings.PROFILE_DIR, 'weather')
+
+        else:
+            source_folder = os.path.join('/', 'home', 'avryhof', 'weather')
 
         target_folder = os.path.join(settings.MEDIA_ROOT, 'weather')
         if not os.path.exists(target_folder):

@@ -62,8 +62,26 @@ def weather_image(request, *args, **kwargs):
 
     search_dict = dict()
 
-    if time:
-        search_dict.update(dict(time=translate_datetime(date, time)))
+    if isinstance(time, str):
+        ltimestring = time.ljust(6, '0')
+        utimestring = time.ljust(6, 'X').replace('XX', '59')
+
+        if len(time) == 2:
+            # newest image within an hour
+            search_dict.update(dict(
+                time__gte=translate_datetime(date, ltimestring),
+                time__lte=translate_datetime(date, utimestring)
+            ))
+
+        elif len(time) == 4:
+            # newest image less than or equal to minute
+            search_dict.update(dict(
+                time__lte=translate_datetime(date, utimestring)
+            ))
+
+        else:
+            # newest image to the second - probably never use this
+            search_dict.update(dict(time=translate_datetime(date, ltimestring)))
 
     elif not time and date:
         search_dict.update(dict(date=translate_date(date)))
