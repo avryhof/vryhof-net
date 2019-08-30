@@ -24,6 +24,7 @@ class PostalCode(GISPoint):
         null=True,
         choices=ACCURACY_CHOICES
     )  # accuracy of lat/lng from 1=estimated, 4=geonameid, 6=centroid of addresses or shape
+    updated = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
 

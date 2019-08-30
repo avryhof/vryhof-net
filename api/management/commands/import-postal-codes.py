@@ -12,10 +12,11 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from api.models import PostalCode
-from geocaching.models import GPXFile, PocketQuery
-from geocaching.utility_functions import process_gpx_file
+from utilities.aware_datetime import aware_datetime
 
 logger = logging.getLogger(__name__)
+
+datetime = aware_datetime()
 
 settings.DEBUG = False
 
@@ -35,7 +36,7 @@ class Command(BaseCommand):
     #     parser.add_argument("address", type=str)
 
     def _log_message(self, message):
-        log_message = "%s: %s\n" % (datetime.datetime.now().isoformat()[0:19], message)
+        log_message = "%s: %s\n" % (datetime.now().isoformat()[0:19], message)
 
         logger.info(message)
 
@@ -44,12 +45,12 @@ class Command(BaseCommand):
 
     def _timer(self):
         if not self.init_time:
-            self.init_time = datetime.datetime.now()
+            self.init_time = datetime.now()
             self._log_message("Command initiated.")
         else:
             self._log_message("Command completed.")
 
-            complete_time = datetime.datetime.now()
+            complete_time = datetime.now()
             command_total_seconds = (complete_time - self.init_time).total_seconds()
             command_minutes = math.floor(command_total_seconds / 60)
             command_seconds = command_total_seconds - (command_minutes * 60)
@@ -108,7 +109,8 @@ class Command(BaseCommand):
                         admin_code3=row[8],
                         latitude=row[9],
                         longitude=row[10],
-                        accuracy=row[11]
+                        accuracy=row[11],
+                        updated=datetime.now()
                     ))
 
                 else:
@@ -125,6 +127,7 @@ class Command(BaseCommand):
                     postal_code.latitude = row[9]
                     postal_code.longitude = row[10]
                     postal_code.accuracy = row[11]
+                    postal_code.updated = datetime.now()
                     postal_code.save()
 
         data_file.close()
