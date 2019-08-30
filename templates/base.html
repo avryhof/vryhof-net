@@ -1,4 +1,4 @@
-{% load static bootstrap4 %}
+{% load static bootstrap4 favorites_icons %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -11,6 +11,8 @@
     {% endblock %}
 
     <title>{{ page_title }} | {{ site_name }}</title>
+
+    {% touch_icons %}
 
     <!-- Bootstrap CSS -->
     {% bootstrap_css %}

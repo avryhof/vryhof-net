@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "easy_thumbnails",
     "filer",
     "mptt",
+    "favorites_icons",
     "frontend_assets",
     "swingtime",
     "navbar",
@@ -58,7 +59,7 @@ INSTALLED_APPS = [
     "mail",
     "gis",
     "geocaching",
-    "api"
+    "api",
 ]
 
 MIDDLEWARE = [
@@ -76,7 +77,7 @@ ROOT_URLCONF = "vryhof.urls"
 
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 
-SENDGRID_API_KEY = os.environ['SENDGRID_API_KEY']
+SENDGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 SENDGRID_TRACK_EMAIL_OPENS = True
 
@@ -131,9 +132,7 @@ DATABASES = {
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -187,10 +186,7 @@ LOGGING = {
             "format": "%(asctime)s %(levelname)s [%(name)s: %(pathname)s %(funcName)s line:%(lineno)s] -- %(message)s",
             "datefmt": "%m-%d-%Y %H:%M:%S",
         },
-        "verbose": {
-            "format": "%(asctime)s %(levelname)s %(name)s -- %(message)s",
-            "datefmt": "%m-%d-%Y %H:%M:%S",
-        },
+        "verbose": {"format": "%(asctime)s %(levelname)s %(name)s -- %(message)s", "datefmt": "%m-%d-%Y %H:%M:%S"},
         "simple": {"format": "%(asctime)s %(levelname)s %(message)s"},
     },
     "handlers": {
@@ -202,11 +198,7 @@ LOGGING = {
             "maxBytes": 1024 * 1024 * 100,  # 100 mb
             "backupCount": 3,
         },
-        "file": {
-            "level": LOGGER_LEVEL,
-            "class": "logging.FileHandler",
-            "filename": ERROR_LOG,
-        },
+        "file": {"level": LOGGER_LEVEL, "class": "logging.FileHandler", "filename": ERROR_LOG},
     },
     "loggers": {
         "": {"level": "INFO", "handlers": ["weather"], "propagate": True},
@@ -233,3 +225,8 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
 }
+
+ICON_SRC = os.path.join(BASE_DIR, "static", "favorites_icon.png")
+SITE_NAME = "Vryhof.NET"  # Optional if you are using the Sites framework, and have a SITE_ID configured.
+TILE_COLOR = "#FFFFFF"
+THEME_COLOR = "#000000"

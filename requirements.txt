@@ -17,6 +17,7 @@ django-sendgrid-v5
 django-swingtime
 djangorestframework
 easy_thumbnails
+favorites-icons
 frontend-assets==0.6.8
 future==0.17.1
 idna==2.8
