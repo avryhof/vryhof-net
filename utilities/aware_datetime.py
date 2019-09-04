@@ -1,7 +1,7 @@
 import datetime
 from time import strftime, gmtime
 
-import pytz as pytz
+from django.utils.timezone import make_aware
 
 
 class aware_datetime:
@@ -31,8 +31,7 @@ class aware_datetime:
 
         if not self._is_aware:
             try:
-                localtz = pytz.timezone(self.timezone)
-                self.value = localtz.localize(self.value)
+                self.value = make_aware(self.value, self.timezone)
             except AttributeError:
                 pass
 

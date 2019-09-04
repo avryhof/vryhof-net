@@ -1,20 +1,13 @@
 from __future__ import unicode_literals
 
-import csv
 import datetime
 import logging
 import math
-import os
-import zipfile
-from urllib.request import urlretrieve
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from api.models import PostalCode
-from api.utility_functions import postal_codes_within_radius
-from geocaching.models import GPXFile, PocketQuery
-from geocaching.utility_functions import process_gpx_file
 from gis.utility_functions import points_within_radius
 
 logger = logging.getLogger(__name__)
@@ -63,7 +56,8 @@ class Command(BaseCommand):
 
         self._timer()
 
-        home_location = PostalCode.objects.get(postal_code='13212')
+        home_location = PostalCode.objects.get(postal_code="13212")
+        # remote_location = PostalCode.objects.get(postal_code='13057')
         # zip_codes = postal_codes_within_radius(home_location.latitude, home_location.longitude, radius=5)
         zip_codes = points_within_radius(PostalCode, home_location.latitude, home_location.longitude, radius=5)
 
