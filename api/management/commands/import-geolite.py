@@ -6,24 +6,22 @@ import glob
 import logging
 import math
 import os
-import pprint
 import zipfile
 from urllib.request import urlretrieve
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from django.utils.timezone import make_aware
 
-from api.models import PostalCode, IP4Location, IP6Location
-from api.utility_functions import import_postal_codes_csv
-from utilities.aware_datetime import aware_datetime
+from api.models import IP4Location, IP6Location
 
 logger = logging.getLogger(__name__)
-
-datetime = aware_datetime()
 
 settings.DEBUG = False
 
 geolite_city = "https://geolite.maxmind.com/download/geoip/database/GeoLite2-City-CSV.zip"
+
+
 # geolite_country = "https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country-CSV.zip"
 # geolite_asn = "https://geolite.maxmind.com/download/geoip/database/GeoLite2-ASN-CSV.zip"
 
@@ -43,7 +41,7 @@ class Command(BaseCommand):
     #     parser.add_argument("address", type=str)
 
     def _log_message(self, message):
-        log_message = "%s: %s\n" % (datetime.now().isoformat()[0:19], message)
+        log_message = "%s: %s\n" % (datetime.datetime.now().isoformat()[0:19], message)
 
         logger.info(message)
 
@@ -52,12 +50,12 @@ class Command(BaseCommand):
 
     def _timer(self):
         if not self.init_time:
-            self.init_time = datetime.now()
+            self.init_time = datetime.datetime.now()
             self._log_message("Command initiated.")
         else:
             self._log_message("Command completed.")
 
-            complete_time = datetime.now()
+            complete_time = datetime.datetime.now()
             command_total_seconds = (complete_time - self.init_time).total_seconds()
             command_minutes = math.floor(command_total_seconds / 60)
             command_seconds = command_total_seconds - (command_minutes * 60)
@@ -117,7 +115,7 @@ class Command(BaseCommand):
                                     is_anonymous_proxy=row[4] == "1",
                                     is_satellite_provider=row[5] == "1",
                                     postal_code=row[6],
-                                    updated=datetime.now()
+                                    updated=make_aware(datetime.datetime.now())
                                 ))
 
                             else:
@@ -128,7 +126,7 @@ class Command(BaseCommand):
                                 ip.is_anonymous_proxy = row[4],
                                 ip.is_satellite_provider = row[5],
                                 ip.postal_code = row[6],
-                                ip.updated = datetime.now()
+                                ip.updated = make_aware(datetime.datetime.now())
                                 ip.save()
 
                             if len(insert_list) == 10000:

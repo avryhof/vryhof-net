@@ -3,12 +3,14 @@ from __future__ import unicode_literals
 import datetime
 import logging
 import math
+import os
+import zipfile
+from urllib.request import urlretrieve
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from api.models import PostalCode
-from gis.utility_functions import points_within_radius
+from gis.utility_functions import import_postal_codes_csv
 
 logger = logging.getLogger(__name__)
 
@@ -56,12 +58,26 @@ class Command(BaseCommand):
 
         self._timer()
 
-        home_location = PostalCode.objects.get(postal_code="13212")
-        # remote_location = PostalCode.objects.get(postal_code='13057')
-        # zip_codes = postal_codes_within_radius(home_location.latitude, home_location.longitude, radius=5)
-        zip_codes = points_within_radius(PostalCode, home_location.latitude, home_location.longitude, radius=5)
+        media_root_normalized = os.path.join(*os.path.split(settings.MEDIA_ROOT))
+        zip_file_path = os.path.join(media_root_normalized, 'geonames')
+        zip_file = os.path.join(zip_file_path, 'US.zip')
 
-        for zip_code in zip_codes:
-            print(zip_code.place_name, zip_code.postal_code, zip_code.distance)
+        if not os.path.exists(zip_file_path):
+            os.makedirs(zip_file_path)
+
+        if os.path.exists(zip_file):
+            os.remove(zip_file)
+
+        urlretrieve("http://download.geonames.org/export/zip/US.zip", zip_file)
+
+        zip_ref = zipfile.ZipFile(zip_file, "r")
+        zip_ref.extractall(zip_file_path)
+        zip_ref.close()
+        os.remove(zip_file)
+
+        data_file_path = os.path.join(zip_file_path, 'US.txt')
+        import_postal_codes_csv(data_file_path)
+
+        os.remove(data_file_path)
 
         self._timer()

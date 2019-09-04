@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 
-from api.models import PostalCode
+from gis.models import PostalCode
 from assistant.api_auth import AnonymousAuthentication
 from assistant.constants import NO_CACHE_HEADERS
 from assistant.permissions import AnonymousPermission

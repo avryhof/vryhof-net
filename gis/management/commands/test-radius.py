@@ -1,23 +1,16 @@
 from __future__ import unicode_literals
 
-import csv
 import datetime
 import logging
 import math
-import os
-import zipfile
-from urllib.request import urlretrieve
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from api.models import PostalCode
-from api.utility_functions import import_postal_codes_csv
-from utilities.aware_datetime import aware_datetime
+from gis.models import PostalCode
+from gis.utility_functions import points_within_radius
 
 logger = logging.getLogger(__name__)
-
-datetime = aware_datetime()
 
 settings.DEBUG = False
 
@@ -37,7 +30,7 @@ class Command(BaseCommand):
     #     parser.add_argument("address", type=str)
 
     def _log_message(self, message):
-        log_message = "%s: %s\n" % (datetime.now().isoformat()[0:19], message)
+        log_message = "%s: %s\n" % (datetime.datetime.now().isoformat()[0:19], message)
 
         logger.info(message)
 
@@ -46,12 +39,12 @@ class Command(BaseCommand):
 
     def _timer(self):
         if not self.init_time:
-            self.init_time = datetime.now()
+            self.init_time = datetime.datetime.now()
             self._log_message("Command initiated.")
         else:
             self._log_message("Command completed.")
 
-            complete_time = datetime.now()
+            complete_time = datetime.datetime.now()
             command_total_seconds = (complete_time - self.init_time).total_seconds()
             command_minutes = math.floor(command_total_seconds / 60)
             command_seconds = command_total_seconds - (command_minutes * 60)
@@ -63,26 +56,12 @@ class Command(BaseCommand):
 
         self._timer()
 
-        media_root_normalized = os.path.join(*os.path.split(settings.MEDIA_ROOT))
-        zip_file_path = os.path.join(media_root_normalized, 'geonames')
-        zip_file = os.path.join(zip_file_path, 'US.zip')
+        home_location = PostalCode.objects.get(postal_code="13212")
+        # remote_location = PostalCode.objects.get(postal_code='13057')
+        # zip_codes = postal_codes_within_radius(home_location.latitude, home_location.longitude, radius=5)
+        zip_codes = points_within_radius(PostalCode, home_location.latitude, home_location.longitude, radius=5)
 
-        if not os.path.exists(zip_file_path):
-            os.makedirs(zip_file_path)
-
-        if os.path.exists(zip_file):
-            os.remove(zip_file)
-
-        urlretrieve("http://download.geonames.org/export/zip/US.zip", zip_file)
-
-        zip_ref = zipfile.ZipFile(zip_file, "r")
-        zip_ref.extractall(zip_file_path)
-        zip_ref.close()
-        os.remove(zip_file)
-
-        data_file_path = os.path.join(zip_file_path, 'US.txt')
-        import_postal_codes_csv(data_file_path)
-
-        os.remove(data_file_path)
+        for zip_code in zip_codes:
+            print(zip_code.place_name, zip_code.postal_code, zip_code.distance)
 
         self._timer()
