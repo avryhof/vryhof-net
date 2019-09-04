@@ -1,8 +1,11 @@
 from math import radians, cos, sin, asin, sqrt
 
 from django.db import models
+from django.db.models import DO_NOTHING
 
 from gis.constants import ACCURACY_CHOICES
+from gis.us_census_class import USCensus
+from gis.usps_class import USPS
 
 
 class GISPoint(models.Model):
@@ -37,7 +40,6 @@ class GISPoint(models.Model):
         return distance
 
     def in_radius(self, latitude, longitude, radius, **kwargs):
-
         return self.distance_from(latitude, longitude, **kwargs) < radius
 
 
@@ -64,3 +66,75 @@ class PostalCode(GISPoint):
 
     def __str__(self):
         return self.place_name
+
+
+class StreetAddress(GISPoint):
+    address1 = models.CharField(max_length=255, blank=True, null=True)
+    address2 = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=180, blank=True, null=True)
+    state = models.CharField(max_length=20, blank=True, null=True)
+    zip_code = models.CharField(max_length=20, blank=True, null=True)
+    plus_four = models.CharField(max_length=20, blank=True, null=True)
+    postal_code = models.ForeignKey(PostalCode, blank=True, null=True, on_delete=DO_NOTHING)
+    validated = models.BooleanField(default=False)
+
+    def dict(self):
+        return dict(
+            address1=self.address1, address2=self.address2, city=self.city, state=self.state, zip_code=self.zip_code
+        )
+
+    def geocode(self, **kwargs):
+        retn = False
+
+        valid_address = self.normalize()
+
+        usc = USCensus()
+
+        geocoded = usc.geocode(query=valid_address)
+        if geocoded:
+            retn = True
+            self.latitude = geocoded.get("latitude")
+            self.longitude = geocoded.get("longitude")
+
+        return retn
+
+    def link_postal_code(self):
+        retn = False
+        try:
+            self.postal_code = PostalCode.objects.get(postal_code=self.zip_code)
+
+        except PostalCode.DoesNotExist:
+            pass
+
+        else:
+            retn = True
+            self.save()
+
+        return retn
+
+    def normalize(self):
+        valid_address = dict(
+            address1=self.address1,
+            address2=self.address2,
+            city=self.city,
+            state=self.state,
+            zip_code=self.zip_code,
+            plus_four=self.plus_four,
+        )
+
+        if not self.validated:
+            search_address = self.dict()
+
+            ps = USPS()
+            valid_address = ps.address(**search_address)
+
+            self.address1 = valid_address.get("address1", self.address1)
+            self.address2 = valid_address.get("address2", self.address2)
+            self.city = valid_address.get("city", self.city)
+            self.state = valid_address.get("state", self.state)
+            self.zip_code = valid_address.get("zip_code", self.zip_code)
+            self.plus_four = valid_address.get("plus_four", self.plus_four)
+            self.validated = True
+            self.save()
+
+        return valid_address
