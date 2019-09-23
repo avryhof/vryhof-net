@@ -1,15 +1,17 @@
 import pprint
 
 import bleach
+from geo_ez.models import PostalCode
+from geo_ez.utility_functions import points_within_radius
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 
-from gis.models import PostalCode
+
 from assistant.api_auth import AnonymousAuthentication
 from assistant.constants import NO_CACHE_HEADERS
 from assistant.permissions import AnonymousPermission
-from gis.utility_functions import points_within_radius
+
 
 
 @api_view(["GET", "POST"])

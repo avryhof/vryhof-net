@@ -20,6 +20,7 @@ easy_thumbnails
 favorites-icons
 frontend-assets==0.6.8
 future==0.17.1
+geo_ez
 idna==2.8
 phonetisch
 psycopg2-binary==2.7.6.1

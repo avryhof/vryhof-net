@@ -1,0 +1,15 @@
+{% load bootstrap4 %}
+<form action="{% url "home" %}" method="post">
+    {% csrf_token %}
+    <div class="form-row">
+        <div class="col-9">
+            {% bootstrap_field form.search %}
+        </div>
+        <div class="col-3">
+            {% buttons %}
+                <label>&nbsp;</label><br>
+                {% bootstrap_button "Search" button_class="btn-primary" %}
+            {% endbuttons %}
+        </div>
+    </div>
+</form>

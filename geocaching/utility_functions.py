@@ -12,7 +12,7 @@ from filer.models import Folder, File
 
 from geocaching.constants import GPX_WAYPOINTS, GPX_GEOCACHES
 from geocaching.models import GPXFile, Point
-from gis.utility_functions import points_within_radius
+from geo_ez.utility_functions import points_within_radius
 
 
 def get_points_in_radius(latitude, longitude, **kwargs):

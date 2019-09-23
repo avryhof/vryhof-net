@@ -3,11 +3,13 @@ from __future__ import unicode_literals
 
 import datetime
 
+from django.contrib.postgres.search import SearchVector
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 
+from firefox.forms import SearchForm
 from firefox.models import NewsItem
 
 
@@ -33,8 +35,31 @@ class FirefoxHomeView(TemplateView):
         self.request = request
         context = self.get_context_data()
 
+        context["form"] = SearchForm()
+
         yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
         context["news"] = NewsItem.objects.filter(date__gte=yesterday)
+
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        self.request = request
+        context = self.get_context_data()
+
+        form = SearchForm(request.POST)
+        news_items = []
+
+        if form.is_valid():
+            terms = form.cleaned_data.get("search")
+            news_items = NewsItem.objects.annotate(search=SearchVector("title", "abstract", "content")).filter(
+                search=terms
+            )
+        else:
+            yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+            news_items = NewsItem.objects.filter(date__gte=yesterday)
+
+        context["news"] = news_items
+        context["form"] = form
 
         return render(request, self.template_name, context)
 

@@ -4,8 +4,7 @@ from django.db.models import (
     CharField,
     BooleanField,
 )
-
-from gis.models import GISPoint
+from geo_ez.models import GISPoint
 
 
 class IP4Location(GISPoint):

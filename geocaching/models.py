@@ -2,9 +2,9 @@ from django.conf import settings
 from django.db import models
 from django.db.models import DO_NOTHING, CASCADE
 from filer.fields.file import FilerFileField
+from geo_ez.models import GISPoint
 
 from geocaching.constants import GPX_CHOICES
-from gis.models import GISPoint
 
 
 class GPXFile(models.Model):
