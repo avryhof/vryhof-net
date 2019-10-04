@@ -1,9 +1,37 @@
 import datetime
 import random
 
+import requests
+
 from alexa.models import BedtimeStory
 from assistant.utility_functions import search_model
 from weather.models import WeatherStation, WeatherData
+
+
+def get_song(**kwargs):
+    search = kwargs.get("search", False)
+    speech_text = "I can't find that song."
+
+    song = None
+
+    if search:
+        search_data = dict(format="json", search=search)
+        if "by" in search.lower():
+            title, artist = search.lower().split("by")
+            search_data.update({
+                "title": title,
+                "artist": artist
+            })
+
+        search_url = "https://dev.vryhof.net/music/search/"
+        resp = requests.get(search_url, params=search_data)
+
+        results = resp.json()
+        song = results[0]
+
+        return song
+
+    return speech_text
 
 
 def get_story(**kwargs):

@@ -8,7 +8,7 @@ from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_model.ui import SimpleCard
 
-from alexa.skills import launch_request, get_weather, get_story
+from alexa.skills import launch_request, get_weather, get_story, get_song
 
 sb = SkillBuilder()
 
@@ -61,6 +61,21 @@ def read_story_intent_handler(handler_input):
 
     story_title = slots.get("story_title").value
     speech_text = get_story(story_title=story_title)
+
+    return (
+        handler_input.response_builder.speak(speech_text)
+        .set_card(SimpleCard(skill_name, speech_text))
+        .set_should_end_session(False)
+        .response
+    )
+
+
+@sb.request_handler(can_handle_func=is_intent_name("PlaySongIntent"))
+def play_song_intent_handler(handler_input):
+    slots = handler_input.request_envelope.request.intent.slots
+
+    song_title = slots.get("song_search").value
+    speech_text = get_song(search=song_title)
 
     return (
         handler_input.response_builder.speak(speech_text)
