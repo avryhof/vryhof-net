@@ -93,6 +93,7 @@ class BlogPostView(TemplateView):
 
             else:
                 context["post"] = post
+                context['category'] = post.category
 
         return render(request, self.template_name, context)
 

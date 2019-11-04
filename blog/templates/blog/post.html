@@ -4,8 +4,8 @@
         {{ post.title|safe }}
     </h2>
     <div class="post-metadata">
-        Posted on {{ post.pub_date }} by {{ post.creator }} in {{ post.category.name }}
-        at <a href="{{ post.blog_source.link }}" target="_blank">{{ post.blog_source.title }}</a>
+        Posted on {{ post.pub_date }} by {{ post.creator }} in {% include "blog/category_link.html" %}
+        <hr>
     </div>
     <div class="post-abstract">
         {% if post.description %}
