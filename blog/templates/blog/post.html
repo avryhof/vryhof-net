@@ -4,7 +4,7 @@
         {{ post.title|safe }}
     </h2>
     <div class="post-metadata">
-        Posted on {{ post.pub_date }} by {{ post.creator }} in {% include "blog/category_link.html" %}
+        Posted on {{ post.pub_date }} by {{ post.creator }} in {{ post.category.name }}
         <hr>
     </div>
     <div class="post-abstract">
