@@ -44,22 +44,25 @@ INSTALLED_APPS = [
     "django_extensions",
     "easy_thumbnails",
     "filer",
+    "ckeditor",
+    "ckeditor_uploader",
     "mptt",
+    "geo_ez",
+    "api",
     "favorites_icons",
     "frontend_assets",
-    "swingtime",
     "navbar",
     "bootstrap4",
     "firefox",
     "weather",
+    "blog",
     "planner",
     "utilities",
     "alexa",
     "assistant",
     "mail",
-    "geo_ez",
     "geocaching",
-    "api",
+    "app",
 ]
 
 MIDDLEWARE = [
@@ -151,6 +154,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+X_FRAME_OPTIONS = "SAMEORIGIN"
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
@@ -170,6 +175,69 @@ STATICFILES_FINDERS = (
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
+
+
+CKEDITOR_BASEPATH = "%s%s" % (STATIC_URL, "ckeditor/ckeditor/")
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_BROWSE_SHOW_DIRS = True
+# CKEDITOR_ALLOW_NONIMAGE_FILES = False
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "Custom",
+        "toolbar_Custom": [
+            {"name": "document", "items": ["Print", "Preview"]},
+            {"name": "spelling", "items": ["Scayt"]},
+            {"name": "clipboard", "items": ["Cut", "Copy", "Paste", "PasteText", "PasteFromWord", "RemoveFormat"]},
+            {"name": "history", "items": ["Undo", "Redo"]},
+            {"name": "links", "items": ["Link", "Unlink", "Anchor"]},
+            {"name": "insert", "items": ["Image", "Table", "HorizontalRule", "SpecialChar"]},
+            {"name": "editing", "items": ["Find", "Replace", "-", "SelectAll", "ShowBlocks"]},
+            {"name": "embedding", "items": ["Iframe"]},
+            "/",
+            {"name": "styles", "items": ["Styles", "Format", "Font", "FontSize"]},
+            {"name": "basicstyles", "items": ["Bold", "Italic", "Underline"]},
+            {
+                "name": "paragraph",
+                "items": [
+                    "JustifyLeft",
+                    "JustifyCenter",
+                    "JustifyRight",
+                    "JustifyBlock",
+                    "-",
+                    "NumberedList",
+                    "BulletedList",
+                    "-",
+                    "Outdent",
+                    "Indent",
+                    "TextColor",
+                ],
+            },
+            {"name": "code", "items": ["Maximize", "Source"]},
+        ],
+        "tabSpaces": 4,
+        "extraPlugins": ",".join(
+            [
+                "uploadimage",  # the upload image feature
+                # your extra plugins here
+                "div",
+                "autolink",
+                "autoembed",
+                "embedsemantic",
+                "autogrow",
+                # "devtools",
+                "widget",
+                "lineutils",
+                "clipboard",
+                "dialog",
+                "dialogui",
+                "elementspath",
+                "uploadimage",
+            ]
+        ),
+    }
+}
+
 
 ERROR_LOG = os.path.join(os.path.dirname(BASE_DIR), "logs", "error.log")
 

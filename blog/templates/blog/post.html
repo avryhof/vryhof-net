@@ -1,0 +1,22 @@
+{% load blogconnector %}
+<div class="post" id="{{ post.slug }}">
+    <h2 class="post-title">
+        {{ post.title|safe }}
+    </h2>
+    <div class="post-metadata">
+        Posted on {{ post.pub_date }} by {{ post.creator }} in {{ post.category.name }}
+        at <a href="{{ post.blog_source.link }}" target="_blank">{{ post.blog_source.title }}</a>
+    </div>
+    <div class="post-abstract">
+        {% if post.description %}
+            {{ post.description|safe }}
+        {% else %}
+            {{ post.content|paragraphs:1|safe }}
+            <p>
+                <a href="{% url 'blog_post' post.slug %}">
+                    Read More&hellip;
+                </a>
+            </p>
+        {% endif %}
+    </div>
+</div>

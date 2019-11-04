@@ -10,6 +10,7 @@ cryptography
 Django==2.2.4
 django-ask-sdk
 django-bootstrap4==0.0.7
+django-ckeditor
 django-extensions==2.1.4
 django-filer==1.5.0
 django-mptt
@@ -20,7 +21,7 @@ easy_thumbnails
 favorites-icons
 frontend-assets==0.6.8
 future==0.17.1
-geo_ez
+geo_ez>=0.1.5
 idna==2.8
 phonetisch
 psycopg2-binary==2.7.6.1

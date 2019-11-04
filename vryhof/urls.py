@@ -24,23 +24,19 @@ urlpatterns = [
     url(r"^vryhof-admin/", admin.site.urls),
     url(r"^alexa/", include("alexa.urls")),
     url(r"^assistant/", include("assistant.urls")),
-    url(r"^api/mail/", include("mail.api_urls")),
+    # url(r"^api/mail/", include("mail.api_urls")),
     url(r"^api/rest/", include("api.urls")),
     url(r"^api-auth/", include("rest_framework.urls")),
+    url(r"^blog/", include("blog.urls")),
     url(r"", include("firefox.urls")),
     url(r"^weather/", include("weather.urls")),
-    url(r'^geocaching/', include('geocaching.urls')),
+    url(r"^geocaching/", include("geocaching.urls")),
+    url(r"^ckeditor/", include("ckeditor_uploader.urls")),
 ]
 
 if settings.DEBUG:
     urlpatterns = (
-        [
-            url(
-                r"^media/(?P<path>.*)$",
-                serve,
-                {"document_root": settings.MEDIA_ROOT, "show_indexes": True},
-            )
-        ]
+        [url(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT, "show_indexes": True})]
         + staticfiles_urlpatterns()
         + urlpatterns
     )
