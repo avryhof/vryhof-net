@@ -7,7 +7,7 @@ bleach
 certifi==2018.11.29
 chardet==3.0.4
 cryptography
-Django==2.2.4
+Django==2.2.8
 django-ask-sdk
 django-bootstrap4==0.0.7
 django-ckeditor
