@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load blogconnector %}
+{% block content %}
+<main class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <h1>{{ category.name }}</h1>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-9">
+            {% posts category=category.slug %}
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            {% categories %}
+        </div>
+    </div>
+</main>
+{% endblock %}

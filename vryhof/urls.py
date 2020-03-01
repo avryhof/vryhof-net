@@ -29,7 +29,8 @@ urlpatterns = [
     path("", include("firefox.urls")),
     path("weather/", include("weather.urls")),
     path("geocaching/", include("geocaching.urls")),
-    path("kids/", include("kids.urls"))
+    path("kids/", include("kids.urls")),
+    path("ckeditor/", include("ckeditor_uploader.urls")),
 ]
 
 if settings.DEBUG:
