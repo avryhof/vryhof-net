@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     "ckeditor_uploader",
     "mptt",
     "geo_ez",
-    "api",
     "favorites_icons",
     "frontend_assets",
     "swingtime",
@@ -64,7 +63,8 @@ INSTALLED_APPS = [
     "gis",
     "geocaching",
     "api",
-    "kids" "app",
+    "kids",
+    "app",
 ]
 
 MIDDLEWARE = [
