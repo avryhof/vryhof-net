@@ -63,7 +63,6 @@ INSTALLED_APPS = [
     "assistant",
     # "mail",
     "gis",
-    "geo_ez",
     "geocaching",
     "api",
     "kids"
