@@ -1,0 +1,19 @@
+#kid-logo {
+  height: auto;
+  width: 475px;
+  margin-left: auto;
+  margin-right: auto; }
+
+.kid-site {
+  display: inline-block;
+  width: auto;
+  margin: 5px;
+  padding: 5px;
+  text-align: center; }
+  .kid-site a {
+    display: block; }
+  .kid-site img {
+    height: 64px;
+    width: auto; }
+
+/*# sourceMappingURL=kids.css.map */

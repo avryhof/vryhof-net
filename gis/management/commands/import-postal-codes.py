@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import datetime
 import logging
 import math
@@ -59,8 +57,8 @@ class Command(BaseCommand):
         self._timer()
 
         media_root_normalized = os.path.join(*os.path.split(settings.MEDIA_ROOT))
-        zip_file_path = os.path.join(media_root_normalized, 'geonames')
-        zip_file = os.path.join(zip_file_path, 'US.zip')
+        zip_file_path = os.path.join(media_root_normalized, "geonames")
+        zip_file = os.path.join(zip_file_path, "US.zip")
 
         if not os.path.exists(zip_file_path):
             os.makedirs(zip_file_path)
@@ -75,7 +73,7 @@ class Command(BaseCommand):
         zip_ref.close()
         os.remove(zip_file)
 
-        data_file_path = os.path.join(zip_file_path, 'US.txt')
+        data_file_path = os.path.join(zip_file_path, "US.txt")
         import_postal_codes_csv(data_file_path)
 
         os.remove(data_file_path)

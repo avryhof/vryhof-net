@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import datetime
 import logging
 import math
@@ -62,6 +60,6 @@ class Command(BaseCommand):
         zip_codes = points_within_radius(PostalCode, home_location.latitude, home_location.longitude, radius=5)
 
         for zip_code in zip_codes:
-            print(zip_code.place_name, zip_code.postal_code, zip_code.distance)
+            print((zip_code.place_name, zip_code.postal_code, zip_code.distance))
 
         self._timer()

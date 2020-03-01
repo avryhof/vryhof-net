@@ -56,10 +56,12 @@ INSTALLED_APPS = [
     "utilities",
     "alexa",
     "assistant",
-    "mail",
+    # "mail",
+    "gis",
     "geo_ez",
     "geocaching",
     "api",
+    "kids"
 ]
 
 MIDDLEWARE = [
@@ -75,11 +77,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "vryhof.urls"
 
-EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+# EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 
-SENDGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
-SENDGRID_SANDBOX_MODE_IN_DEBUG = False
-SENDGRID_TRACK_EMAIL_OPENS = True
+# SENDGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
+# SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+# SENDGRID_TRACK_EMAIL_OPENS = True
 
 TEMPLATES = [
     {
@@ -89,6 +91,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, "firefox", "templates"),
             os.path.join(BASE_DIR, "weather", "templates"),
             os.path.join(BASE_DIR, "geocaching", "templates"),
+            os.path.join(BASE_DIR, "kids", "templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -161,6 +164,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "firefox", "static"),
     os.path.join(BASE_DIR, "geocaching", "static"),
     os.path.join(BASE_DIR, "weather", "static"),
+    os.path.join(BASE_DIR, "kids", "static"),
 )
 
 STATICFILES_FINDERS = (

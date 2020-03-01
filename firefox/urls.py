@@ -1,5 +1,5 @@
-from django.conf.urls import url
+from django.urls import path
 
 from firefox.views import FirefoxHomeView
 
-urlpatterns = [url(r"^$", FirefoxHomeView.as_view(), name="firefox_home")]
+urlpatterns = [path("", FirefoxHomeView.as_view(), name="firefox_home")]

@@ -1,0 +1,25 @@
+#kid-logo {
+  height: auto;
+  width: 475px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.kid-site {
+  display: inline-block;
+  width: auto;
+  margin: 5px;
+  padding: 5px;
+  text-align: center;
+  a {
+    display: block;
+  }
+  img {
+    height: 64px;
+    width: auto;
+  }
+  //img:hover {
+  //  height: 72px;
+  //  width: auto;
+  //}
+}

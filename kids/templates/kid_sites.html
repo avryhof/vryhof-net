@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load frontend_assets static %}
+{% block extra_css %}
+
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 text-center">
+                <img src="{% static "images/vryhof-kids.png" %}" id="kid-logo" alt="Vryhof Kids">
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                {% for site in sites %}
+                    <div class="kid-site">
+                        <a href="{{ site.url }}" target="_blank">
+                            <img src="{{ site.icon.url }}" alt="{{ site.name }} icon"><br>{{ site.name }}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
