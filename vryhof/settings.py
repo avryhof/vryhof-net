@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-import datetime
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -65,8 +64,7 @@ INSTALLED_APPS = [
     "gis",
     "geocaching",
     "api",
-    "kids"
-    "app",
+    "kids" "app",
 ]
 
 MIDDLEWARE = [
@@ -140,7 +138,9 @@ DATABASES = {
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -182,7 +182,6 @@ STATICFILES_FINDERS = (
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 
-
 CKEDITOR_BASEPATH = "%s%s" % (STATIC_URL, "ckeditor/ckeditor/")
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_BROWSE_SHOW_DIRS = True
@@ -194,11 +193,27 @@ CKEDITOR_CONFIGS = {
         "toolbar_Custom": [
             {"name": "document", "items": ["Print", "Preview"]},
             {"name": "spelling", "items": ["Scayt"]},
-            {"name": "clipboard", "items": ["Cut", "Copy", "Paste", "PasteText", "PasteFromWord", "RemoveFormat"]},
+            {
+                "name": "clipboard",
+                "items": [
+                    "Cut",
+                    "Copy",
+                    "Paste",
+                    "PasteText",
+                    "PasteFromWord",
+                    "RemoveFormat",
+                ],
+            },
             {"name": "history", "items": ["Undo", "Redo"]},
             {"name": "links", "items": ["Link", "Unlink", "Anchor"]},
-            {"name": "insert", "items": ["Image", "Table", "HorizontalRule", "SpecialChar"]},
-            {"name": "editing", "items": ["Find", "Replace", "-", "SelectAll", "ShowBlocks"]},
+            {
+                "name": "insert",
+                "items": ["Image", "Table", "HorizontalRule", "SpecialChar"],
+            },
+            {
+                "name": "editing",
+                "items": ["Find", "Replace", "-", "SelectAll", "ShowBlocks"],
+            },
             {"name": "embedding", "items": ["Iframe"]},
             "/",
             {"name": "styles", "items": ["Styles", "Format", "Font", "FontSize"]},
@@ -244,7 +259,6 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-
 ERROR_LOG = os.path.join(os.path.dirname(BASE_DIR), "logs", "error.log")
 
 try:
@@ -260,7 +274,10 @@ LOGGING = {
             "format": "%(asctime)s %(levelname)s [%(name)s: %(pathname)s %(funcName)s line:%(lineno)s] -- %(message)s",
             "datefmt": "%m-%d-%Y %H:%M:%S",
         },
-        "verbose": {"format": "%(asctime)s %(levelname)s %(name)s -- %(message)s", "datefmt": "%m-%d-%Y %H:%M:%S"},
+        "verbose": {
+            "format": "%(asctime)s %(levelname)s %(name)s -- %(message)s",
+            "datefmt": "%m-%d-%Y %H:%M:%S",
+        },
         "simple": {"format": "%(asctime)s %(levelname)s %(message)s"},
     },
     "handlers": {
@@ -272,7 +289,11 @@ LOGGING = {
             "maxBytes": 1024 * 1024 * 100,  # 100 mb
             "backupCount": 3,
         },
-        "file": {"level": LOGGER_LEVEL, "class": "logging.FileHandler", "filename": ERROR_LOG},
+        "file": {
+            "level": LOGGER_LEVEL,
+            "class": "logging.FileHandler",
+            "filename": ERROR_LOG,
+        },
     },
     "loggers": {
         "": {"level": "INFO", "handlers": ["weather"], "propagate": True},
@@ -301,6 +322,8 @@ REST_FRAMEWORK = {
 }
 
 ICON_SRC = os.path.join(BASE_DIR, "static", "favorites_icon.png")
-SITE_NAME = "Vryhof.NET"  # Optional if you are using the Sites framework, and have a SITE_ID configured.
+SITE_NAME = (
+    "Vryhof.NET"
+)  # Optional if you are using the Sites framework, and have a SITE_ID configured.
 TILE_COLOR = "#FFFFFF"
 THEME_COLOR = "#000000"
