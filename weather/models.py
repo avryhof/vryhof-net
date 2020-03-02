@@ -38,6 +38,7 @@ class WeatherData(Model):
     date = DateTimeField(null=True)
     dateutc = BigIntegerField(null=True)
     dew_point = FloatField(null=True)
+    dew_pointin = FloatField(null=True)
     eventrainin = FloatField(null=True)
     feels_like = FloatField(null=True)
     feels_likein = FloatField(null=True)

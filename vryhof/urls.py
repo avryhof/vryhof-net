@@ -20,7 +20,7 @@ from django.urls import include, path, re_path
 from django.views.static import serve
 
 urlpatterns = [
-    path("vryhof-admin/multifactor/", include("multifactor.urls")),
+    # path("vryhof-admin/multifactor/", include("multifactor.urls")),
     path("vryhof-admin/", admin.site.urls),
     path("alexa/", include("alexa.urls")),
     path("assistant/", include("assistant.urls")),
