@@ -40,6 +40,7 @@ class WeatherData(Model):
     dew_point = FloatField(null=True)
     eventrainin = FloatField(null=True)
     feels_like = FloatField(null=True)
+    feels_likein = FloatField(null=True)
     hourlyrainin = FloatField(null=True)
     humidity = IntegerField(null=True)
     humidityin = IntegerField(null=True)

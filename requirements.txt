@@ -15,11 +15,13 @@ django-extensions==2.2.8
 django-filer==1.7.0
 django-polymorphic==2.1.2
 django-mptt
+django-multifactor
 django-sendgrid-v5
 django-swingtime
 djangorestframework
 easy_thumbnails
 favorites-icons
+fido2==0.7.2
 frontend-assets==0.8.0
 future==0.18.2
 geo_ez

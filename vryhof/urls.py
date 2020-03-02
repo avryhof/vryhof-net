@@ -20,12 +20,14 @@ from django.urls import include, path, re_path
 from django.views.static import serve
 
 urlpatterns = [
+    path("vryhof-admin/multifactor/", include("multifactor.urls")),
     path("vryhof-admin/", admin.site.urls),
     path("alexa/", include("alexa.urls")),
     path("assistant/", include("assistant.urls")),
     # path("api/mail/", include("mail.api_urls")),
     path("api/rest/", include("api.urls")),
     path("api-auth/", include("rest_framework.urls")),
+    path("blog/", include("blog.urls")),
     path("", include("firefox.urls")),
     path("weather/", include("weather.urls")),
     path("geocaching/", include("geocaching.urls")),
