@@ -14,6 +14,8 @@ logger = logging.getLogger(__name__)
 
 settings.DEBUG = False
 
+insert_threshold = 1000
+
 
 class Command(BaseCommand):
     help = "Import Postal Codes from GeoNames."
@@ -25,9 +27,6 @@ class Command(BaseCommand):
     init_time = None
     existing_drug_list = []
     drug_insert_list = []
-
-    # def add_arguments(self, parser):
-    #     parser.add_argument("address", type=str)
 
     def _log_message(self, message):
         log_message = "%s: %s\n" % (datetime.datetime.now().isoformat()[0:19], message)
@@ -57,8 +56,9 @@ class Command(BaseCommand):
         self._timer()
 
         media_root_normalized = os.path.join(*os.path.split(settings.MEDIA_ROOT))
-        zip_file_path = os.path.join(media_root_normalized, "geonames")
-        zip_file = os.path.join(zip_file_path, "US.zip")
+        zip_file_path = os.path.join(media_root_normalized, 'geonames')
+
+        zip_file = os.path.join(zip_file_path, 'ALL.zip')
 
         if not os.path.exists(zip_file_path):
             os.makedirs(zip_file_path)
@@ -66,16 +66,19 @@ class Command(BaseCommand):
         if os.path.exists(zip_file):
             os.remove(zip_file)
 
-        urlretrieve("http://download.geonames.org/export/zip/US.zip", zip_file)
+        urlretrieve("https://github.com/avryhof/postal_codes/archive/master.zip", zip_file)
 
         zip_ref = zipfile.ZipFile(zip_file, "r")
         zip_ref.extractall(zip_file_path)
         zip_ref.close()
         os.remove(zip_file)
 
-        data_file_path = os.path.join(zip_file_path, "US.txt")
-        import_postal_codes_csv(data_file_path)
+        for country in ["US", "PR", "VI", "GU", "MP", "AZ"]:
+            self._log_message("Processing: %s" % country)
 
-        os.remove(data_file_path)
+            data_file_path = os.path.join(zip_file_path, "postal_codes-master", '%s.txt' % country)
+            import_postal_codes_csv(data_file_path)
+
+            os.remove(data_file_path)
 
         self._timer()

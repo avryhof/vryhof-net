@@ -1,8 +1,8 @@
-import json
 import re
 from collections import OrderedDict
 
 import bleach
+import json
 from future.backports.urllib.parse import quote
 
 
@@ -116,6 +116,7 @@ def http_build_query(query_dict):
         query_vals.append("%s=%s" % (filter_query_characters(key), filter_query_characters(val)))
 
     return "&".join(query_vals)
+
 
 def snake_to_camel(value, **kwargs):
     """
