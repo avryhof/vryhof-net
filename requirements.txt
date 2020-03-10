@@ -30,7 +30,7 @@ djangorestframework==3.11.0
 easy-thumbnails==2.7
 ecdsa==0.14.1
 favorites-icons==1.0.7
-frontend-assets==0.8.0
+frontend-assets==0.6.8
 future==0.18.2
 geo-ez==0.1.5
 idna==2.9

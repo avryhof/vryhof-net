@@ -1,0 +1,41 @@
+#chat-container {
+  display: block;
+  position: fixed;
+  bottom: 0;
+  right: 50px;
+  width: auto;
+  min-width: 264px;
+  border: 1px solid #1D3160;
+  background: #ffffff;
+}
+#chat-container #chat-messages {
+  display: block;
+  overflow: scroll;
+}
+#chat-container #chat-notifier {
+  width: 100%;
+  padding: 5px 10px 5px 10px;
+  color: #ffffff;
+  background: #1D3160;
+}
+#chat-container #chat-dialog {
+  width: 500px;
+  min-height: 250px;
+}
+#chat-container #chat-dialog #chat-input {
+  display: block;
+  width: 100%;
+}
+#chat-container #chat-dialog #chat-send {
+  float: right;
+}
+#chat-container #chat-name {
+  height: 300px;
+}
+#chat-container #chat-name #first_name, #chat-container #chat-name #last_name, #chat-container #chat-name #date_of_birth, #chat-container #chat-name #chat-start {
+  display: block;
+  width: 155px !important;
+  margin: 5px 10px;
+}
+
+/*# sourceMappingURL=chat.css.map */
