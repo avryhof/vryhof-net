@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -57,27 +55,24 @@ class WeatherView(TemplateView):
 
 
 def weather_image(request, *args, **kwargs):
-    date = kwargs.get('date', False)
-    time = kwargs.get('time', False)
+    date = kwargs.get("date", False)
+    time = kwargs.get("time", False)
 
     search_dict = dict()
 
     if isinstance(time, str):
-        ltimestring = time.ljust(6, '0')
-        utimestring = time.ljust(6, 'X').replace('XX', '59')
+        ltimestring = time.ljust(6, "0")
+        utimestring = time.ljust(6, "X").replace("XX", "59")
 
         if len(time) == 2:
             # newest image within an hour
-            search_dict.update(dict(
-                time__gte=translate_datetime(date, ltimestring),
-                time__lte=translate_datetime(date, utimestring)
-            ))
+            search_dict.update(
+                dict(time__gte=translate_datetime(date, ltimestring), time__lte=translate_datetime(date, utimestring))
+            )
 
         elif len(time) == 4:
             # newest image less than or equal to minute
-            search_dict.update(dict(
-                time__lte=translate_datetime(date, utimestring)
-            ))
+            search_dict.update(dict(time__lte=translate_datetime(date, utimestring)))
 
         else:
             # newest image to the second - probably never use this
@@ -90,13 +85,10 @@ def weather_image(request, *args, **kwargs):
 
     if len(return_images) > 0:
         return_image = return_images[0]
-        imagefile = open(return_image.path, 'rb')
+        imagefile = open(return_image.path, "rb")
 
-        response = HttpResponse(
-            content=imagefile,
-            content_type='image/jpeg'
-        )
-        response['Cache-Control'] = 'no-cache'
+        response = HttpResponse(content=imagefile, content_type="image/jpeg")
+        response["Cache-Control"] = "no-cache"
     else:
         response = HttpResponse(status=404)
         response.status_code = 404

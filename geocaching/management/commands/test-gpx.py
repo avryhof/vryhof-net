@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import datetime
 import logging
 import math
@@ -56,7 +54,7 @@ class Command(BaseCommand):
 
         self._timer()
 
-        pocket_query = PocketQuery.objects.get(name='2019 central parks challenge')
+        pocket_query = PocketQuery.objects.get(name="2019 central parks challenge")
         gpx_file = pocket_query.geocaches
 
         process_gpx_file()

@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.conf import settings
 from django.contrib.sites.models import Site
 from future.backports.urllib.parse import urlparse

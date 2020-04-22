@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.db.models import (
     Model,
     URLField,
@@ -27,9 +25,7 @@ class NavbarLink(Model):
     order = IntegerField()
     title = CharField(max_length=128, blank=True, null=True)
     link = URLField(blank=True, null=True)
-    target = CharField(
-        max_length=16, choices=LINK_TARGET_CHOICES, default=LINK_TARGET_SELF
-    )
+    target = CharField(max_length=16, choices=LINK_TARGET_CHOICES, default=LINK_TARGET_SELF)
     submenu = ForeignKey("NavbarMenu", blank=True, null=True, on_delete=DO_NOTHING)
 
     def __str__(self):

@@ -1,9 +1,7 @@
-from __future__ import unicode_literals
-
 import datetime
 import logging
-
 import math
+
 from django.conf import settings
 from django.core.mail import send_mail
 from django.core.management.base import BaseCommand
@@ -56,7 +54,7 @@ class Command(BaseCommand):
 
         send_mail(
             "[SendGrid Test] Email From Test Sender",
-            'Message from Test Sender',
+            "Message from Test Sender",
             "reply@help.pvryhof.net",
             [options.get("address")],
         )

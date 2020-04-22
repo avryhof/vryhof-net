@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import csv
 import datetime
 import glob
@@ -68,7 +66,7 @@ class Command(BaseCommand):
         self._timer()
 
         media_root_normalized = os.path.join(*os.path.split(settings.MEDIA_ROOT))
-        zip_file_path = os.path.join(media_root_normalized, 'maxmind')
+        zip_file_path = os.path.join(media_root_normalized, "maxmind")
         zip_file = os.path.join(zip_file_path, "GeoLite2-City-CSV.zip")
 
         if not os.path.exists(zip_file_path):
@@ -88,12 +86,12 @@ class Command(BaseCommand):
             if os.path.isdir(folder):
                 for csv_file_name in glob.glob(os.path.join(folder, "GeoLite2-City-Blocks-*.csv")):
                     self._log_message("Processing %s" % csv_file_name)
-                    if 'IPV4' in csv_file_name:
+                    if "IPV4" in csv_file_name:
                         target_model = IP4Location
                     else:
                         target_model = IP6Location
 
-                    data_file = open(csv_file_name, 'rU')
+                    data_file = open(csv_file_name, "rU")
 
                     rows = csv.reader(data_file)
                     next(rows, None)
@@ -102,43 +100,43 @@ class Command(BaseCommand):
                     for row in rows:
                         if len(row) > 0 and row[6]:
                             try:
-                                ip = target_model.objects.get(
-                                    network=row[0]
-                                )
+                                ip = target_model.objects.get(network=row[0])
 
                             except target_model.DoesNotExist:
-                                insert_list.append(target_model(
-                                    network=row[0],
-                                    geoname_id=row[1],
-                                    registered_country_geoname_id=row[2],
-                                    represented_country_geoname_id=row[3],
-                                    is_anonymous_proxy=row[4] == "1",
-                                    is_satellite_provider=row[5] == "1",
-                                    postal_code=row[6],
-                                    updated=make_aware(datetime.datetime.now())
-                                ))
+                                insert_list.append(
+                                    target_model(
+                                        network=row[0],
+                                        geoname_id=row[1],
+                                        registered_country_geoname_id=row[2],
+                                        represented_country_geoname_id=row[3],
+                                        is_anonymous_proxy=row[4] == "1",
+                                        is_satellite_provider=row[5] == "1",
+                                        postal_code=row[6],
+                                        updated=make_aware(datetime.datetime.now()),
+                                    )
+                                )
 
                             else:
-                                ip.network = row[0],
-                                ip.geoname_id = row[1],
-                                ip.registered_country_geoname_id = row[2],
-                                ip.represented_country_geoname_id = row[3],
-                                ip.is_anonymous_proxy = row[4],
-                                ip.is_satellite_provider = row[5],
-                                ip.postal_code = row[6],
+                                ip.network = (row[0],)
+                                ip.geoname_id = (row[1],)
+                                ip.registered_country_geoname_id = (row[2],)
+                                ip.represented_country_geoname_id = (row[3],)
+                                ip.is_anonymous_proxy = (row[4],)
+                                ip.is_satellite_provider = (row[5],)
+                                ip.postal_code = (row[6],)
                                 ip.updated = make_aware(datetime.datetime.now())
                                 ip.save()
 
                             if len(insert_list) == 10000:
                                 target_model.objects.bulk_create(insert_list)
-                                print("Inserted 10,000 objects for a total of %i." % target_model.objects.count())
+                                print(("Inserted 10,000 objects for a total of %i." % target_model.objects.count()))
                                 insert_list = []
 
                     data_file.close()
 
-                    print("Inserted %i objects." % len(insert_list))
+                    print(("Inserted %i objects." % len(insert_list)))
                     target_model.objects.bulk_create(insert_list)
-                    print("%i objects total." % target_model.objects.count())
+                    print(("%i objects total." % target_model.objects.count()))
                     os.remove(csv_file_name)
 
                 self._timer()
