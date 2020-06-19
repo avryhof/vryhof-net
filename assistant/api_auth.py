@@ -10,11 +10,7 @@ class AssistantAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
         auth = None
         user = AnonymousUser()
-        allowed_agents = list(
-            AuthorizedAgent.objects.filter(authorized=True).values_list(
-                "app_key", flat=True
-            )
-        )
+        allowed_agents = list(AuthorizedAgent.objects.filter(authorized=True).values_list("app_key", flat=True))
         agent = request.META.get("HTTP_ASSISTANT_AGENT")
 
         if agent in allowed_agents:
@@ -35,4 +31,4 @@ class AssistantAuthentication(authentication.BaseAuthentication):
 
 class AnonymousAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
-        return (AnonymousUser, '')
+        return (AnonymousUser, "")
