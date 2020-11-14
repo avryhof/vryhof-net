@@ -23,6 +23,7 @@ urlpatterns = [
     # path("vryhof-admin/multifactor/", include("multifactor.urls")),
     path("vryhof-admin/", admin.site.urls),
     path("alexa/", include("alexa.urls")),
+    path("subsonic/", include("subsonic.urls")),
     path("assistant/", include("assistant.urls")),
     # path("api/mail/", include("mail.api_urls")),
     path("api/rest/", include("api.urls")),
