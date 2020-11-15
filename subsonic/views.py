@@ -1,3 +1,4 @@
+import json
 import pprint
 
 from rest_framework import status
@@ -17,9 +18,8 @@ from subsonic.google_responses import GoogleResponse
 def intent_responder(request):
     resp = {}
 
-    log_message(request.data)
-
-    intent = request.data.get("intent", {})
+    request_json = json.loads(request.data)
+    intent = request_json.get("intent", {})
 
     query = intent.get("query")
     params = intent.get("params")
