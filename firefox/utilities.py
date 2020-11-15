@@ -23,6 +23,8 @@ def log_message(message):
 
     logger.info(logmessage)
 
+    print(logmessage)
+
 
 def get_bytes(value):
     retn = value.encode("utf8")
