@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from assistant.api_auth import AnonymousAuthentication
 from assistant.constants import NO_CACHE_HEADERS
 from assistant.permissions import AnonymousPermission
+from firefox.utilities import log_message
 from subsonic.google_responses import GoogleResponse
 
 
@@ -15,6 +16,8 @@ from subsonic.google_responses import GoogleResponse
 @permission_classes((AnonymousPermission,))
 def intent_responder(request):
     resp = {}
+
+    log_message(request.data)
 
     intent = request.data.get("intent", {})
 
