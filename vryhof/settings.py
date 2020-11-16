@@ -66,6 +66,8 @@ INSTALLED_APPS = [
     "api",
     "kids",
     "app",
+    "web_discover",
+    "hiking",
     "subsonic",
 ]
 
@@ -314,6 +316,8 @@ ICON_SRC = os.path.join(BASE_DIR, "static", "favorites_icon.png")
 SITE_NAME = "Vryhof.NET"  # Optional if you are using the Sites framework, and have a SITE_ID configured.
 TILE_COLOR = "#FFFFFF"
 THEME_COLOR = "#000000"
+
+PDL_KEY = "b63861db1bfed5591be4480bf64cd73d743fc981844d8064a5b5fa72dcfa4d83"
 
 SUBSONIC_URL = os.environ.get("SUBSONIC_URL")
 SUBSONIC_USER = os.environ.get("SUBSONIC_USER")
