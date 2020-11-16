@@ -1,14 +1,15 @@
-import pprint
-
 from django.http import HttpResponse
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+    authentication_classes,
+)
 from rest_framework.response import Response
 
 from assistant.api_auth import AnonymousAuthentication
 from assistant.constants import NO_CACHE_HEADERS
 from assistant.permissions import AnonymousPermission
-from firefox.utilities import log_message
 from subsonic.google_responses import GoogleResponse
 from subsonic.subsonic_class import Subsonic
 
@@ -85,9 +86,25 @@ def stream_song(request, *args, **kwargs):
     song_id = kwargs.get("song_id")
 
     ss = Subsonic()
-    songstream = ss.stream(song_id)
+    song = ss.get_song(song_id)
+    songstream = ss.download(song_id)
 
-    response = HttpResponse(content=songstream, content_type="audio/mpeg")
-    # response['Content-Disposition'] = 'attachment; filename=filename.mp3'
+    file_name = song.get("path").split("/")[-1]
+
+    response = HttpResponse(content=songstream, content_type=song.get("contentType"))
+    response["Content-Disposition"] = "attachment; filename={}".format(file_name)
 
     return response
+
+
+# def cover_art(request, *args, **kwargs):
+#     song_id = kwargs.get("song_id")
+#
+#     ss = Subsonic()
+#     song = ss.get_song(song_id)
+#     cover = ss.get_cover_art(song_id)
+#
+#     response = HttpResponse(content=songstream, content_type=song.get("contentType"))
+#     response["Content-Disposition"] = "attachment; filename={}".format(file_name)
+#
+#     return response

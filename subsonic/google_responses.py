@@ -43,6 +43,7 @@ class GoogleResponse(object):
         if isinstance(song, str):
             song = self.sub.get_song(song)
 
+        pprint.pprint(song)
         the_site = CustomSite(self.request)
         song_url = the_site.external_reverse("subsonic-stream", song_id=song.get("id"))
 
