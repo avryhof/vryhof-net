@@ -85,10 +85,9 @@ def stream_song(request, *args, **kwargs):
     song_id = kwargs.get("song_id")
 
     ss = Subsonic()
-    # song = ss.get_song(song_id)
     songstream = ss.stream(song_id)
 
-    # response = HttpResponse(content=songstream, content_type="audio/mpeg")
+    response = HttpResponse(content=songstream, content_type="audio/mpeg")
     # response['Content-Disposition'] = 'attachment; filename=filename.mp3'
 
-    return songstream
+    return response
