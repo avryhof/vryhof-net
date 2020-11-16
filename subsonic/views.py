@@ -53,13 +53,18 @@ def intent_responder(request):
     google_resp = GoogleResponse(session)
     if action == "Shuffle":
         if artist:
-            resp = google_resp.random_song(artist)
+            resp = google_resp.random_song_by_artist(artist)
         elif genre:
             resp = google_resp.song_by_genre(genre)
         else:
             resp = google_resp.random_song()
 
     elif action == "Play":
+        if song and not artist and "by" in song.lower():
+            parts = song.lower().split("by")
+            artist = parts[-1]
+            song = "by".join(parts[0:-1])
+
         if song_type == "next":
             resp = google_resp.next_song()
         elif song_type == "random":

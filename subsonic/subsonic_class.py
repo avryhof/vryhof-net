@@ -109,18 +109,9 @@ class Subsonic(object):
 
         return genres
 
-    def get_random_songs(self, artist=False):
+    def get_random_songs(self):
         search_result = self._api_call("getRandomSongs")
-
         songs = search_result.get("subsonic-response", {}).get("randomSongs", {}).get("song", [])
-
-        if artist:
-            songs_by_artist = []
-            for song in songs:
-                song_artist = song.get("artist")
-                if song_artist and artist.lower() in song.get("artist").lower():
-                    songs_by_artist.append(song)
-            songs = songs_by_artist
 
         return songs
 

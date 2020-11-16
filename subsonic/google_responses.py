@@ -1,3 +1,6 @@
+import pprint
+import random
+
 from subsonic.subsonic_class import Subsonic
 
 
@@ -21,6 +24,9 @@ class GoogleResponse(object):
         return self.simple_response("No songs found.")
 
     def stream_song(self, song):
+        if isinstance(song, str):
+            song = self.sub.get_song(song)
+
         resp = {
             "source": "subsonic",
             "fulfillmentText": "Playing %s" % song.get("title"),
@@ -73,6 +79,15 @@ class GoogleResponse(object):
 
         return resp
 
+    def stream_random(self, songs):
+        if len(songs) == 0:
+            retn = self.no_songs()
+        else:
+            song = random.choice(songs)
+            retn = self.stream_song(song.get("id"))
+
+        return retn
+
     def stream_songs(self, songs):
         if len(songs) == 0:
             retn = self.no_songs()
@@ -83,12 +98,17 @@ class GoogleResponse(object):
         return retn
 
     def random_song(self, artist=False):
-        songs = self.sub.get_random_songs(artist)
+        songs = self.sub.get_random_songs()
 
         return self.stream_songs(songs)
 
+    def random_song_by_artist(self, artist):
+        songs = self.sub.search2(artist, id3=True)
+
+        return self.stream_random(songs)
+
     def song_by_artist(self, artist):
-        songs = self.sub.search2(artist, id3=True, result_type="artist")
+        songs = self.sub.search2(artist, id3=True)
 
         return self.stream_songs(songs)
 
@@ -98,8 +118,8 @@ class GoogleResponse(object):
 
         self.stream_song(song.get("id"))
 
-    def search(self, song, artist):
-        if not song or not artist:
+    def search(self, song, artist=False):
+        if not song:
             retn = self.missing_parameter()
         else:
             songs = self.sub.search(song, artist)
