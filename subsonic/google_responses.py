@@ -80,9 +80,33 @@ class GoogleResponse(object):
             "session": self.session,
             "prompt": {
                 "override": False,
+                "content": {
+                    "media": {
+                        "mediaObjects": [
+                            {
+                                "name": song.get("title"),
+                                "description": "{} by {}".format(song.get("title"), song.get("artist")),
+                                "url": song.get("url"),
+                                "image": {
+                                    "large": {
+                                        "alt": song.get("title"),
+                                        "height": 0,
+                                        "url": song.get("coverUrl"),
+                                        "width": 0
+                                    }
+                                }
+                            }
+                        ],
+                        "mediaType": "AUDIO",
+                        "optionalMediaControls": [
+                            "PAUSED",
+                            "STOPPED"
+                        ]
+                    }
+                },
                 "firstSimple": {
-                    "speech": "Hello World.",
-                    "text": ""
+                    "speech": "Playing %s" % song.get("title"),
+                    "text": "Playing %s" % song.get("title")
                 }
             },
             "scene": {
