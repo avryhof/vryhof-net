@@ -14,7 +14,18 @@ class GoogleResponse(object):
         self.sub = Subsonic()
 
     def simple_response(self, text_response):
-        return {"source": self.source, "fulfillmentText": text_response}
+        resp = {
+            "session": self.session,
+            "prompt": {
+                "override": False,
+                "firstSimple": {
+                    "speech": text_response,
+                    "text": text_response
+                }
+            }
+        }
+
+        return resp
 
     def missing_parameter(self):
         return self.simple_response("Request problem: missing mandatory parameter.")
@@ -25,56 +36,6 @@ class GoogleResponse(object):
     def stream_song(self, song):
         if isinstance(song, str):
             song = self.sub.get_song(song)
-
-        # resp = {
-        #     "source": "subsonic",
-        #     "fulfillmentText": "Playing %s" % song.get("title"),
-        #     "payload": {
-        #         "google": {
-        #             "expectUserResponse": True,
-        #             "richResponse": {
-        #                 "items": [
-        #                     {"simpleResponse": {"textToSpeech": " "}},
-        #                     {
-        #                         "mediaResponse": {
-        #                             "mediaType": "AUDIO",
-        #                             "mediaObjects": [
-        #                                 {
-        #                                     "name": song.get("title"),
-        #                                     "description": "{} by {}".format(
-        #                                         song.get("title"), song.get("artist")
-        #                                     ),
-        #                                     "largeImage": {
-        #                                         "url": song.get("coverUrl"),
-        #                                         "accessibilityText": "Album cover of {} by {}".format(
-        #                                             song.get("album"),
-        #                                             song.get("artist"),
-        #                                         ),
-        #                                     },
-        #                                     "contentUrl": song.get("url"),
-        #                                 }
-        #                             ],
-        #                         }
-        #                     },
-        #                 ],
-        #                 "suggestions": [
-        #                     {
-        #                         "title": "{} by {}".format(
-        #                             song.get("album"), song.get("artist")
-        #                         )
-        #                     }
-        #                 ],
-        #             },
-        #         }
-        #     },
-        #     "outputContexts": [
-        #         {
-        #             "name": "{}/contexts/playing".format(self.session),
-        #             "lifespanCount": 5,
-        #             "parameters": {"id": song.get("id")},
-        #         }
-        #     ],
-        # }
 
         resp = {
             "session": self.session,
@@ -107,13 +68,6 @@ class GoogleResponse(object):
                 "firstSimple": {
                     "speech": "Playing %s" % song.get("title"),
                     "text": "Playing %s" % song.get("title")
-                }
-            },
-            "scene": {
-                "name": "SceneName",
-                "slots": {},
-                "next": {
-                    "name": "actions.scene.END_CONVERSATION"
                 }
             }
         }
