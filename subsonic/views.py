@@ -1,5 +1,6 @@
 import pprint
 
+from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
@@ -9,6 +10,7 @@ from assistant.constants import NO_CACHE_HEADERS
 from assistant.permissions import AnonymousPermission
 from firefox.utilities import log_message
 from subsonic.google_responses import GoogleResponse
+from subsonic.subsonic_class import Subsonic
 
 
 @api_view(["POST"])
@@ -17,8 +19,8 @@ from subsonic.google_responses import GoogleResponse
 def intent_responder(request):
     resp = {}
 
-    log_message(type(request.data))
-    log_message(request.data)
+    # log_message(type(request.data))
+    # log_message(request.data)
 
     intent = request.data.get("intent", {})
 
@@ -26,8 +28,8 @@ def intent_responder(request):
     params = intent.get("params")
     session = request.data.get("session")
 
-    print(query)
-    pprint.pprint(params)
+    # print(query)
+    # pprint.pprint(params)
 
     action = "Play"
     artist = False
@@ -50,7 +52,7 @@ def intent_responder(request):
     if "genre" in params:
         genre = params.get("genre", {}).get("resolved")
 
-    google_resp = GoogleResponse(session)
+    google_resp = GoogleResponse(session, request)
     if action == "Shuffle":
         if artist:
             resp = google_resp.random_song_by_artist(artist)
@@ -77,3 +79,16 @@ def intent_responder(request):
             resp = google_resp.song_by_genre(genre)
 
     return Response(resp, status=status.HTTP_200_OK, headers=NO_CACHE_HEADERS)
+
+
+def stream_song(request, *args, **kwargs):
+    song_id = kwargs.get("song_id")
+
+    ss = Subsonic()
+    # song = ss.get_song(song_id)
+    songstream = ss.stream(song_id)
+
+    # response = HttpResponse(content=songstream, content_type="audio/mpeg")
+    # response['Content-Disposition'] = 'attachment; filename=filename.mp3'
+
+    return songstream

@@ -1,16 +1,22 @@
+import pprint
 import random
 
+from django.urls import reverse
+
 from subsonic.subsonic_class import Subsonic
+from utilities.custom_site_class import CustomSite
 
 
 class GoogleResponse(object):
     source = "subsonic"
 
+    request = None
     session = None
     sub = None
 
-    def __init__(self, session):
+    def __init__(self, session, request):
         self.session = session
+        self.request = request
         self.sub = Subsonic()
 
     def simple_response(self, text_response):
@@ -37,6 +43,9 @@ class GoogleResponse(object):
         if isinstance(song, str):
             song = self.sub.get_song(song)
 
+        the_site = CustomSite(self.request)
+        song_url = the_site.external_reverse("subsonic-stream", song_id=song.get("id"))
+
         resp = {
             "session": self.session,
             "prompt": {
@@ -47,7 +56,7 @@ class GoogleResponse(object):
                             {
                                 "name": song.get("title"),
                                 "description": "{} by {}".format(song.get("title"), song.get("artist")),
-                                "url": song.get("url"),
+                                "url": song_url,
                                 "image": {
                                     "large": {
                                         "alt": song.get("title"),
