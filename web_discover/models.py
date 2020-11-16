@@ -6,13 +6,13 @@ from urllib.parse import urlsplit, parse_qs
 import requests
 import xmltodict
 from bs4 import BeautifulSoup
-from django.contrib.postgres.fields import JSONField
 from django.db.models import (
     Model,
     CharField,
     IntegerField,
     DateTimeField,
     FloatField,
+    JSONField,
     URLField,
     TextField,
 )
@@ -44,7 +44,9 @@ class SSLCert(Model):
 
     def update_ssl(self):
         context = ssl.create_default_context()
-        conn = context.wrap_socket(socket.socket(socket.AF_INET), server_hostname=self.domain)
+        conn = context.wrap_socket(
+            socket.socket(socket.AF_INET), server_hostname=self.domain
+        )
         conn.settimeout(self.timeout)
 
         conn.connect((self.domain, self.ssl_port))
@@ -67,7 +69,9 @@ class SSLCert(Model):
 
         self.issuer = self.ssl_info.get("issuer")
         self.subject = self.ssl_info.get("subject")
-        self.expires = datetime.datetime.strptime(self.ssl_info["notAfter"], self.ssl_date_fmt)
+        self.expires = datetime.datetime.strptime(
+            self.ssl_info["notAfter"], self.ssl_date_fmt
+        )
 
         self.save()
 
@@ -93,7 +97,9 @@ class WebSite(Model):
     site_url = CharField(max_length=255, blank=True, null=True)
     base_url = CharField(max_length=255, blank=True, null=True)
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
         url = urlsplit(self.url)
 
         self.protocol = url.scheme
@@ -177,7 +183,9 @@ class WebPath(Model):
 
         return url.hostname
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
         if self.url:
             url = urlsplit(self.url)
             domain = url.hostname
@@ -210,7 +218,9 @@ class WebPath(Model):
             else:
                 site_url = "%s://%s" % (url.scheme, self.domain)
 
-            WebSite.objects.create(url=site_url, site_url=site_url, domain=self.domain, port=url.port)
+            WebSite.objects.create(
+                url=site_url, site_url=site_url, domain=self.domain, port=url.port
+            )
             retn = WebSite.objects.get(domain=self.domain)
 
         return retn
