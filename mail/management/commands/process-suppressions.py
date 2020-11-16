@@ -5,8 +5,6 @@ import math
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-# from kph_sendgrid_backend.utility_functions import process_suppressed_emails
-
 logger = logging.getLogger(__name__)
 
 settings.DEBUG = False

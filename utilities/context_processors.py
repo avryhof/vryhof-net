@@ -4,9 +4,6 @@ from future.backports.urllib.parse import urlparse
 
 
 def website_context(request):
-    """Site wide content processor, returns a dictionary of values to be
-       available site wide. Use with caution as queries here will affect site
-       performance."""
     return_dict = {}
     site_name = ""
 
@@ -23,8 +20,6 @@ def website_context(request):
     if settings.SITE_PROTO:
         proto = getattr(settings, "SITE_PROTO", "https")
 
-    # Force these attributes to be set in the settings, so both get_generic_context and kph_api_request
-    # in portal_user will work on multiple domains.
     settings_domain = getattr(settings, "DOMAIN_NAME", "")
     if settings_domain == "" or settings_domain != site_url:
         setattr(settings, "DOMAIN_NAME", site_url)
