@@ -25,12 +25,6 @@ class CustomSite(object):
     canonical_url = None
 
     def __init__(self, request):
-        default_uri = settings.SITE_URL
-        default_url = urlsplit(default_uri)
-
-        default_protocol = default_url.scheme
-        default_domain = default_url.hostname
-
         request_uri = request.build_absolute_uri()
 
         url = urlsplit(request_uri)
@@ -52,11 +46,6 @@ class CustomSite(object):
             if hasattr(request.current_page, "get_slug"):
                 self.page_slug = request.current_page.get_slug()
 
-        try:
-            default_site = Site.objects.get(domain=default_domain)
-        except Site.DoesNotExist:
-            pass
-
         if self.domain:
             try:
                 self.site = Site.objects.get(domain=self.domain)
@@ -64,18 +53,15 @@ class CustomSite(object):
                 try:
                     self.site = Site.objects.get_current(request)
                 except Site.DoesNotExist:
-                    self.site = Site.objects.get(domain=default_domain)
-
-        # if settings.DEBUG:
-        #     log_message("Default Site: %s" % default_domain)
-        #     if self.site:
-        #         log_message("SITE: %s" % self.site.domain)
+                    pass
 
         if ".local" in self.domain:
             self.domain = "%s:8000" % self.domain
         setattr(settings, "DOMAIN_NAME", self.domain)
 
-    def external_reverse(self, url_slug, add_slash=False):
+    def external_reverse(self, url_slug, **kwargs):
+        add_slash = kwargs.pop("add_slash", False)
+
         urlbase = self.site_url if not add_slash else self.base_url
 
-        return "%s%s" % (urlbase, reverse(url_slug))
+        return "%s%s" % (urlbase, reverse(url_slug, kwargs=kwargs))
