@@ -28,6 +28,7 @@ class GoogleResponse(object):
             song = self.sub.get_song(song)
 
         resp = {
+            "requestId": "ff36a3cc-ec34-11e6-b1a0-64510650abcf",
             "source": "subsonic",
             "fulfillmentText": "Playing %s" % song.get("title"),
             "payload": {
