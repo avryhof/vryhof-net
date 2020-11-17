@@ -59,6 +59,8 @@ class Subsonic(object):
 
         resp = requests.get(url, params=api_data)
 
+        print(resp.headers)
+
         if self.debug:
             print(resp)
 
