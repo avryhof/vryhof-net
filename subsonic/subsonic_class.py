@@ -6,6 +6,7 @@ import requests
 from django.conf import settings
 
 from subsonic.exceptions import InvalidCriteria
+from subsonic.models import SubsonicServer
 from utilities.helpers import md5
 
 
@@ -24,18 +25,30 @@ class Subsonic(object):
     def __init__(self, **kwargs):
         self.debug = kwargs.get("debug", False)
 
+        user = kwargs.get("user", False)
+
         self.endpoint = kwargs.get("url", settings.SUBSONIC_URL)
         self.username = kwargs.get("user", settings.SUBSONIC_USER)
         self.password = kwargs.get("password", settings.SUBSONIC_PASSWORD)
 
-        salt_length = random.randint(6, 12)
-        self.salt = "".join(
-            random.choice(string.ascii_letters + "1234567890_")
-            for i in range(salt_length)
-        )
+        if self.password:
+            salt_length = random.randint(6, 12)
+            self.salt = "".join(
+                random.choice(string.ascii_letters + "1234567890_")
+                for i in range(salt_length)
+            )
 
-        salted_password = self.password + self.salt
-        self.encoded_password = md5(salted_password)
+            salted_password = self.password + self.salt
+            self.encoded_password = md5(salted_password)
+
+        if user:
+            try:
+                server = SubsonicServer.objects.get(user=user)
+            except SubsonicServer.DoesNotExist:
+                pass
+            else:
+                self.salt = server.password_salt
+                self.encoded_password = server.password_hash
 
     def _api_call(self, resource, data={}):
         api_data = dict(
