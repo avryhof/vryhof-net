@@ -7,10 +7,11 @@ from subsonic.subsonic_class import Subsonic
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        # ss = Subsonic(debug=True)
-        ss = Subsonic(debug=False)
+        ss = Subsonic(debug=True)
+        # ss = Subsonic(debug=False)
 
-        ss.stream("4201")
+        # ss.stream("4201")
+        ss.get_cover_art("4201")
 
         # songs = ss.search("the sound of silence", "Disturbed")
         # songs = ss.get_random_songs()

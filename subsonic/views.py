@@ -97,14 +97,12 @@ def stream_song(request, *args, **kwargs):
     return response
 
 
-# def cover_art(request, *args, **kwargs):
-#     song_id = kwargs.get("song_id")
-#
-#     ss = Subsonic()
-#     song = ss.get_song(song_id)
-#     cover = ss.get_cover_art(song_id)
-#
-#     response = HttpResponse(content=songstream, content_type=song.get("contentType"))
-#     response["Content-Disposition"] = "attachment; filename={}".format(file_name)
-#
-#     return response
+def cover_art(request, *args, **kwargs):
+    song_id = kwargs.get("song_id")
+
+    ss = Subsonic()
+    cover = ss.get_cover_art(song_id)
+
+    response = HttpResponse(content=cover, content_type="image/png")
+
+    return response

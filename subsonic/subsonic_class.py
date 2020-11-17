@@ -63,7 +63,7 @@ class Subsonic(object):
 
         if "application/json" in content_type:
             retn = resp.json()
-        elif content_type == "audio/mpeg":
+        elif content_type == "audio/mpeg" or "image" in content_type:
             retn = resp.content
         else:
             retn = resp.text
