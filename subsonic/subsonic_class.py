@@ -59,12 +59,21 @@ class Subsonic(object):
 
         resp = requests.get(url, params=api_data)
 
-        print(resp.headers)
+        content_type = resp.headers.get("Content-Type")
+
+        print(content_type)
+
+        if "application/json" in content_type:
+            retn = resp.json()
+        elif content_type == "audio/mpeg":
+            retn = resp.text
+        else:
+            retn = resp.text
 
         if self.debug:
             print(resp)
 
-        return resp.json()
+        return retn
 
     def download(self, song_id=False):
         if not song_id:

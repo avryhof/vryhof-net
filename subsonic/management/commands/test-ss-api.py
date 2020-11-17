@@ -10,10 +10,12 @@ class Command(BaseCommand):
         # ss = Subsonic(debug=True)
         ss = Subsonic(debug=False)
 
+        ss.stream("4201")
+
         # songs = ss.search("the sound of silence", "Disturbed")
         # songs = ss.get_random_songs()
-        songs = ss.search2("enya")
-        pprint.pprint(songs)
+        # songs = ss.search2("enya")
+        # pprint.pprint(songs)
 
         # song = songs[0]
         # pprint.pprint(song)
