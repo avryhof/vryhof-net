@@ -87,12 +87,12 @@ def stream_song(request, *args, **kwargs):
 
     ss = Subsonic()
     song = ss.get_song(song_id)
-    songstream = ss.download(song_id)
+    songstream = ss.stream(song_id)
 
     file_name = song.get("path").split("/")[-1]
 
     response = HttpResponse(content=songstream, content_type=song.get("contentType"))
-    response["Content-Disposition"] = "attachment; filename={}".format(file_name)
+    # response["Content-Disposition"] = "attachment; filename={}".format(file_name)
 
     return response
 

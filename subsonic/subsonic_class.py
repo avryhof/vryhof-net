@@ -61,8 +61,6 @@ class Subsonic(object):
 
         content_type = resp.headers.get("Content-Type")
 
-        print(content_type)
-
         if "application/json" in content_type:
             retn = resp.json()
         elif content_type == "audio/mpeg":
@@ -71,6 +69,7 @@ class Subsonic(object):
             retn = resp.text
 
         if self.debug:
+            print(resp.headers)
             print(resp)
 
         return retn
