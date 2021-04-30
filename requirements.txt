@@ -49,7 +49,7 @@ python-Levenshtein==0.12.0
 python-u2flib-server==5.0.1
 pytz==2020.4
 requests==2.25.0
-rsa==4.6
+rsa==4.7
 sendgrid==6.2.2
 six==1.15.0
 soupsieve==2.0.1
