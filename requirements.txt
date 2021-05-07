@@ -36,7 +36,7 @@ geo-ez==0.1.5
 idna==2.10
 phonetisch==0.2.2
 pika==1.1.0
-Pillow==8.0.1
+Pillow==8.1.1
 psycopg2-binary==2.8.6
 pyasn1==0.4.8
 pycparser==2.20
