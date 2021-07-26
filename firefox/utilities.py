@@ -8,6 +8,7 @@ import requests
 import xmltodict
 from bs4 import BeautifulSoup
 from dateutil.parser import parse
+from django.utils.timezone import make_aware
 
 from firefox.models import NewsFeed, NewsItem, NewsImage
 
@@ -108,7 +109,7 @@ def convert_keys_list(input_list):
 def multi_clean(value):
     if value:
         if "iframe" in value:
-            value = re.sub("\<iframe.*?iframe\>", "", value)
+            value = re.sub(r"\<iframe.*?iframe\>", "", value)
 
         if "http:" in value:
             value = value.replace("http:", "https:")
@@ -237,7 +238,7 @@ def get_feed(feed):
                         poster=poster,
                         link=link,
                         guid=guid,
-                        date=item_date,
+                        date=make_aware(item_date),
                     )
 
                     try:

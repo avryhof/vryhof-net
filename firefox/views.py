@@ -4,6 +4,7 @@ import datetime
 from django.contrib.postgres.search import SearchVector
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
+from django.utils.timezone import make_aware
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 
@@ -53,7 +54,7 @@ class FirefoxHomeView(TemplateView):
                 search=terms
             )
         else:
-            yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+            yesterday = make_aware(datetime.datetime.now() - datetime.timedelta(days=1))
             news_items = NewsItem.objects.filter(date__gte=yesterday)
 
         context["news"] = news_items

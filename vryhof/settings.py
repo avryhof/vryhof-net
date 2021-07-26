@@ -28,6 +28,8 @@ SITE_PROTO = "http"
 
 ALLOWED_HOSTS = []
 
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 # Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -206,11 +208,27 @@ CKEDITOR_CONFIGS = {
         "toolbar_Custom": [
             {"name": "document", "items": ["Print", "Preview"]},
             {"name": "spelling", "items": ["Scayt"]},
-            {"name": "clipboard", "items": ["Cut", "Copy", "Paste", "PasteText", "PasteFromWord", "RemoveFormat", ], },
+            {
+                "name": "clipboard",
+                "items": [
+                    "Cut",
+                    "Copy",
+                    "Paste",
+                    "PasteText",
+                    "PasteFromWord",
+                    "RemoveFormat",
+                ],
+            },
             {"name": "history", "items": ["Undo", "Redo"]},
             {"name": "links", "items": ["Link", "Unlink", "Anchor"]},
-            {"name": "insert", "items": ["Image", "Table", "HorizontalRule", "SpecialChar"], },
-            {"name": "editing", "items": ["Find", "Replace", "-", "SelectAll", "ShowBlocks"], },
+            {
+                "name": "insert",
+                "items": ["Image", "Table", "HorizontalRule", "SpecialChar"],
+            },
+            {
+                "name": "editing",
+                "items": ["Find", "Replace", "-", "SelectAll", "ShowBlocks"],
+            },
             {"name": "embedding", "items": ["Iframe"]},
             "/",
             {"name": "styles", "items": ["Styles", "Format", "Font", "FontSize"]},
@@ -271,7 +289,10 @@ LOGGING = {
             "format": "%(asctime)s %(levelname)s [%(name)s: %(pathname)s %(funcName)s line:%(lineno)s] -- %(message)s",
             "datefmt": "%m-%d-%Y %H:%M:%S",
         },
-        "verbose": {"format": "%(asctime)s %(levelname)s %(name)s -- %(message)s", "datefmt": "%m-%d-%Y %H:%M:%S", },
+        "verbose": {
+            "format": "%(asctime)s %(levelname)s %(name)s -- %(message)s",
+            "datefmt": "%m-%d-%Y %H:%M:%S",
+        },
         "simple": {"format": "%(asctime)s %(levelname)s %(message)s"},
     },
     "handlers": {
@@ -283,7 +304,11 @@ LOGGING = {
             "maxBytes": 1024 * 1024 * 100,  # 100 mb
             "backupCount": 3,
         },
-        "file": {"level": LOGGER_LEVEL, "class": "logging.FileHandler", "filename": ERROR_LOG, },
+        "file": {
+            "level": LOGGER_LEVEL,
+            "class": "logging.FileHandler",
+            "filename": ERROR_LOG,
+        },
     },
     "loggers": {
         "": {"level": "INFO", "handlers": ["weather"], "propagate": True},
