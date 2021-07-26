@@ -8,5 +8,5 @@ urlpatterns = [
         get_zipcodes_in_radius,
         name="get_zipcodes_in_radius",
     ),
-    path("zipcode-to-geonameid/<str:zip_code>", zipcode_to_geoname, name="zip-to-geo")
+    path("zipcode-to-geonameid/<str:zip_code>/", zipcode_to_geoname, name="zip-to-geo")
 ]
