@@ -70,9 +70,9 @@ def zipcode_to_geoname(request, **kwargs):
     except GeoPostalCode.DoesNotExist:
         resp = {"error": "Zip code not found."}
     else:
-        if not gpc.place:
-            resp = {"error": "Place not found"}
-        else:
+        if  gpc.place is not None:
             resp = gpc.place.as_dict()
+        else:
+            resp = {"error": "Place not found"}
 
     return Response(resp, status=status.HTTP_200_OK, headers=NO_CACHE_HEADERS)
