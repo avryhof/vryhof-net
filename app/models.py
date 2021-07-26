@@ -1,7 +1,7 @@
 import pprint
 
 from django.db.models import DateTimeField
-from geo_ez.models import PostalCode, AbstractStreetAddress
+from gis.models import PostalCode, AbstractStreetAddress
 
 from app.geonames_class import GeoNames
 

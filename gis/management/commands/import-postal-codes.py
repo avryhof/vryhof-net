@@ -76,7 +76,7 @@ class Command(BaseCommand):
         for country in ["US", "PR", "VI", "GU", "MP", "AZ"]:
             self._log_message("Processing: %s" % country)
 
-            data_file_path = os.path.join(zip_file_path, "postal_codes-master", '%s.txt' % country)
+            data_file_path = os.path.join(zip_file_path, "postal_codes-master", "zip", '{}.txt'.format(country))
             import_postal_codes_csv(data_file_path)
 
             os.remove(data_file_path)

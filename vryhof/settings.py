@@ -47,10 +47,10 @@ INSTALLED_APPS = [
     "ckeditor",
     "ckeditor_uploader",
     "mptt",
-    "geo_ez",
     "favorites_icons",
     "frontend_assets",
     "swingtime",
+    "gis",
     "navbar",
     "bootstrap4",
     "firefox",
@@ -61,15 +61,14 @@ INSTALLED_APPS = [
     "alexa",
     "assistant",
     # "mail",
-    "gis.apps.GisConfig",
     "geocaching",
     "api",
     "kids",
     "app",
-    "web_discover",
-    "hiking",
     "subsonic",
 ]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

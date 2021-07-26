@@ -44,6 +44,7 @@ class GISPoint(models.Model):
 
 
 class PostalCode(GISPoint):
+    geonameid = models.IntegerField(null=True)
     country_code = models.CharField(max_length=2, blank=True, null=True)  # iso country code, 2 characters
     postal_code = models.CharField(max_length=20, blank=True, null=True)  # varchar(20)
     place_name = models.CharField(max_length=180, blank=True, null=True)  # varchar(180)
