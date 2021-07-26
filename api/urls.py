@@ -1,6 +1,6 @@
 from django.urls import path
 
-from api.views import get_zipcodes_in_radius
+from api.views import get_zipcodes_in_radius, zipcode_to_geoname
 
 urlpatterns = [
     path(
