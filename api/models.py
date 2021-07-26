@@ -50,7 +50,7 @@ class GeoName(GISPoint):
     postal_code = models.ForeignKey(PostalCode, null=True, on_delete=models.SET_NULL)
 
     def as_dict(self):
-        return dict(
+        retn = dict(
             geonameid=self.geonameid,
             asciiname=self.asciiname,
             alternatenames=self.alternatenames,
@@ -67,8 +67,10 @@ class GeoName(GISPoint):
             dem=self.dem,  # digital elevation model, srtm3 or gtopo30
             timezone=self.timezone,
             modification_date=self.modification_date,
-            postal_code=self.postal_code.as_dict(),
         )
+        if self.postal_code:
+            retn.update(postal_code=self.postal_code.as_dict())
+        return retn
 
 
 class GeoPostalCode(models.Model):
