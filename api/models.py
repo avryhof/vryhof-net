@@ -68,8 +68,14 @@ class GeoName(GISPoint):
             timezone=self.timezone,
             modification_date=self.modification_date,
         )
-        if self.postal_code:
+        if self.postal_code is not None:
             retn.update(postal_code=self.postal_code.as_dict())
+            try:
+                pd = PopulationDensity.objects.get(postal_code=self.postal_code)
+            except PopulationDensity.DoesNotExist:
+                pass
+            else:
+                retn.update(population=pd.as_dict())
         return retn
 
 
@@ -166,8 +172,6 @@ class GeoPostalCode(models.Model):
 
 
 class PopulationDensity(models.Model):
-    use_api_search = False
-
     zip_code = models.CharField(max_length=9, blank=True, null=True)
     population = models.IntegerField(null=True)
     land_miles = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
@@ -175,6 +179,14 @@ class PopulationDensity(models.Model):
     classification = models.CharField(max_length=1, blank=True, null=True)
     postal_code = models.ForeignKey(PostalCode, null=True, on_delete=models.SET_NULL)
     place = models.ForeignKey(GeoName, null=True, on_delete=models.SET_NULL)
+
+    def as_dict(self):
+        return dict(
+            population=self.population,
+            land_miles=self.land_miles,
+            density=self.density,
+            classification=self.classification,
+        )
 
     def set_classification(self):
         if self.density > 3000:
