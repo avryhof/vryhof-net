@@ -78,18 +78,19 @@ class GeoPostalCode(models.Model):
     place = models.ForeignKey(GeoName, null=True, on_delete=models.SET_NULL)
 
     def link_postal_code(self):
-        try:
-            self.postal_code = PostalCode.objects.get(postal_code=self.zip_code)
-        except PostalCode.DoesNotExist:
-            pass
-        except PostalCode.MultipleObjectsReturned:
-            if self.zip_code is not None:
-                postal_codes = PostalCode.objects.filter(postal_code=self.zip_code).order_by("accuracy")
-                if len(postal_codes) > 0:
-                    self.postal_code = postal_codes[0]
-                    self.save()
-        else:
-            self.save()
+        if self.postal_code is None:
+            try:
+                self.postal_code = PostalCode.objects.get(postal_code=self.zip_code)
+            except PostalCode.DoesNotExist:
+                pass
+            except PostalCode.MultipleObjectsReturned:
+                if self.zip_code is not None:
+                    postal_codes = PostalCode.objects.filter(postal_code=self.zip_code).order_by("accuracy")
+                    if len(postal_codes) > 0:
+                        self.postal_code = postal_codes[0]
+                        self.save()
+            else:
+                self.save()
 
     def link_place_api(self):
         resp = requests.get(
@@ -158,6 +159,10 @@ class GeoPostalCode(models.Model):
             if place:
                 self.place = place
                 self.save()
+
+        if not self.place.postal_code and self.postal_code:
+            self.place.postal_code = self.postal_code
+            self.place.save()
 
 
 class PopulationDensity(models.Model):

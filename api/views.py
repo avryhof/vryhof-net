@@ -1,19 +1,14 @@
-import pprint
-
 import bleach
-
-from api.models import GeoPostalCode
-from gis.models import PostalCode
-from gis.utility_functions import points_within_radius
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 
-
+from api.models import GeoPostalCode
 from assistant.api_auth import AnonymousAuthentication
 from assistant.constants import NO_CACHE_HEADERS
 from assistant.permissions import AnonymousPermission
-
+from gis.models import PostalCode
+from gis.utility_functions import points_within_radius
 
 
 @api_view(["GET", "POST"])
@@ -53,6 +48,7 @@ def get_zipcodes_in_radius(request, **kwargs):
 
     return Response(resp, status=status.HTTP_200_OK, headers=NO_CACHE_HEADERS)
 
+
 @api_view(["GET", "POST"])
 @authentication_classes((AnonymousAuthentication,))
 @permission_classes((AnonymousPermission,))
@@ -70,7 +66,8 @@ def zipcode_to_geoname(request, **kwargs):
     except GeoPostalCode.DoesNotExist:
         resp = {"error": "Zip code not found."}
     else:
-        if  gpc.place is not None:
+        gpc.link_postal_code()
+        if gpc.place is not None:
             resp = gpc.place.as_dict()
         else:
             resp = {"error": "Place not found"}
