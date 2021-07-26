@@ -49,9 +49,117 @@ class GeoName(GISPoint):
     modification_date = models.DateField(null=True)
     postal_code = models.ForeignKey(PostalCode, null=True, on_delete=models.SET_NULL)
 
+    def as_dict(self):
+        return dict(
+            geonameid=self.geonameid,
+            asciiname=self.asciiname,
+            alternatenames=self.alternatenames,
+            feature_class=self.feature_class,
+            feature_code=self.feature_code,
+            country_code=self.country_code,
+            cc2=self.cc2,
+            admin1_code=self.admin1_code,  # 1. order subdivision (state) varchar(20)
+            admin2_code=self.admin2_code,  # 2. order subdivision (county/province)
+            admin3_code=self.admin3_code,  # 3. order subdivision (community) varchar(20)
+            admin4_code=self.admin4_code,  # 3. order subdivision (community) varchar(20)
+            population=self.population,
+            elevation=self.elevation,  # in meters
+            dem=self.dem,  # digital elevation model, srtm3 or gtopo30
+            timezone=self.timezone,
+            modification_date=self.modification_date,
+            postal_code=self.postal_code.as_dict(),
+        )
+
+
+class GeoPostalCode(models.Model):
+    postal_code = models.ForeignKey(PostalCode, null=True, on_delete=models.SET_NULL)
+    place = models.ForeignKey(GeoName, null=True, on_delete=models.SET_NULL)
+
+    def link_postal_code(self):
+        try:
+            self.postal_code = PostalCode.objects.get(postal_code=self.zip_code)
+        except PostalCode.DoesNotExist:
+            pass
+        except PostalCode.MultipleObjectsReturned:
+            if self.zip_code is not None:
+                postal_codes = PostalCode.objects.filter(postal_code=self.zip_code).order_by("accuracy")
+                if len(postal_codes) > 0:
+                    self.postal_code = postal_codes[0]
+                    self.save()
+        else:
+            self.save()
+
+    def link_place_api(self):
+        resp = requests.get(
+            "http://api.geonames.org/findNearbyPlaceNameJSON",
+            params=dict(lat=self.postal_code.latitude, lng=self.postal_code.longitude, username="avryhof"),
+        )
+        try:
+            resp_json = resp.json()
+        except JSONDecodeError:
+            log_message("Turning off api search.")
+            self.use_api_search = False
+        else:
+            if "geonames" in resp_json:
+                places_json = make_list(resp_json.get("geonames"))
+                place_json = places_json[0]
+                place_id = place_json.get("geonameId")
+
+                try:
+                    self.place = GeoName.objects.get(geonameid=place_id)
+                except GeoName.DoesNotExist:
+                    log_message("Place not found")
+                else:
+                    self.postal_code.place_name = place_json.get("name")
+                    self.postal_code.save()
+
+                    self.save()
+
+    def link_place(self):
+        if not self.postal_code:
+            self.link_postal_code()
+
+        if self.postal_code:
+            place = False
+            try:
+                place = GeoName.objects.get(
+                    name__iexact=self.postal_code.name,
+                    country_code=self.postal_code.country_code,
+                    admin1_code=self.postal_code.admin_code1,
+                    admin2_code=self.postal_code.admin_code2,
+                    feature_class="P",
+                )
+            except GeoName.DoesNotExist:
+                try:
+                    place = GeoName.objects.get(
+                        name__iexact=self.postal_code.name,
+                        country_code=self.postal_code.country_code,
+                        admin1_code=self.postal_code.admin_code1,
+                        feature_class="P",
+                    )
+                except GeoName.DoesNotExist:
+                    try:
+                        place = GeoName.objects.get(
+                            name__iexact=self.postal_code.name,
+                            country_code=self.postal_code.country_code,
+                            admin1_code=self.postal_code.admin_code1,
+                        )
+                    except (GeoName.DoesNotExist, GeoName.MultipleObjectsReturned):
+                        self.link_place_api()
+
+                except GeoName.MultipleObjectsReturned:
+                    self.link_place_api()
+
+            except GeoName.MultipleObjectsReturned:
+                self.link_place_api()
+
+            if place:
+                self.place = place
+                self.save()
+
 
 class PopulationDensity(models.Model):
-    use_api_search = True
+    use_api_search = False
 
     zip_code = models.CharField(max_length=9, blank=True, null=True)
     population = models.IntegerField(null=True)

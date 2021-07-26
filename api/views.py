@@ -1,6 +1,8 @@
 import pprint
 
 import bleach
+
+from api.models import GeoPostalCode
 from gis.models import PostalCode
 from gis.utility_functions import points_within_radius
 from rest_framework import status
@@ -48,5 +50,26 @@ def get_zipcodes_in_radius(request, **kwargs):
         })
 
     resp['zip_codes'] = zip_codes
+
+    return Response(resp, status=status.HTTP_200_OK, headers=NO_CACHE_HEADERS)
+
+@api_view(["GET", "POST"])
+@authentication_classes((AnonymousAuthentication,))
+@permission_classes((AnonymousPermission,))
+def zipcode_to_geoname(request, **kwargs):
+    """
+    Finds ZipCodes within a radius of the specified Zip Code
+    :param request:
+    :return:
+    """
+
+    zip_code = kwargs.get('zip_code', None)
+
+    try:
+        gpc = GeoPostalCode.objects.get(postal_code__postal_code=zip_code)
+    except GeoPostalCode.DoesNotExist:
+        resp = {}
+    else:
+        resp = gpc.place.as_dict()
 
     return Response(resp, status=status.HTTP_200_OK, headers=NO_CACHE_HEADERS)

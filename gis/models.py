@@ -3,6 +3,7 @@ from math import radians, cos, sin, asin, sqrt
 from django.db import models
 from django.db.models import DO_NOTHING, DateTimeField
 
+from api.models import GeoName
 from gis.constants import ACCURACY_CHOICES
 from gis.us_census_class import USCensus
 from gis.usps_class import USPS
@@ -44,7 +45,6 @@ class GISPoint(models.Model):
 
 
 class PostalCode(GISPoint):
-    geonameid = models.IntegerField(null=True)
     country_code = models.CharField(max_length=2, blank=True, null=True)  # iso country code, 2 characters
     postal_code = models.CharField(max_length=20, blank=True, null=True)  # varchar(20)
     place_name = models.CharField(max_length=180, blank=True, null=True)  # varchar(180)
@@ -79,120 +79,133 @@ class PostalCode(GISPoint):
     def zip_code(self):
         return self.postal_code
 
-
-class AbstractStreetAddress(GISPoint):
-    address1 = models.CharField(max_length=255, blank=True, null=True)
-    address2 = models.CharField(max_length=255, blank=True, null=True)
-    city = models.CharField(max_length=180, blank=True, null=True)
-    state = models.CharField(max_length=20, blank=True, null=True)
-    zip_code = models.CharField(max_length=20, blank=True, null=True)
-    plus_four = models.CharField(max_length=20, blank=True, null=True)
-    postal_code = models.ForeignKey(PostalCode, blank=True, null=True, on_delete=DO_NOTHING)
-    validated = models.BooleanField(default=False)
-
-    class Meta:
-        abstract = True
-
-    def dict(self):
+    def as_dict(self):
         return dict(
-            address1=self.address1, address2=self.address2, city=self.city, state=self.state, zip_code=self.zip_code
+            country_code=self.country_code,
+            postal_code=self.postal_code,
+            place_name=self.place_name,
+            admin_name1=self.admin_name1,
+            admin_code1=self.admin_code1,
+            admin_name2=self.admin_name2,
+            admin_code2=self.admin_code2,
+            admin_name3=self.admin_name3,
+            admin_code3=self.admin_code3,
+            accuracy=self.accuracy,
+            updated=self.updated,
         )
 
-    def geocode(self, **kwargs):
-        debug = kwargs.get("debug", False)
+    class AbstractStreetAddress(GISPoint):
+        address1 = models.CharField(max_length=255, blank=True, null=True)
+        address2 = models.CharField(max_length=255, blank=True, null=True)
+        city = models.CharField(max_length=180, blank=True, null=True)
+        state = models.CharField(max_length=20, blank=True, null=True)
+        zip_code = models.CharField(max_length=20, blank=True, null=True)
+        plus_four = models.CharField(max_length=20, blank=True, null=True)
+        postal_code = models.ForeignKey(PostalCode, blank=True, null=True, on_delete=DO_NOTHING)
+        validated = models.BooleanField(default=False)
 
-        retn = False
+        class Meta:
+            abstract = True
 
-        if self.latitude and self.longitude:
-            retn = True
+        def dict(self):
+            return dict(
+                address1=self.address1, address2=self.address2, city=self.city, state=self.state, zip_code=self.zip_code
+            )
 
-        else:
-            valid_address = self.normalize()
+        def geocode(self, **kwargs):
+            debug = kwargs.get("debug", False)
 
-            # log_message(valid_address, pretty=True, custom_log="pharmacy.log")
-            if debug:
-                print(valid_address)
+            retn = False
 
-            try:
-                verified_address = VerifiedStreetAddress.objects.get(
-                    address1__iexact=self.address1,
-                    address2__iexact=self.address2,
-                    city__iexact=self.city,
-                    state__iexact=self.state,
-                    zip_code=self.zip_code,
-                    postal_code=self.postal_code,
-                )
-
-            except VerifiedStreetAddress.DoesNotExist:
-                usc = USCensus()
-
-                if valid_address:
-                    if valid_address.get("address1") and valid_address.get("city") and valid_address.get("state"):
-                        geocoded = usc.geocode(query=valid_address)
-                        if geocoded:
-                            retn = True
-                            self.latitude = geocoded.get("latitude")
-                            self.longitude = geocoded.get("longitude")
-                            self.save()
+            if self.latitude and self.longitude:
+                retn = True
 
             else:
-                self.address1 = verified_address.address1
-                self.address2 = verified_address.address2
-                self.city = verified_address.city
-                self.state = verified_address.state
-                self.zip_code = verified_address.zip_code
-                self.plus_four = verified_address.plus_four
-                self.postal_code = verified_address.postal_code
-                self.validated = verified_address.validated
+                valid_address = self.normalize()
+
+                # log_message(valid_address, pretty=True, custom_log="pharmacy.log")
+                if debug:
+                    print(valid_address)
+
+                try:
+                    verified_address = VerifiedStreetAddress.objects.get(
+                        address1__iexact=self.address1,
+                        address2__iexact=self.address2,
+                        city__iexact=self.city,
+                        state__iexact=self.state,
+                        zip_code=self.zip_code,
+                        postal_code=self.postal_code,
+                    )
+
+                except VerifiedStreetAddress.DoesNotExist:
+                    usc = USCensus()
+
+                    if valid_address:
+                        if valid_address.get("address1") and valid_address.get("city") and valid_address.get("state"):
+                            geocoded = usc.geocode(query=valid_address)
+                            if geocoded:
+                                retn = True
+                                self.latitude = geocoded.get("latitude")
+                                self.longitude = geocoded.get("longitude")
+                                self.save()
+
+                else:
+                    self.address1 = verified_address.address1
+                    self.address2 = verified_address.address2
+                    self.city = verified_address.city
+                    self.state = verified_address.state
+                    self.zip_code = verified_address.zip_code
+                    self.plus_four = verified_address.plus_four
+                    self.postal_code = verified_address.postal_code
+                    self.validated = verified_address.validated
+                    self.save()
+
+            if debug:
+                # log_message(retn, pretty=True, custom_log="pharmacy.log")
+                print(retn)
+
+            return retn
+
+        def link_postal_code(self):
+            retn = False
+            try:
+                self.postal_code = PostalCode.objects.get(postal_code=self.zip_code)
+
+            except PostalCode.DoesNotExist:
+                pass
+
+            else:
+                retn = True
                 self.save()
 
-        if debug:
-            # log_message(retn, pretty=True, custom_log="pharmacy.log")
-            print(retn)
+            return retn
 
-        return retn
+        def normalize(self):
+            valid_address = dict(
+                address1=self.address1,
+                address2=self.address2,
+                city=self.city,
+                state=self.state,
+                zip_code=self.zip_code,
+                plus_four=self.plus_four,
+            )
 
-    def link_postal_code(self):
-        retn = False
-        try:
-            self.postal_code = PostalCode.objects.get(postal_code=self.zip_code)
+            if not self.validated:
+                search_address = self.dict()
+                ps = USPS()
+                valid_address = ps.address(**search_address)
 
-        except PostalCode.DoesNotExist:
-            pass
+                if valid_address:
+                    self.address1 = valid_address.get("address1", self.address1)
+                    self.address2 = valid_address.get("address2", self.address2)
+                    self.city = valid_address.get("city", self.city)
+                    self.state = valid_address.get("state", self.state)
+                    self.zip_code = valid_address.get("zip_code", self.zip_code)
+                    self.plus_four = valid_address.get("plus_four", self.plus_four)
+                    self.validated = True
+                    self.save()
 
-        else:
-            retn = True
-            self.save()
+            return valid_address
 
-        return retn
-
-    def normalize(self):
-        valid_address = dict(
-            address1=self.address1,
-            address2=self.address2,
-            city=self.city,
-            state=self.state,
-            zip_code=self.zip_code,
-            plus_four=self.plus_four,
-        )
-
-        if not self.validated:
-            search_address = self.dict()
-            ps = USPS()
-            valid_address = ps.address(**search_address)
-
-            if valid_address:
-                self.address1 = valid_address.get("address1", self.address1)
-                self.address2 = valid_address.get("address2", self.address2)
-                self.city = valid_address.get("city", self.city)
-                self.state = valid_address.get("state", self.state)
-                self.zip_code = valid_address.get("zip_code", self.zip_code)
-                self.plus_four = valid_address.get("plus_four", self.plus_four)
-                self.validated = True
-                self.save()
-
-        return valid_address
-
-
-class VerifiedStreetAddress(AbstractStreetAddress):
-    updated = DateTimeField(auto_now_add=True)
+    class VerifiedStreetAddress(AbstractStreetAddress):
+        updated = DateTimeField(auto_now_add=True)
