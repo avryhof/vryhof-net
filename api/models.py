@@ -119,7 +119,7 @@ class GeoPostalCode(models.Model):
                     pass
 
         if pd:
-            retn.update(density=pd.as_dict())
+            retn.update(pd.as_dict())
 
         # if latitude and longitude:
         #     w = Wikipedia()
