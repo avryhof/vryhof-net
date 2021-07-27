@@ -220,7 +220,7 @@ class PopulationDensity(models.Model):
     population = models.IntegerField(null=True)
     land_miles = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     density = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
-    classification = models.CharField(max_length=1, blank=True, null=True)
+    classification = models.CharField(max_length=12, blank=True, null=True)
     postal_code = models.ForeignKey(PostalCode, null=True, on_delete=models.SET_NULL)
     place = models.ForeignKey(GeoName, null=True, on_delete=models.SET_NULL)
 
