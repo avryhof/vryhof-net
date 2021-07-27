@@ -3,6 +3,7 @@ from json import JSONDecodeError
 import requests
 from django.db import models
 
+from api.wikipedia import Wikipedia
 from gis.models import GISPoint, PostalCode
 from utilities.debugging import log_message
 from utilities.utility_functions import make_list
@@ -89,9 +90,15 @@ class GeoPostalCode(models.Model):
     def as_dict(self):
         retn = {}
 
+        latitude = False
+        longitude = False
+
         pd = False
         if self.postal_code is not None:
             retn = self.postal_code.as_dict()
+
+            latitude = self.postal_code.latitude
+            longitude = self.postal_code.longitude
 
             try:
                 pd = PopulationDensity.objects.get(postal_code=self.postal_code)
@@ -100,6 +107,11 @@ class GeoPostalCode(models.Model):
 
         if self.place is not None:
             retn.update(place=self.place.as_dict())
+
+            if not latitude or not longitude:
+                latitude = self.place.latitude
+                longitude = self.place.longitude
+
             if not pd:
                 try:
                     pd = PopulationDensity.objects.get(place=self.place)
@@ -108,6 +120,10 @@ class GeoPostalCode(models.Model):
 
         if pd:
             retn.update(density=pd.as_dict())
+
+        if latitude and longitude:
+            w = Wikipedia()
+            retn.update(wikipedia=w.get_by_coordinates(latitude, longitude))
 
         return retn
 
