@@ -206,6 +206,7 @@ class PopulationDensity(models.Model):
     place = models.ForeignKey(GeoName, null=True, on_delete=models.SET_NULL)
 
     def as_dict(self):
+        self.set_classification()
         return dict(
             population=self.population,
             land_miles=self.land_miles,
