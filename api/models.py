@@ -51,6 +51,9 @@ class GeoName(GISPoint):
 
     def as_dict(self):
         retn = dict(
+            name=self.name,
+            latitude=self.latitude,
+            longitude=self.longitude,
             geonameid=self.geonameid,
             asciiname=self.asciiname,
             alternatenames=self.alternatenames,
@@ -88,7 +91,7 @@ class GeoPostalCode(models.Model):
 
         pd = False
         if self.postal_code is not None:
-            retn.update(postal_code=self.postal_code.as_dict())
+            retn = self.postal_code.as_dict()
 
             try:
                 pd = PopulationDensity.objects.get(postal_code=self.postal_code)

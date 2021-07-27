@@ -80,6 +80,9 @@ class PostalCode(GISPoint):
 
     def as_dict(self):
         return dict(
+            name=self.name,
+            latitude=self.latitude,
+            longitude=self.longitude,
             country_code=self.country_code,
             postal_code=self.postal_code,
             place_name=self.place_name,
