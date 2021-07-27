@@ -121,9 +121,9 @@ class GeoPostalCode(models.Model):
         if pd:
             retn.update(density=pd.as_dict())
 
-        if latitude and longitude:
-            w = Wikipedia()
-            retn.update(wikipedia=w.get_by_coordinates(latitude, longitude))
+        # if latitude and longitude:
+        #     w = Wikipedia()
+        #     retn.update(wikipedia=w.get_by_coordinates(latitude, longitude))
 
         return retn
 
