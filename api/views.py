@@ -68,7 +68,7 @@ def zipcode_to_geoname(request, **kwargs):
     else:
         gpc.link_postal_code()
         if gpc.place is not None:
-            resp = gpc.place.as_dict()
+            resp = gpc.as_dict()
         else:
             resp = {"error": "Place not found"}
 

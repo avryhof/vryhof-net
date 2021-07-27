@@ -83,6 +83,31 @@ class GeoPostalCode(models.Model):
     postal_code = models.ForeignKey(PostalCode, null=True, on_delete=models.SET_NULL)
     place = models.ForeignKey(GeoName, null=True, on_delete=models.SET_NULL)
 
+    def as_dict(self):
+        retn = {}
+
+        pd = False
+        if self.postal_code is not None:
+            retn.update(postal_code=self.postal_code.as_dict())
+
+            try:
+                pd = PopulationDensity.objects.get(postal_code=self.postal_code)
+            except PopulationDensity.DoesNotExist:
+                pass
+
+        if self.place is not None:
+            retn.update(place=self.place.as_dict())
+            if not pd:
+                try:
+                    pd = PopulationDensity.objects.get(place=self.place)
+                except PopulationDensity.DoesNotExist:
+                    pass
+
+        if pd:
+            retn.update(density=pd.as_dict())
+
+        return retn
+
     def link_postal_code(self):
         if self.postal_code is None:
             try:
