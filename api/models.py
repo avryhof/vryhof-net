@@ -3,7 +3,7 @@ from json import JSONDecodeError
 import requests
 from django.db import models
 
-from api.wikipedia import Wikipedia
+from gis.constants import CLASS_RURAL, CLASS_SUBURBAN, CLASS_URBAN
 from gis.models import GISPoint, PostalCode
 from utilities.debugging import log_message
 from utilities.utility_functions import make_list
@@ -229,19 +229,17 @@ class PopulationDensity(models.Model):
         return dict(
             population=self.population,
             land_miles=self.land_miles,
-            density=self.density,
+            population_density=self.density,
             classification=self.classification,
         )
 
     def set_classification(self):
         if self.density > 3000:
-            self.classification = "U"
+            self.classification = CLASS_URBAN
         elif 1000 < self.density < 3000:
-            self.classification = "S"
-        elif 6 < self.density < 1000:
-            self.classification = "R"
-        elif self.density < 6:
-            self.classification = "F"
+            self.classification = CLASS_SUBURBAN
+        elif self.density < 1000:
+            self.classification = CLASS_RURAL
 
         self.save()
 
