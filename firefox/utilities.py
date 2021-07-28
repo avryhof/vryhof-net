@@ -230,6 +230,11 @@ def get_feed(feed):
                     else:
                         guid = multi_clean(guid)
 
+                    try:
+                        db_date = make_aware(item_date)
+                    except ValueError:
+                        db_date = item_date
+
                     append_dict = dict(
                         feed_id=feed.pk,
                         title=append_item.get("title"),
@@ -238,7 +243,7 @@ def get_feed(feed):
                         poster=poster,
                         link=link,
                         guid=guid,
-                        date=make_aware(item_date),
+                        date=db_date,
                     )
 
                     try:
