@@ -7,12 +7,19 @@ class Wikipedia(object):
 
     def get_by_coordinates(self, latitude, longitude):
         """
-        https://en.wikipedia.org/w/api.php?
+        "https://en.wikipedia.org/w/api.php
+        ?
         action=query
+        &
+        format=json
+        &
         list=geosearch
-        gscoord=37.7891838 %7C -122.4033522
-        gsradius=15
-        gslimit=3
+        &
+        gscoord={}%7C{}
+        &
+        gsradius=10000
+        &
+        gslimit=100".format(postal_code.latitude, postal_code.longitude)
 
         :param latitude:
         :param longitude:

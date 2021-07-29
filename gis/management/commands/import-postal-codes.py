@@ -2,13 +2,12 @@ import datetime
 import logging
 import math
 import os
-import zipfile
-from urllib.request import urlretrieve
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from gis.utility_functions import import_postal_codes_csv
+from gis.constants import COUNTRIES
+from gis.utility_functions import import_postal_codes_csv, get_geoname_data
 
 logger = logging.getLogger(__name__)
 
@@ -55,30 +54,12 @@ class Command(BaseCommand):
 
         self._timer()
 
-        media_root_normalized = os.path.join(*os.path.split(settings.MEDIA_ROOT))
-        zip_file_path = os.path.join(media_root_normalized, 'geonames')
+        data_path = get_geoname_data()
 
-        zip_file = os.path.join(zip_file_path, 'ALL.zip')
-
-        if not os.path.exists(zip_file_path):
-            os.makedirs(zip_file_path)
-
-        if os.path.exists(zip_file):
-            os.remove(zip_file)
-
-        urlretrieve("https://github.com/avryhof/postal_codes/archive/master.zip", zip_file)
-
-        zip_ref = zipfile.ZipFile(zip_file, "r")
-        zip_ref.extractall(zip_file_path)
-        zip_ref.close()
-        os.remove(zip_file)
-
-        for country in ["US", "PR", "VI", "GU", "MP", "AZ"]:
+        for country in COUNTRIES:
             self._log_message("Processing: %s" % country)
 
-            data_file_path = os.path.join(zip_file_path, "postal_codes-master", "zip", '{}.txt'.format(country))
+            data_file_path = os.path.join(data_path, "zip", '{}.txt'.format(country))
             import_postal_codes_csv(data_file_path)
-
-            os.remove(data_file_path)
 
         self._timer()

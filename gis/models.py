@@ -1,11 +1,13 @@
 from math import radians, cos, sin, asin, sqrt
 
+import requests
 from django.db import models
 from django.db.models import DO_NOTHING, DateTimeField
 
-from gis.constants import ACCURACY_CHOICES
+from gis.constants import ACCURACY_CHOICES, URBAN, SUBURBAN, RURAL, CLASS_URBAN, CLASS_SUBURBAN, CLASS_RURAL
 from gis.us_census_class import USCensus
 from gis.usps_class import USPS
+from utilities.debugging import log_message
 
 
 class GISPoint(models.Model):
@@ -43,7 +45,49 @@ class GISPoint(models.Model):
         return self.distance_from(latitude, longitude, **kwargs) < radius
 
 
+class GeoName(GISPoint):
+    geonameid = models.IntegerField(primary_key=True)
+    asciiname = models.CharField(max_length=200, blank=True, null=True)
+    alternatenames = models.TextField(null=True)
+    feature_class = models.CharField(max_length=1, blank=True, null=True)
+    feature_code = models.CharField(max_length=10, blank=True, null=True)
+    country_code = models.CharField(max_length=2, blank=True, null=True)
+    cc2 = models.CharField(max_length=200, blank=True, null=True)
+    admin1_code = models.CharField(max_length=20, blank=True, null=True)  # 1. order subdivision (state) varchar(20)
+    admin2_code = models.CharField(max_length=80, blank=True, null=True)  # 2. order subdivision (county/province)
+    admin3_code = models.CharField(max_length=20, blank=True, null=True)  # 3. order subdivision (community) varchar(20)
+    admin4_code = models.CharField(max_length=20, blank=True, null=True)  # 3. order subdivision (community) varchar(20)
+    population = models.BigIntegerField(null=True)
+    elevation = models.IntegerField(null=True)  # in meters
+    dem = models.IntegerField(null=True)  # digital elevation model, srtm3 or gtopo30
+    timezone = models.CharField(max_length=40, blank=True, null=True)
+    modification_date = models.DateField(null=True)
+
+    def density_classification(self):
+        """
+        By Census tract definitions:
+        > 50000      = URBAN (U)
+        >2500 <50000 = SUBURBAN (S)
+        >10 <2500    = RURAL (R)
+        <10          = FRONTIER (F)
+        """
+        if self.population >= URBAN:
+            self.classification = "U"
+
+        elif URBAN > self.population >= SUBURBAN:
+            self.classification = "S"
+
+        elif SUBURBAN >= self.population >= RURAL:
+            self.classification = "R"
+
+        else:
+            self.classification = "F"
+
+        self.save()
+
+
 class PostalCode(GISPoint):
+    place = models.ForeignKey(GeoName, null=True, on_delete=models.SET_NULL)
     country_code = models.CharField(max_length=2, blank=True, null=True)  # iso country code, 2 characters
     postal_code = models.CharField(max_length=20, blank=True, null=True)  # varchar(20)
     place_name = models.CharField(max_length=180, blank=True, null=True)  # varchar(180)
@@ -66,6 +110,15 @@ class PostalCode(GISPoint):
 
     def __str__(self):
         return self.place_name
+
+    @property
+    def density(self):
+        try:
+            data = PopulationDensity.objects.get(postal_code=self)
+        except PopulationDensity.DoesNotExist:
+            return None
+        else:
+            return data
 
     @property
     def city(self):
@@ -95,6 +148,98 @@ class PostalCode(GISPoint):
             accuracy=self.accuracy,
             updated=self.updated,
         )
+
+    def link_place_api(self):
+        resp = requests.get("https://firefox.vryhof.net/api/rest/zipcode/{}/".format(self.postal_code))
+        resp_json = resp.json()
+        if "place" in resp_json:
+            place_id = resp_json.get("place").get("geonameid")
+            place = GeoName.objects.get(geonameid=place_id)
+            try:
+                self.place = place
+            except GeoName.DoesNotExist:
+                log_message("Place not found")
+            else:
+                self.save()
+
+    def link_place(self):
+        place = False
+        try:
+            place = GeoName.objects.get(
+                name__iexact=self.name,
+                country_code=self.country_code,
+                admin1_code=self.admin_code1,
+                admin2_code=self.admin_code2,
+                feature_class="P",
+            )
+        except GeoName.DoesNotExist:
+            try:
+                place = GeoName.objects.get(
+                    name__iexact=self.name,
+                    country_code=self.country_code,
+                    admin1_code=self.admin_code1,
+                    feature_class="P",
+                )
+            except GeoName.DoesNotExist:
+                try:
+                    place = GeoName.objects.get(
+                        name__iexact=self.name, country_code=self.country_code, admin1_code=self.admin_code1,
+                    )
+                except (GeoName.DoesNotExist, GeoName.MultipleObjectsReturned):
+                    self.link_place_api()
+
+            except GeoName.MultipleObjectsReturned:
+                self.link_place_api()
+
+        except GeoName.MultipleObjectsReturned:
+            self.link_place_api()
+
+        if place:
+            self.place = place
+            self.save()
+
+
+class PopulationDensity(models.Model):
+    zip_code = models.CharField(max_length=9, blank=True, null=True)
+    population = models.IntegerField(null=True)
+    land_miles = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
+    density = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
+    classification = models.CharField(max_length=12, blank=True, null=True)
+    postal_code = models.ForeignKey(PostalCode, null=True, on_delete=models.SET_NULL)
+
+    def as_dict(self):
+        self.set_classification()
+        return dict(
+            population=self.population,
+            land_miles=self.land_miles,
+            population_density=self.density,
+            classification=self.classification,
+        )
+
+    def set_classification(self):
+        if self.density > 3000:
+            self.classification = CLASS_URBAN
+        elif 1000 < self.density < 3000:
+            self.classification = CLASS_SUBURBAN
+        elif self.density < 1000:
+            self.classification = CLASS_RURAL
+
+        self.save()
+
+    def link_postal_code(self):
+        try:
+            self.postal_code = PostalCode.objects.get(postal_code=self.zip_code)
+        except PostalCode.DoesNotExist:
+            pass
+        except PostalCode.MultipleObjectsReturned:
+            if self.zip_code is not None:
+                postal_codes = PostalCode.objects.filter(postal_code=self.zip_code).order_by("accuracy")
+                if len(postal_codes) > 0:
+                    self.postal_code = postal_codes[0]
+                    self.save()
+        else:
+            self.save()
+
 
 class AbstractStreetAddress(GISPoint):
     address1 = models.CharField(max_length=255, blank=True, null=True)
@@ -209,5 +354,91 @@ class AbstractStreetAddress(GISPoint):
 
         return valid_address
 
+
 class VerifiedStreetAddress(AbstractStreetAddress):
     updated = DateTimeField(auto_now_add=True)
+
+
+class ZCTACrossWalk(models.Model):
+    zip_code = models.CharField(max_length=9, blank=True, null=True)
+    po_name = models.CharField(max_length=255, blank=True, null=True)
+    state = models.CharField(max_length=20, blank=True, null=True)
+    zip_type = models.CharField(max_length=255, blank=True, null=True)
+    zcta = models.CharField(max_length=9, blank=True, null=True)
+    zip_join_type = models.CharField(max_length=128, blank=True, null=True)
+    postal_code = models.ForeignKey(PostalCode, null=True, on_delete=models.SET_NULL)
+
+    def link_postal_code(self):
+        try:
+            self.postal_code = PostalCode.objects.get(postal_code=self.zip_code)
+        except PostalCode.DoesNotExist:
+            pass
+        except PostalCode.MultipleObjectsReturned:
+            if self.zip_code is not None:
+                postal_codes = PostalCode.objects.filter(postal_code=self.zip_code).order_by("accuracy")
+                if len(postal_codes) > 0:
+                    self.postal_code = postal_codes[0]
+                    self.save()
+        else:
+            self.save()
+
+        if self.state is None and self.postal_code is not None:
+            self.state = self.postal_code.state
+            self.save()
+
+
+class BasePopulation(models.Model):
+    geoid = models.CharField(max_length=128, primary_key=True)
+    name = models.CharField(max_length=128, blank=True, null=True)
+    universe = models.DecimalField(max_digits=9, decimal_places=1, null=True)
+    universe_annotation = models.DecimalField(max_digits=9, decimal_places=1, null=True)
+    universe_moe = models.CharField(max_length=128, blank=True, null=True)
+    universe_moe_annotation = models.CharField(max_length=128, blank=True, null=True)
+
+    class Meta:
+        abstract = True
+
+
+class ZCTAState(models.Model):
+    state = models.CharField(max_length=6, blank=True, null=True)
+    admin_name1 = models.CharField(max_length=100, blank=True, null=True)
+    admin_code1 = models.CharField(max_length=20, blank=True, null=True)
+
+    def link_names(self):
+        if self.admin_code1 is None or self.admin_name1 is None:
+            zctas = ZCTAZcta.objects.filter(state=self.state)
+            zcta = zctas[0]
+
+            try:
+                crosswalk = ZCTACrossWalk.objects.get(zcta=zcta.zcta)
+            except ZCTACrossWalk.DoesNotExist:
+                pass
+            else:
+                self.admin_code1 = crosswalk.state
+
+                if crosswalk.postal_code is not None:
+                    self.admin_name1 = crosswalk.postal_code.admin_name1
+
+                self.save()
+
+
+class ZCTAPlace(BasePopulation):
+    state = models.CharField(max_length=6, blank=True, null=True)
+    place = models.CharField(max_length=128, blank=True, null=True)
+    geonames_place = models.ForeignKey(GeoName, null=True, on_delete=models.SET_NULL)
+
+
+class ZCTAZcta(BasePopulation):
+    state = models.CharField(max_length=6, blank=True, null=True)
+    zcta = models.CharField(max_length=9, blank=True, null=True)
+    geonames_postal_code = models.ForeignKey(PostalCode, null=True, on_delete=models.SET_NULL)
+
+    def link_postal_code(self):
+        if self.geonames_postal_code is None:
+            try:
+                zcta_cross = ZCTACrossWalk.objects.get(zcta=self.zcta)
+            except ZCTACrossWalk.DoesNotExist:
+                pass
+            else:
+                self.geonames_postal_code = zcta_cross.postal_code
+                self.save()

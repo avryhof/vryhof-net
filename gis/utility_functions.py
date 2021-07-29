@@ -1,14 +1,19 @@
 import csv
 import datetime
 import math
+import os
+import zipfile
+from urllib.request import urlretrieve
 
 import bleach
+from django.conf import settings
 from django.db.models.expressions import RawSQL
 from django.utils.timezone import make_aware
 
 from gis.models import PostalCode
 from gis.us_census_class import USCensus
 from gis.usps_class import USPS
+from utilities.debugging import log_message
 from utilities.utility_functions import string_or_none, int_or_none
 
 
@@ -72,6 +77,51 @@ def get_distance(lat1, lon1, lat2, lon2, **kwargs):
         return_value = km_to_miles(distance)
 
     return return_value
+
+
+def file_is_expired(file_path, days=30):
+    if not os.path.exists(file_path):
+        is_expired = True
+    else:
+        today = datetime.datetime.today()
+        modified_date = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
+        file_age = today - modified_date
+        is_expired = file_age.days > days
+    return is_expired
+
+
+def download_new_file(file_link, target_file):
+    if os.path.exists(target_file):
+        log_message("Removing file: {}".format(target_file))
+        os.remove(target_file)
+
+    log_message("Downloading new file.")
+    urlretrieve(file_link, target_file)
+
+    return target_file
+
+
+def get_geoname_data():
+    media_root_normalized = os.path.join(*os.path.split(settings.MEDIA_ROOT))
+    zip_file_path = os.path.join(media_root_normalized, "geonames")
+
+    zip_file = os.path.join(zip_file_path, "ALL.zip")
+
+    if file_is_expired(zip_file, 30):
+        if not os.path.exists(zip_file_path):
+            os.makedirs(zip_file_path)
+
+        if os.path.exists(zip_file):
+            os.remove(zip_file)
+
+        urlretrieve("https://github.com/avryhof/postal_codes/archive/master.zip", zip_file)
+
+        zip_ref = zipfile.ZipFile(zip_file, "r")
+        zip_ref.extractall(zip_file_path)
+
+        zip_ref.close()
+
+    return os.path.join(zip_file_path, "postal_codes-master")
 
 
 def get_postal_code_by_coords(latitude, longitude):
