@@ -68,9 +68,8 @@ INSTALLED_APPS = [
     "kids",
     "app",
     "subsonic",
+    "catalog",
 ]
-
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -274,47 +273,47 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-ERROR_LOG = os.path.join(os.path.dirname(BASE_DIR), "logs", "error.log")
-
-try:
-    LOGGER_LEVEL = os.environ["LOGGER_LEVEL"]
-except KeyError:
-    LOGGER_LEVEL = "ERROR"
-
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "detailed": {
-            "format": "%(asctime)s %(levelname)s [%(name)s: %(pathname)s %(funcName)s line:%(lineno)s] -- %(message)s",
-            "datefmt": "%m-%d-%Y %H:%M:%S",
-        },
-        "verbose": {
-            "format": "%(asctime)s %(levelname)s %(name)s -- %(message)s",
-            "datefmt": "%m-%d-%Y %H:%M:%S",
-        },
-        "simple": {"format": "%(asctime)s %(levelname)s %(message)s"},
-    },
-    "handlers": {
-        "weather": {
-            "level": "INFO",
-            "class": "logging.handlers.RotatingFileHandler",
-            "formatter": "verbose",
-            "filename": os.path.join(os.path.dirname(BASE_DIR), "logs", "weather.log"),
-            "maxBytes": 1024 * 1024 * 100,  # 100 mb
-            "backupCount": 3,
-        },
-        "file": {
-            "level": LOGGER_LEVEL,
-            "class": "logging.FileHandler",
-            "filename": ERROR_LOG,
-        },
-    },
-    "loggers": {
-        "": {"level": "INFO", "handlers": ["weather"], "propagate": True},
-        "django": {"handlers": ["file"], "level": LOGGER_LEVEL, "propagate": True},
-    },
-}
+# ERROR_LOG = os.path.join(os.path.dirname(BASE_DIR), "logs", "error.log")
+#
+# try:
+#     LOGGER_LEVEL = os.environ["LOGGER_LEVEL"]
+# except KeyError:
+#     LOGGER_LEVEL = "ERROR"
+#
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "formatters": {
+#         "detailed": {
+#             "format": "%(asctime)s %(levelname)s [%(name)s: %(pathname)s %(funcName)s line:%(lineno)s] -- %(message)s",
+#             "datefmt": "%m-%d-%Y %H:%M:%S",
+#         },
+#         "verbose": {
+#             "format": "%(asctime)s %(levelname)s %(name)s -- %(message)s",
+#             "datefmt": "%m-%d-%Y %H:%M:%S",
+#         },
+#         "simple": {"format": "%(asctime)s %(levelname)s %(message)s"},
+#     },
+#     "handlers": {
+#         "weather": {
+#             "level": "INFO",
+#             "class": "logging.handlers.RotatingFileHandler",
+#             "formatter": "verbose",
+#             "filename": os.path.join(os.path.dirname(BASE_DIR), "logs", "weather.log"),
+#             "maxBytes": 1024 * 1024 * 100,  # 100 mb
+#             "backupCount": 3,
+#         },
+#         "file": {
+#             "level": LOGGER_LEVEL,
+#             "class": "logging.FileHandler",
+#             "filename": ERROR_LOG,
+#         },
+#     },
+#     "loggers": {
+#         "": {"level": "INFO", "handlers": ["weather"], "propagate": True},
+#         "django": {"handlers": ["file"], "level": LOGGER_LEVEL, "propagate": True},
+#     },
+# }
 
 # SWINGTIME = {
 #     'TIMESLOT_START_TIME': datetime.time(14),

@@ -313,17 +313,26 @@ class AbstractStreetAddress(GISPoint):
 
         return retn
 
-    def link_postal_code(self):
+    def link_postal_code(self, zip_code=False):
         retn = False
-        try:
-            self.postal_code = PostalCode.objects.get(postal_code=self.zip_code)
 
-        except PostalCode.DoesNotExist:
-            pass
+        if not self.postal_code:
+            if not zip_code:
+                zip_code = self.zip_code
 
+            try:
+                self.postal_code = PostalCode.objects.get(postal_code=zip_code)
+
+            except PostalCode.DoesNotExist:
+                log_message("Postal code not found: {}".format(zip_code))
+
+            else:
+                retn = True
+                if not self.state:
+                    self.state = self.postal_code.state
+                self.save()
         else:
             retn = True
-            self.save()
 
         return retn
 

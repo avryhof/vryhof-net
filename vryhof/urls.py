@@ -27,6 +27,7 @@ urlpatterns = [
     path("assistant/", include("assistant.urls")),
     # path("api/mail/", include("mail.api_urls")),
     path("api/rest/", include("api.urls")),
+    path("api/catalog/", include("catalog.api_urls")),
     path("api-auth/", include("rest_framework.urls")),
     path("blog/", include("blog.urls")),
     path("", include("firefox.urls")),
