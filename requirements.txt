@@ -64,7 +64,7 @@ pytz==2021.1
 pyxlsb==1.0.8
 requests==2.26.0
 rsa==4.7.2
-sendgrid==6.2.2
+sendgrid==6.7.1
 six==1.16.0
 soupsieve==2.2.1
 sqlparse==0.4.1
