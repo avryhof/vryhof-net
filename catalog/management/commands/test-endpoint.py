@@ -11,10 +11,11 @@ class Command(BaseCommand):
         rfid_id = str(uuid0.generate())
         endpoint_path = reverse("rfid-lookup")
 
-        endpoint_url = "http://127.0.0.1:8000{}".format(endpoint_path)
+        # endpoint_url = "http://127.0.0.1:8000{}".format(endpoint_path)
+        endpoint_url = "https://firefox.vryhof.net{}".format(endpoint_path)
 
         log_message("talking to: {}".format(endpoint_url))
 
-        resp = requests.post(endpoint_url, data=dict(rfid_id=rfid_id))
+        resp = requests.post(endpoint_url, data=dict(catalog_id=1, rfid_id=rfid_id))
 
         print(resp.text)

@@ -1,5 +1,3 @@
-import datetime
-
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
@@ -7,7 +5,7 @@ from rest_framework.response import Response
 from assistant.api_auth import AnonymousAuthentication
 from assistant.constants import NO_CACHE_HEADERS
 from assistant.permissions import AnonymousPermission
-from catalog.models import CatalogVariant, Catalog
+from catalog.models import CatalogVariant
 
 
 @api_view(["POST"])
