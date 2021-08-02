@@ -363,11 +363,18 @@ class CatalogVariant(Model):
             self.catalog_item.save()
 
     def as_dict(self):
+        item_id = None
+        if self.catalog_item:
+            if self.catalog_item.object_id is not None:
+                item_id = self.catalog_item.object_id
+            elif self.catalog_item.item_key:
+                item_id = self.catalog_item.item_id
+
         return {
             "type": "ITEM_VARIATION",
             "id": self.object_id,
             "item_variation_data": {
-                "item_id": self.catalog_item.object_id,
+                "item_id": item_id,
                 "name": self.name,
                 "pricing_type": "FIXED_PRICING",
                 "price_money": {"amount": self.price, "currency": "USD"},
