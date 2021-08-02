@@ -61,7 +61,6 @@ INSTALLED_APPS = [
     "utilities",
     "alexa",
     "assistant",
-    # "mail",
     "geocaching",
     "api",
     "kids",
@@ -82,12 +81,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "vryhof.urls"
-
-# EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-
-# SENDGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
-# SENDGRID_SANDBOX_MODE_IN_DEBUG = False
-# SENDGRID_TRACK_EMAIL_OPENS = True
 
 TEMPLATES = [
     {
