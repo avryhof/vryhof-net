@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     "mptt",
     "favorites_icons",
     "frontend_assets",
-    "swingtime",
     "gis",
     "navbar",
     "bootstrap4",
@@ -313,11 +312,6 @@ CKEDITOR_CONFIGS = {
 #         "": {"level": "INFO", "handlers": ["weather"], "propagate": True},
 #         "django": {"handlers": ["file"], "level": LOGGER_LEVEL, "propagate": True},
 #     },
-# }
-
-# SWINGTIME = {
-#     'TIMESLOT_START_TIME': datetime.time(14),
-#     'TIMESLOT_END_TIME_DURATION': datetime.timedelta(hours=6.5)
 # }
 
 
