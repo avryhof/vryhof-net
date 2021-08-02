@@ -15,7 +15,7 @@ certvalidator==0.11.1
 cffi==1.14.6
 chardet==4.0.0
 charset-normalizer==2.0.4
-cryptography==2.9.2
+cryptography==3.3.2
 deprecation==2.1.0
 Django==3.2.6
 django-ask-sdk==1.0.0
