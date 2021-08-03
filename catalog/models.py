@@ -17,7 +17,7 @@ from django.db.models import (
     URLField,
     SET_NULL,
     DateTimeField,
-    DecimalField,
+    DecimalField, BigIntegerField,
 )
 from django.utils.text import slugify
 
@@ -158,7 +158,7 @@ class LocationCapability(Model):
 class Catalog(Model):
     location = ForeignKey(Location, null=True, on_delete=SET_NULL)
     name = CharField(max_length=255, blank=True, null=True)
-    version = IntegerField(blank=True, null=True)
+    version = BigIntegerField(blank=True, null=True)
 
     def __str__(self):
         retn = self.name
