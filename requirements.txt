@@ -67,7 +67,7 @@ ssml-builder==1.1.1
 starkbank-ecdsa==1.1.1
 subresource-integrity==0.2
 ua-parser==0.10.0
-Unidecode<1.2,>=0.04
+Unidecode>=0.04,<1.4
 urllib3==1.26.6
 user-agents==2.2.0
 uuid0==0.2.7
