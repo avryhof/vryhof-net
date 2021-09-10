@@ -61,7 +61,7 @@ requests==2.26.0
 rsa==4.7.2
 six==1.16.0
 soupsieve==2.2.1
-sqlparse==0.4.1
+sqlparse==0.4.2
 squareup==13.1.0.20210818
 ssml-builder==1.1.1
 starkbank-ecdsa==1.1.1
