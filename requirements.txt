@@ -8,7 +8,7 @@ ask-sdk-webservice-support==1.3.2
 asn1crypto==1.4.0
 Babel==2.9.1
 beautifulsoup4==4.9.3
-bleach==4.0.0
+bleach==5.0.0
 certifi==2021.5.30
 cffi==1.14.6
 chardet==4.0.0
