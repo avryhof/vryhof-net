@@ -13,7 +13,7 @@ certifi==2021.5.30
 cffi==1.14.6
 chardet==4.0.0
 cryptography<3.0,>=2.3.0
-Django==3.2.6
+Django==4.0.5
 django-ask-sdk==1.0.0
 django-bootstrap4==3.0.1
 django-ckeditor==6.1.0
