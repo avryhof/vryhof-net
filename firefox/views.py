@@ -36,7 +36,7 @@ class FirefoxHomeView(TemplateView):
 
         context["form"] = SearchForm()
 
-        yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+        yesterday = make_aware(datetime.datetime.now()) - datetime.timedelta(days=1)
         context["news"] = NewsItem.objects.filter(date__gte=yesterday)
 
         return render(request, self.template_name, context)
