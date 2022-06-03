@@ -1,0 +1,47 @@
+.email-signature {
+  display: inline-block;
+  width: auto;
+  padding: 20px;
+
+  font: normal 11pt Calibri, Verdana, Arial, Sans-Serif;
+  background: #ffffff;
+  border: 2px solid #dcdcdc;
+
+  a {
+    text-decoration: none;
+  }
+
+  .signature-left, .signature-right {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .signature-left {
+    padding-right: 10px;
+    border-right: 2px solid #dcdcdc;
+  }
+
+  .signature-right {
+    text-align: center;
+  }
+
+  .signature-avatar {
+    text-align: center;
+  }
+
+  .signature-name {
+    font-weight: bold;
+    font-size: 15pt;
+  }
+
+  .signature-title {
+    font-style: italic;
+    font-size: 11pt;
+  }
+
+  .signature-logo {
+    width: 200px;
+    margin: 0 auto 0 auto;
+  }
+
+}
