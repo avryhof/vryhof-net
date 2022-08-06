@@ -44,7 +44,7 @@ class NavbarLink(Model):
 
     @property
     def link(self):
-        if "/" not in self.link_target:
+        if not is_empty(self.link_target) and "/" not in self.link_target:
             try:
                 return reverse(self.link_target)
             except NoReverseMatch:

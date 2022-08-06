@@ -273,3 +273,6 @@ def years_ago(years=18, end_date=False):
     start_year = int(today_year) - years
 
     return datetime.datetime(year=start_year, month=int(today_month), day=int(today_day))
+
+def is_empty(value):
+    return value in [False, None, "", {}, [], ()]
