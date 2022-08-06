@@ -10,6 +10,8 @@ from django.db.models import (
 )
 from django.urls import reverse, NoReverseMatch
 
+from utilities.utility_functions import is_empty
+
 
 class NavbarLink(Model):
     LINK_TARGET_SELF = "_self"
