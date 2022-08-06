@@ -6,8 +6,9 @@ from .models import NavbarLink, NavbarMenu
 
 @admin.register(NavbarLink)
 class NavbarLinkAdmin(admin.ModelAdmin):
-    list_display = ("title", "link", "active", "order")
+    list_display = ("title", "link_target", "active", "order")
     list_filter = ("active", "submenu")
+    list_editable = ("order",)
 
 
 @admin.register(NavbarMenu)

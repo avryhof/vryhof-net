@@ -32,6 +32,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Application definition
 INSTALLED_APPS = [
+    "adminsortable",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.sitemaps",
     "django.contrib.humanize",
     # "multifactor",
+    "bootstrap4",
     "rest_framework",
     "django_extensions",
     "easy_thumbnails",
@@ -50,23 +52,18 @@ INSTALLED_APPS = [
     "ckeditor_uploader",
     "mptt",
     "favorites_icons",
-    "frontend_assets",
     "gis",
     "navbar",
-    "bootstrap4",
     "firefox",
     "weather",
     "blog",
     "planner",
     "utilities",
-    "alexa",
-    "assistant",
     "geocaching",
     "api",
     "kids",
     "app",
     "subsonic",
-    "catalog",
 ]
 
 MIDDLEWARE = [
@@ -309,14 +306,13 @@ CKEDITOR_CONFIGS = {
 
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ("assistant.api_auth.AssistantAuthentication",),
+    # "DEFAULT_AUTHENTICATION_CLASSES": ("assistant.api_auth.AssistantAuthentication",),
     "DEFAULT_PARSER_CLASSES": (
         "rest_framework.parsers.JSONParser",
         "rest_framework.parsers.FormParser",
         "rest_framework.parsers.MultiPartParser",
     ),
     "DEFAULT_PERMISSION_CLASSES": (
-        "assistant.permissions.AuthorizedAgentPermission",
         "rest_framework.permissions.IsAdminUser",
     ),
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],

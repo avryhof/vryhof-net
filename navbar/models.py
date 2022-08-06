@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db.models import (
     Model,
-    URLField,
     CharField,
     BooleanField,
     IntegerField,
@@ -9,6 +8,7 @@ from django.db.models import (
     ForeignKey,
     DO_NOTHING,
 )
+from django.urls import reverse, NoReverseMatch
 
 
 class NavbarLink(Model):
@@ -24,9 +24,12 @@ class NavbarLink(Model):
     active = BooleanField(default=True)
     order = IntegerField()
     title = CharField(max_length=128, blank=True, null=True)
-    link = URLField(blank=True, null=True)
+    link_target = CharField(max_length=255, blank=True, null=True)
     target = CharField(max_length=16, choices=LINK_TARGET_CHOICES, default=LINK_TARGET_SELF)
     submenu = ForeignKey("NavbarMenu", blank=True, null=True, on_delete=DO_NOTHING)
+
+    class Meta:
+        ordering = ["order"]
 
     def __str__(self):
         retn = "NavbarLink %i" % self.pk
@@ -38,6 +41,16 @@ class NavbarLink(Model):
             retn = self.title
 
         return retn
+
+    @property
+    def link(self):
+        if "/" not in self.link_target:
+            try:
+                return reverse(self.link_target)
+            except NoReverseMatch:
+                return "#"
+        else:
+            return self.link_target
 
 
 class NavbarMenu(Model):

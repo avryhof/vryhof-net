@@ -7,16 +7,13 @@ from rest_framework.decorators import (
 )
 from rest_framework.response import Response
 
-from assistant.api_auth import AnonymousAuthentication
-from assistant.constants import NO_CACHE_HEADERS
-from assistant.permissions import AnonymousPermission
 from subsonic.google_responses import GoogleResponse
 from subsonic.subsonic_class import Subsonic
 
 
 @api_view(["POST"])
-@authentication_classes((AnonymousAuthentication,))
-@permission_classes((AnonymousPermission,))
+@authentication_classes(())
+@permission_classes(())
 def intent_responder(request):
     resp = {}
 
@@ -79,7 +76,7 @@ def intent_responder(request):
         elif genre:
             resp = google_resp.song_by_genre(genre)
 
-    return Response(resp, status=status.HTTP_200_OK, headers=NO_CACHE_HEADERS)
+    return Response(resp, status=status.HTTP_200_OK)
 
 
 def stream_song(request, *args, **kwargs):

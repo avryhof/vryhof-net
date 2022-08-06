@@ -1,4 +1,10 @@
-<div class="post" data-guid='{{ post.link }}'>
+<div class="post" id="{{ post.title|slugify }}" data-guid='{{ post.link }}'>
+    <div class="post-title grey-text text-darken-4">
+        {{ post.title }}
+    </div>
+    <div class="post-metadata">
+        Posted on {{ post.date }} | <a href="{{ post.feed.link }}" target="_blank">{{ post.feed.title }}</a>
+    </div>
     {% if post.poster and 'img' not in post.content %}
         <!-- Images -->
         <div class="post-image waves-effect waves-block waves-light">
@@ -6,16 +12,6 @@
         </div>
     {% endif %}
     <div class="post-content">
-        <div class="post-title grey-text text-darken-4">
-            {{ post.title }}
-        </div>
-        <div>
-            <small>
-                <em>
-                    Posted on {{ post.date }} | <a href="{{ post.feed.link }}" target="_blank">{{ post.feed.title }}</a>
-                </em>
-            </small>
-        </div>
         <div>
             <p>
                 {% if post.content %}

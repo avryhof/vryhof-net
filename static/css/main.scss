@@ -1,19 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Pragati+Narrow');
-
-$foregroundColor: #333333;
-$backgroundColor: #FFFFFF;
-
-$white: #ffffff;
-$gray: #cccccc;
-$silver: #dcdcdc;
-$smoke: #f1f1f1;
-
-$gBlue: #4285F4;
-$gRed: #EA4335;
-$gGreen: #34A853;
-$gYellow: #FBBC05;
-
-$narrowfont: 'Pragati Narrow', 'Arial Narrow', 'Helvetica Condensed', Arial, Helvetica, sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Pragati+Narrow&display=swap');
+@import "reset";
+@import "vars";
+@import "grid";
+@import "forms";
+@import "table";
+@import "navbar";
 
 html {
   color: $foregroundColor;
@@ -21,17 +12,48 @@ html {
 }
 
 body {
+  font-size: $baseFontSize;
+  font-weight: normal;
+  font-family: $normalfont;
   min-height: 75rem;
   padding-top: 4.5rem;
 }
 
 .box {
-  display:inline-block;
-  margin:10px;
+  display: inline-block;
+  margin: 10px;
   padding: 10px;
-  box-sizing:border-box;
+  box-sizing: border-box;
   border-radius: 5px;
   border: 1px solid $gray;
   border-bottom: 5px solid $silver;
   background: $smoke !important;
+}
+
+a:link, a:visited {
+  text-decoration: none;
+}
+a:hover, a:active {
+  text-decoration: underline;
+}
+
+@media (max-width: $sm) {
+  .search-col form {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (min-width: $sm) {
+  .search-col form {
+    .form-row {
+      display: flex;
+      flex-direction: row;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
 }

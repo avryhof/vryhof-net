@@ -1,4 +1,4 @@
-{% load static bootstrap4 favorites_icons %}
+{% load static favorites_icons %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -14,8 +14,6 @@
 
     {% touch_icons %}
 
-    <!-- Bootstrap CSS -->
-    {% bootstrap_css %}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/v4-shims.css">
@@ -36,8 +34,6 @@
 {% block content %}{% endblock %}
 
 <!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-{% bootstrap_javascript jquery='slim' %}
 {% for extra_js in extra_javascript %}
     <script src="{% static extra_js %}"></script>
 {% endfor %}

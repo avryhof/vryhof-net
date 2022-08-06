@@ -14,6 +14,7 @@ cffi
 chardet
 cryptography
 Django
+django-admin-sortable
 django-ask-sdk
 django-bootstrap4
 django-ckeditor

@@ -1,8 +1,10 @@
 .leaflet-container {
-    width: 100% !important;
-    max-width: 600px !important;
-    height: 400px !important;
-    border: 1px solid #dcdcdc !important;
-    border-bottom: 5px solid #dcdcdc !important;
-    margin: 0 0 10px 0;
+  width: 100% !important;
+  max-width: 600px !important;
+  height: 400px !important;
+  border: 1px solid #dcdcdc !important;
+  border-bottom: 5px solid #dcdcdc !important;
+  margin: 0 0 10px 0;
 }
+
+/*# sourceMappingURL=weather.css.map */

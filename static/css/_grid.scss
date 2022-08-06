@@ -1,0 +1,159 @@
+@import "vars";
+@import "mixins";
+
+.container {
+  max-width: 1320px;
+  flex: 100% 0 0;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container-fluid {
+  flex: 100% 0 0;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+
+  [class*=col-] {
+    position: relative;
+    width: 100%;
+    padding-left: $padding;
+    padding-right: $padding;
+  }
+
+  .col-12 {
+    @include col($width-12);
+  }
+
+  .col-11 {
+    @include col($width-11);
+  }
+
+  .col-10 {
+    @include col($width-10);
+  }
+
+  .col-9 {
+    @include col($width-9);
+  }
+
+  .col-8 {
+    @include col($width-8);
+  }
+
+  .col-7 {
+    @include col($width-7);
+  }
+
+  .col-6 {
+    @include col($width-6);
+  }
+
+  .col-5 {
+    @include col($width-5);
+  }
+
+  .col-4 {
+    @include col($width-4);
+  }
+
+  .col-3 {
+    @include col($width-3);
+  }
+
+  .col-2 {
+    @include col($width-2);
+  }
+
+  .col-1 {
+    @include col($width-1);
+  }
+}
+
+@media (max-width: $xs) {
+  .hidden-xs {
+    display: none !important;
+  }
+  .col-xs-12 {
+    @include col-override($width-12);
+  }
+  .col-xs-11 {
+    @include col-override($width-11);
+  }
+  .col-xs-10 {
+    @include col-override($width-10);
+  }
+  .col-xs-9 {
+    @include col-override($width-9);
+  }
+  .col-xs-8 {
+    @include col-override($width-8);
+  }
+  .col-xs-7 {
+    @include col-override($width-7);
+  }
+  .col-xs-6 {
+    @include col-override($width-6);
+  }
+  .col-xs-5 {
+    @include col-override($width-5);
+  }
+  .col-xs-4 {
+    @include col-override($width-4);
+  }
+  .col-xs-3 {
+    @include col-override($width-3);
+  }
+  .col-xs-2 {
+    @include col-override($width-2);
+  }
+  .col-xs-1 {
+    @include col-override($width-1);
+  }
+}
+
+@media (min-width: $xs) {
+  .col-sm-12 {
+    @include col-override($width-12);
+  }
+  .col-sm-11 {
+    @include col-override($width-11);
+  }
+  .col-sm-10 {
+    @include col-override($width-10);
+  }
+  .col-sm-9 {
+    @include col-override($width-9);
+  }
+  .col-sm-8 {
+    @include col-override($width-8);
+  }
+  .col-sm-7 {
+    @include col-override($width-7);
+  }
+  .col-sm-6 {
+    @include col-override($width-6);
+  }
+  .col-sm-5 {
+    @include col-override($width-5);
+  }
+  .col-sm-4 {
+    @include col-override($width-4);
+  }
+  .col-sm-3 {
+    @include col-override($width-3);
+  }
+  .col-sm-2 {
+    @include col-override($width-2);
+  }
+  .col-sm-1 {
+    @include col-override($width-1);
+  }
+
+}

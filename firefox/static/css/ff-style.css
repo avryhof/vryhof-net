@@ -3,18 +3,24 @@
 }
 
 .post {
-  width: 100%;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   margin: 10px;
-  box-sizing: border-box;
   border-radius: 5px;
   border: 1px solid #cccccc;
   border-bottom: 5px solid #dcdcdc;
   background: #f1f1f1 !important;
-  overflow: auto;
 }
-.post .post-content, .post .post-action, .post .post-reveal {
+.post .post-content, .post .post-action {
   padding: 5px 10px 5px 10px;
+}
+.post .post-action, .post .post-reveal {
+  display: flex;
+  flex-direction: row;
+}
+.post .post-content, .post .post-title {
+  display: flex;
+  flex-direction: column;
 }
 .post .post-action {
   border-top: 1px solid #dcdcdc;
@@ -26,9 +32,28 @@
   font-size: 18px;
   font-family: "Roboto Condensed", Roboto, sans-serif;
   font-weight: 700;
+  padding: 5px 10px 0 10px;
 }
-.post .post-img img, .post .post-reveal img, .post .post-image img {
+.post .post-metadata {
+  font-size: 0.75em;
+  font-style: italic;
+  padding: 0 10px 5px 10px;
+}
+.post .post-content p {
+  margin: 0 0 25px 0;
+}
+.post .post-content p:empty {
+  display: none;
+}
+.post .post-img, .post .post-reveal, .post .post-image, .post figure {
+  padding: 0 !important;
+  margin: 0 -10px 0 -10px !important;
+}
+.post .post-img img, .post .post-reveal img, .post .post-image img, .post figure img {
   width: 100%;
+}
+.post .caption {
+  margin: 0 10px 0 10px !important;
 }
 .post .activator .fa-ellipsis-v, .post .activator .fa-times, .post .post-reveal .fa-ellipsis-v, .post .post-reveal .fa-times {
   cursor: pointer;

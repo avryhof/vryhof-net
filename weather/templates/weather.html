@@ -1,14 +1,9 @@
 {% extends 'base.html' %}
-{% load frontend_assets %}
+{% load leaflet %}
 {% block extra_css %}
-{#    {% leaflet_header %}#}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
-    <script>
-        osm_tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-        osm_attr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ';
-    </script>
+    {% leaflet_css %}
+    {% leaflet_javascript %}
+    {% leaflet_tiles %}
 {% endblock %}
 {% block content %}
     <div class="container">
@@ -73,12 +68,28 @@
                         </tr>
                     </table>
                     <hr>
-                    <img src="https://www.vryhofresearch.com/vryhof/media/weather/snapshot.jpg" alt="Weather Cam Image" class="img-responsive" width="100%">
+                    <img src="https://www.vryhofresearch.com/vryhof/media/weather/snapshot.jpg" alt="Weather Cam Image"
+                         class="img-responsive" width="100%">
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    {% leaflet_map weather_station.station.latitude weather_station.station.longitude 16 weather_station.station.name %}
-                    {% leaflet_marker weather_station.station.name weather_station.station.latitude weather_station.station.longitude %}
-                    <p>Latitude: {{ weather_station.station.latitude }}<br>Longitude: {{ weather_station.station.longitude }}</p>
+                    <div id="{{ weather_station.station.name }}_map"></div>
+                    <script integrity="sha384-PWWwLiclKVytOQTW9jFkFGEcdQ4BlGqYY9CZ2QB8xCU1Vh9NwsbZEvhz1vfLodDy">
+                        var {{ weather_station.station.name }}_coords = [{{ weather_station.station.latitude }}, {{ weather_station.station.longitude }}];
+                        var {{ weather_station.station.name }}_marker_coords = [{{ weather_station.station.latitude }}, {{ weather_station.station.longitude }}];
+                        var {{ weather_station.station.name }}_map = L.map('{{ weather_station.station.name }}_map').setView({{ weather_station.station.name }}_coords, 16);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            maxZoom: 18,
+                            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ',
+                            id: '{{ weather_station.station.name }}_streets'
+                        }).addTo({{ weather_station.station.name }}_map);
+                    </script>
+                    <script integrity="sha384-bNor440E1ThHxLxZtKEd00y7UR/UurD3jwQBLPVA/Kubd4DiyAokAQ70Qad+y1q8">
+
+                        L.marker({{ weather_station.station.name }}_marker_coords).addTo({{ weather_station.station.name }}_map);
+                    </script>
+                    <p>
+                        Latitude: {{ weather_station.station.latitude }}<br>Longitude: {{ weather_station.station.longitude }}
+                    </p>
                     <ul>
                         {% if weather_station.station.weather_underground_id %}
                             <li>

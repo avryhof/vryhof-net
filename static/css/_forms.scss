@@ -1,0 +1,29 @@
+@import "vars";
+
+.form-control, .btn {
+  font-size: 1.0em;
+  padding: 6px 12px;
+  margin: $padding / 2;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.btn {
+  border: 1px solid transparent;
+}
+
+.form-control {
+  border: 1px solid $silver;
+}
+
+.btn-primary {
+  color: $foregroundColor;
+  background-color: $gBlue;
+}
+
+.form-inline {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}

@@ -15,45 +15,85 @@ $narrowfont: 'Pragati Narrow', 'Arial Narrow', 'Helvetica Condensed', Arial, Hel
 }
 
 .post {
-  width:100%;
-  display:inline-block;
-  margin:10px;
-  box-sizing:border-box;
+  display: flex;
+  flex-direction: column;
+
+  margin: 10px;
   border-radius: 5px;
   border: 1px solid $gray;
   border-bottom: 5px solid $silver;
   background: $smoke !important;
-  overflow: auto;
-  .post-content, .post-action, .post-reveal {
-    padding:5px 10px 5px 10px;
+
+  .post-content, .post-action {
+    padding: 5px 10px 5px 10px;
   }
+
+  .post-action, .post-reveal {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .post-content, .post-title {
+    display: flex;
+    flex-direction: column;
+  }
+
   .post-action {
     border-top: 1px solid $silver;
+
     a {
       text-transform: uppercase;
     }
   }
+
   .post-title {
     font-size: 18px;
     font-family: 'Roboto Condensed', Roboto, sans-serif;
-    font-weight:700;
+    font-weight: 700;
+    padding: 5px 10px 0 10px;
   }
-  .post-img, .post-reveal, .post-image {
-    img {
-      width:100%;
+
+  .post-metadata {
+    font-size: 0.75em;
+    font-style: italic;
+    padding: 0 10px 5px 10px;
+  }
+
+  .post-content {
+    p {
+      margin: 0 0 25px 0;
+    }
+
+    p:empty {
+      display: none;
     }
   }
+
+  .post-img, .post-reveal, .post-image, figure {
+    padding: 0 !important;
+    margin: 0 -10px 0 -10px !important;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .caption {
+    margin: 0 10px 0 10px !important;
+  }
+
   .activator, .post-reveal {
     .fa-ellipsis-v, .fa-times {
-      cursor:pointer;
-      display:inline-block;
-      padding:5px;
+      cursor: pointer;
+      display: inline-block;
+      padding: 5px;
     }
   }
 }
 
 .post-weather {
   background: $white !important;
+
   .weather-app {
     display: block !important;
     width: 100%;

@@ -1,0 +1,84 @@
+@import "vars";
+
+.fixed-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+
+.navbar-dark {
+  color: $white;
+
+  a {
+    color: $white;
+  }
+
+  .navbar-brand {
+    color: $white;
+  }
+}
+
+.bg-dark {
+  background-color: $dark-color;
+}
+
+@media (min-width: $sm) {
+  .navbar {
+    display: flex;
+    flex-direction: row;
+
+    padding: $padding;
+
+    flex-wrap: nowrap;
+    align-items: stretch;
+
+    .navbar-brand {
+      display: block;
+      text-decoration: none;
+    }
+
+    .navbar-toggler {
+      display: none;
+      align-self: flex-end;
+    }
+
+    .navbar-collapse {
+      display: flex;
+      align-items: stretch;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
+    }
+
+    .navbar-nav {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+
+      font-size: 0.75em;
+
+      margin: 0;
+      padding: 0;
+
+      .nav-item {
+        padding-left: $padding / 2;
+        padding-right: $padding / 2;
+
+        a {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  .navbar-expand {
+    width: 100%;
+  }
+}
+
+@media (min-width: $md) {
+  .navbar-expand-lg {
+    width: 100%;
+  }
+}
