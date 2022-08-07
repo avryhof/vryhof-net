@@ -28,6 +28,10 @@
 .post .post-action a {
   text-transform: uppercase;
 }
+.post .post-action .btn {
+  margin-left: 0;
+  margin-top: 0;
+}
 .post .post-title {
   font-size: 18px;
   font-family: "Roboto Condensed", Roboto, sans-serif;
