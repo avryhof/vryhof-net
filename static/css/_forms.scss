@@ -27,3 +27,25 @@
   flex-direction: row;
   flex-wrap: nowrap;
 }
+
+.form-row {
+  display: flex;
+}
+
+@media (max-width: $xs) {
+  .form-row {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: $xs) {
+  .form-row {
+    flex-direction: row;
+
+    .col {
+      padding-left: $padding;
+      padding-right: $padding;
+    }
+  }
+
+}

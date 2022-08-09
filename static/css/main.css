@@ -1,4 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Pragati+Narrow&display=swap");
+body {
+  box-sizing: border-box;
+}
+
 p {
   margin-top: 0;
   margin-bottom: 1rem;
@@ -49,8 +53,6 @@ h2, .h2 {
   flex-direction: row;
 }
 .row [class*=col-] {
-  position: relative;
-  width: 100%;
   padding-left: 1em;
   padding-right: 1em;
 }
@@ -104,6 +106,14 @@ h2, .h2 {
 }
 
 @media (max-width: 576px) {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
   .hidden-xs {
     display: none !important;
   }
@@ -240,6 +250,24 @@ h2, .h2 {
   flex-wrap: nowrap;
 }
 
+.form-row {
+  display: flex;
+}
+
+@media (max-width: 576px) {
+  .form-row {
+    flex-direction: column;
+  }
+}
+@media (min-width: 576px) {
+  .form-row {
+    flex-direction: row;
+  }
+  .form-row .col {
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+}
 /* < 576 */
 /* > 576 < 768 */
 /* > 768 < 992 */
@@ -286,7 +314,45 @@ h2, .h2 {
   background-color: #414141;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 576px) {
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+  .navbar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-between;
+    align-items: stretch;
+    width: calc(100% - 43px);
+    padding: 10px;
+  }
+  .navbar-brand {
+    font-size: 2em;
+  }
+  .nav-toggle-control {
+    display: none !important;
+  }
+  .nav-toggle-button {
+    width: 45px;
+    font-size: 2em;
+  }
+  .navbar-collapse {
+    display: none;
+    width: 0;
+  }
+  .nav-toggle-control:checked ~ .navbar-collapse {
+    display: flex !important;
+    flex-direction: column;
+    flex: 100% 0 0;
+  }
+  .nav-item {
+    padding: 10px 0;
+  }
+}
+@media (min-width: 576px) {
   .navbar {
     display: flex;
     flex-direction: row;
@@ -298,7 +364,7 @@ h2, .h2 {
     display: block;
     text-decoration: none;
   }
-  .navbar .navbar-toggler {
+  .navbar .navbar-toggler, .navbar .nav-toggle-control, .navbar .nav-toggle-button {
     display: none;
     align-self: flex-end;
   }
