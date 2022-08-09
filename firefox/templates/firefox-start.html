@@ -9,12 +9,14 @@
                 {% include "search-form.html" %}
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                {% for post in news %}
+        {% for post in news %}
+            <div class="row">
+                <div class="col-12">
+
                     {% include 'post.html' %}
-                {% endfor %}
+
+                </div>
             </div>
-        </div>
+        {% endfor %}
     </div>
 {% endblock %}
