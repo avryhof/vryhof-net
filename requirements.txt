@@ -34,7 +34,7 @@ easy-thumbnails==2.8.3
 ecdsa==0.18.0
 et-xmlfile==1.1.0
 favorites-icons==1.0.7
-freezegun==1.2.1
+freezegun==1.2.2
 frontend-assets==0.8.1
 future==0.18.2
 geo-ez==0.1.5
