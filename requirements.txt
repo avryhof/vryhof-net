@@ -76,7 +76,7 @@ subresource-integrity==0.2
 svglib==1.4.1
 tinycss2==1.1.1
 tzdata==2022.1
-ua-parser==0.15.0
+ua-parser==0.16.1
 Unidecode
 urllib3==1.26.11
 user-agents==2.2.0
