@@ -75,7 +75,7 @@ starkbank-ecdsa==2.0.3
 subresource-integrity==0.2
 svglib==1.4.1
 tinycss2==1.1.1
-tzdata==2022.1
+tzdata==2022.6
 ua-parser==0.15.0
 Unidecode
 urllib3==1.26.11
