@@ -10,7 +10,7 @@ Babel==2.10.3
 beautifulsoup4==4.11.1
 bleach==5.0.1
 CacheControl==0.12.11
-certifi==2022.6.15
+certifi==2022.12.7
 certvalidator==0.11.1
 cffi==1.15.1
 chardet==5.0.0
