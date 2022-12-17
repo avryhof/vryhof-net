@@ -114,6 +114,13 @@ def multi_clean(value):
         if "http:" in value:
             value = value.replace("http:", "https:")
 
+    soup = BeautifulSoup(value, "html.parser")
+    images = soup.find_all("img")
+    for image in images:
+        before = str(image)
+        del(image["width"])
+        value = value.replace(before, str(image))
+
     return value
 
 

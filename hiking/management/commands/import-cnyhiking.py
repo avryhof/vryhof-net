@@ -40,4 +40,5 @@ class Command(ManagementCommand):
                 HikeSource.objects.create(url=region)
 
         for hike_source in HikeSource.objects.all():
+            return
             

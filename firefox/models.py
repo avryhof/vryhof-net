@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 from django.db.models import (
     Model,
     CharField,
@@ -10,6 +11,7 @@ from django.db.models import (
 )
 
 from firefox.fields import LongURLField
+from utilities.utility_functions import is_empty
 
 
 class NewsFeed(Model):
@@ -48,3 +50,19 @@ class NewsItem(Model):
 
     class Meta:
         ordering = ["-date"]
+
+    @property
+    def cleaned_content(self):
+        if not is_empty(self.content):
+            content_html = self.content
+        else:
+            content_html = self.abstract
+
+        soup = BeautifulSoup(content_html, "html.parser")
+        images = soup.find_all("img")
+        for image in images:
+            before = str(image)
+            del (image["width"])
+            content_html = content_html.replace(before, str(image))
+
+        return content_html

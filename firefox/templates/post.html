@@ -14,11 +14,7 @@
     <div class="post-content">
         <div>
             <p>
-                {% if post.content %}
-                    {{ post.content|safe }}
-                {% else %}
-                    {{ post.abstract|safe }}
-                {% endif %}
+                {{ post.cleaned_content|safe }}
             </p>
         </div>
     </div>
