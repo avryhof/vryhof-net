@@ -118,8 +118,7 @@ def multi_clean(value):
     images = soup.find_all("img")
     for image in images:
         before = str(image)
-        del(image["width"])
-        value = value.replace(before, str(image))
+        value = value.replace(before, f'<img src="{image["src"]}">')
 
     return value
 
