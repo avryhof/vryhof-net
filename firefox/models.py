@@ -61,8 +61,6 @@ class NewsItem(Model):
         soup = BeautifulSoup(content_html, "html.parser")
         images = soup.find_all("img")
         for image in images:
-            before = str(image)
-            del (image["width"])
-            content_html = content_html.replace(before, str(image))
+            content_html = content_html.replace(str(image), f'<img src="{image["src"]}">')
 
         return content_html
