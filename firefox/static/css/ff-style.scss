@@ -72,6 +72,10 @@ $narrowfont: 'Pragati Narrow', 'Arial Narrow', 'Helvetica Condensed', Arial, Hel
     p:empty {
       display: none;
     }
+
+    img {
+      max-width: 100% !important;
+    }
   }
 
   .post-img, .post-reveal, .post-image, figure {
