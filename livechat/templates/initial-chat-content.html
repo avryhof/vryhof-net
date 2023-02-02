@@ -1,0 +1,5 @@
+<div class="chat-message received">
+    {% if chat_bot and chat_bot.initial_chat_content %}
+        {{ chat_bot.initial_chat_content|safe }}
+    {% endif %}
+</div>

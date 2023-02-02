@@ -4,12 +4,13 @@ import os
 import re
 
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.urls import reverse
 from django.utils.timezone import make_aware
 from nltk.chat.util import reflections
 
 from livechat.constants import API_FORWARD_IP_KEY
-from livechat.models import ChatSession, NLTKPairs, NLTKReflections
+from livechat.models import ChatSession, NLTKPairs, NLTKReflections, ChatBot
 from utilities.debugging import log_message
 
 
@@ -54,8 +55,31 @@ def generate_token():
     return encoded_token
 
 
+def get_chat_bot(request):
+    current_site = False
+    chat_bot = False
+
+    try:
+        current_site = Site.objects.get_current(request)
+    except Site.DoesNotExist:
+        site_id = getattr(settings, "SITE_ID", False)
+        if site_id:
+            current_site = Site.objects.get(id=site_id)
+
+    if current_site:
+        chatbots = ChatBot.objects.filter(active=True)
+        for chatbot in chatbots:
+            if current_site in chatbot.sites.all():
+                return chatbot
+
+    return chat_bot
+
+
 def get_chat_session(request):
-    session_expiration = make_aware(datetime.datetime.now()) - datetime.timedelta(days=1)
+    session_expiration = make_aware(datetime.datetime.now()) - datetime.timedelta(hours=2)
+
+    for old_session in ChatSession.objects.filter(last_replied__lt=session_expiration):
+        old_session.delete()
 
     session_id = request.session.get("chat_id")
     if not session_id:

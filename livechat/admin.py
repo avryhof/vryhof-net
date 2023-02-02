@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import ChatSession, ChatMessage, NLTKReflections, NLTKPairs
+from .models import ChatSession, ChatMessage, NLTKReflections, NLTKPairs, ChatBot
+
+
+@admin.register(ChatBot)
+class ChatBotAdmin(admin.ModelAdmin):
+    list_display = ("bot_name", "active",)
+    filter_horizontal = ("sites",)
 
 
 @admin.register(ChatSession)

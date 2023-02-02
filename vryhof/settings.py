@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "gis",
     "navbar",
     "firefox",
+    "livechat",
     "weather",
     "blog",
     "planner",
@@ -84,6 +85,7 @@ TEMPLATES = [
         "DIRS": [
             os.path.join(BASE_DIR, "templates"),
             os.path.join(BASE_DIR, "firefox", "templates"),
+            os.path.join(BASE_DIR, "livechat", "templates"),
             os.path.join(BASE_DIR, "weather", "templates"),
             os.path.join(BASE_DIR, "geocaching", "templates"),
             os.path.join(BASE_DIR, "kids", "templates"),
@@ -97,6 +99,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "navbar.context_processor.navmenu_context",
                 "utilities.context_processors.website_context",
+                "livechat.context_processors.livechat_context",
             ]
         },
     }
@@ -163,6 +166,8 @@ USE_TZ = True
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
@@ -171,6 +176,7 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
     os.path.join(BASE_DIR, "firefox", "static"),
+    os.path.join(BASE_DIR, "livechat", "static"),
     os.path.join(BASE_DIR, "geocaching", "static"),
     os.path.join(BASE_DIR, "weather", "static"),
     os.path.join(BASE_DIR, "kids", "static"),
@@ -311,9 +317,7 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.FormParser",
         "rest_framework.parsers.MultiPartParser",
     ),
-    "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAdminUser",
-    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAdminUser",),
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
 }
 

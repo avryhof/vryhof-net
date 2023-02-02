@@ -1,15 +1,21 @@
-<div id="chat-container">
-    <div id="chat-notifier">
-        Chat
-        <i class="fas fa-comments"></i>
-    </div>
-    <div id="chat-dialog">
-        <div id="chat-message-container">
-            <div id="chat-messages"></div>
+{% load static %}
+{% if request.user.is_authenticated %}
+    <div id="chat-container">
+        <div id="chat-notifier">
+            Chat
+            <i class="fas fa-comments"></i>
         </div>
-        <div id="chat-input-area">
-            <textarea id="chat-input" placeholder="Type your message here&hellip;"></textarea>
-            <a href="#" class="btn btn-primary" id="chat-send">Send</a>
+        <div id="chat-dialog">
+            <div id="chat-message-container">
+                <div id="chat-messages">
+                    {% include "initial-chat-content.html" %}
+                </div>
+            </div>
+            <div id="chat-input-area">
+                <label for="chat-input" class="sr-only">Chat Input</label>
+                <textarea id="chat-input" class="form-control" placeholder="Type your message here&hellip;"></textarea>
+                <a href="#" class="btn btn-primary" id="chat-send">Send</a>
+            </div>
         </div>
     </div>
-</div>
+{% endif %}

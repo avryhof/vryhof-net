@@ -1,6 +1,7 @@
 import datetime
 
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.db.models import (
     Model,
     ForeignKey,
@@ -10,10 +11,19 @@ from django.db.models import (
     CharField,
     GenericIPAddressField,
     BooleanField,
+    ManyToManyField,
 )
-from django.utils.timezone import make_aware
 
 from livechat.constants import alphanumeric
+from utilities.utility_functions import is_empty
+
+
+class ChatBot(Model):
+    bot_name = CharField(max_length=50, blank=True, null=True, validators=[alphanumeric])
+    active = BooleanField(default=True)
+    bot_user = ForeignKey(settings.AUTH_USER_MODEL, default=None, blank=True, null=True, on_delete=DO_NOTHING)
+    sites = ManyToManyField(Site)
+    initial_chat_content = TextField(null=True)
 
 
 class ChatSession(Model):
@@ -25,6 +35,14 @@ class ChatSession(Model):
     session_id = CharField(max_length=64, blank=True, null=True)
     created = DateTimeField(auto_now_add=True, blank=True, editable=False)
     last_replied = DateTimeField(auto_now_add=True, blank=True, editable=False)
+
+    @property
+    def name(self):
+        name = [x for x in [self.first_name, self.last_name] if isinstance(x, str)]
+        if is_empty(name):
+            return self.user.username
+
+        return name
 
     def get_messages(self, include_sent=False):
         if include_sent:
@@ -56,6 +74,19 @@ class ChatMessage(Model):
     sent = DateTimeField(auto_now_add=True, blank=True, editable=False)
     shown = BooleanField(default=False)
     message = TextField(null=True)
+    source = CharField(max_length=100, blank=True, null=True)
+
+    @property
+    def name(self):
+        name = self.session.name
+
+        if is_empty(name):
+            name = [x for x in [self.sender.first_name, self.sender.last_name] if isinstance(x, str)]
+
+        if is_empty(name):
+            return self.sender.username
+
+        return name
 
 
 class NLTKReflections(Model):

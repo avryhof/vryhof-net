@@ -42,6 +42,8 @@ iso18245==1.2.0
 jsonpickle
 lxml==4.9.2
 msgpack==1.0.4
+nltk
+openai
 openpyxl==3.0.10
 oscrypto==1.3.0
 packaging==21.3

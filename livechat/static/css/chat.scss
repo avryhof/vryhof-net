@@ -1,5 +1,8 @@
 #chat-container {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-items: stretch;
+
   position: fixed;
   bottom: 0 !important;
   right: 50px;
@@ -9,10 +12,16 @@
   background: #ffffff;
 
   #chat-message-container {
+    display: flex;
+    flex-direction: column;
+
     overflow: auto;
 
     #chat-messages {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      justify-items: auto;
+
       max-height: 290px !important;
       overflow: scroll !important;
 
@@ -48,7 +57,6 @@
   }
 
   #chat-notifier {
-    width: 100%;
     padding: 5px 10px 5px 10px;
     color: #ffffff;
     background: #1D3160;
@@ -59,19 +67,29 @@
   }
 
   #chat-dialog {
+    display: flex;
+    flex-direction: column;
+
     width: 500px;
     max-height: 300px !important;
 
     #chat-input-area {
-      height: 110px !important;
+      display: flex;
+      flex-direction: row;
+      justify-items: flex-start;
+      flex: 40px 0 0;
 
       #chat-input {
         display: block;
-        width: 100%;
+        flex: 75% 0 0;
+        margin: 0 !important;
+
+        border: none !important;
+        border-radius: 0 !important;
       }
 
       #chat-send {
-        float: right;
+
       }
     }
   }

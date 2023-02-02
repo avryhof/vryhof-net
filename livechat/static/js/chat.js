@@ -2,7 +2,6 @@ var API_RESULT_KEY = "result";
 var API_GENERIC_FAILURE = "bad";
 var API_GENERIC_SUCCESS = "ok";
 
-var MOBILE_APP_AGENT = 'ErWsatQyfJ93y4TnzUbaPtRwVa62tXbuTGNspRx8MweHsPaRr7';
 var chat_dialog_visible = false;
 var session_continued = false;
 var chat_started = false;
@@ -12,7 +11,7 @@ function get_messages(continue_chat) {
     $.ajax({
         url: "/livechat/get-messages/",
         method: 'GET',
-        headers: {'KPH-Agent': MOBILE_APP_AGENT},
+        headers: {},
         data: {continue_chat: continue_chat},
         success: function (retn) {
             results = retn.result;
@@ -21,11 +20,10 @@ function get_messages(continue_chat) {
                 message_div.append('<div class="chat-message ' + results[i].type + '">' +
                     '<strong>' + results[i].name + ':</strong> ' + results[i].message +
                     '</div>');
+                message_div.stop().animate({
+                    scrollTop: message_div[0].scrollHeight * 2
+                }, 800);
             }
-
-            message_div.stop().animate({
-                scrollTop: message_div[0].scrollHeight * 2
-            }, 800);
         },
         error: function (msg) {
             console.log("ERROR:");
@@ -41,7 +39,7 @@ function send_message() {
         $.ajax({
             url: "/livechat/send-message/",
             method: 'POST',
-            headers: {'KPH-Agent': MOBILE_APP_AGENT},
+            headers: {},
             data: {message: message},
             success: function (retn) {
                 $("#chat-input").val("");
