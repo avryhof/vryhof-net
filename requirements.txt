@@ -18,6 +18,7 @@ charset-normalizer
 cryptography
 deprecation==2.1.0
 Django==4.1.4
+django-allauth
 django-ask-sdk==1.0.0
 django-bootstrap4==22.3
 django-ckeditor==6.5.1
