@@ -43,6 +43,12 @@ a:hover, a:active {
   text-decoration: underline;
 }
 
+.img-fluid {
+  box-sizing: border-box;
+  width: 100%;
+  height: auto;
+}
+
 @media (max-width: $sm) {
   .search-col form {
     display: flex;

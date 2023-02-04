@@ -1,0 +1,125 @@
+{% extends "member-base.html" %}
+{% load static bootstrap4 %}
+{% block member-content %}
+    <form action="{% url "member-edit" %}" method="post" id="profile-edit" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-sm-4">
+                    {% if profile.photo %}
+                        <img src="{{ profile.photo.url }}" class="img-fluid profile-picture"
+                             alt="{{ profile.display_name }}">
+                    {% else %}
+                        <div class="img-fluid profile-picture">{{ display_name }}</div>
+                    {% endif %}
+                    <div class="about">
+                        <div class="label">
+                            Update Photo:
+                        </div>
+                        <div class="value">
+                            <input id="{{ form.photo.id_for_label }}" name="{{ form.photo.name }}" type="file"
+                                   accept="image/*">
+                        </div>
+                    </div>
+                    <div class="about">
+                        <div class="label">
+                            Specifications
+                        </div>
+                        <div class="value">
+                            <p class="help">
+                                Max upload size is 3Mb. The largest this block will usually get is 431px wide, so you
+                                can upload a big photo but it will be scaled down. If you can keep the file smaller than
+                                1MB, (so it loads faster) that is great.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-8">
+                    <div class="profile-heading">
+                        <div class="heading-text">Update</div>
+                        <div class="heading-actions btn-group">
+                            <button type="submit" class="btn btn-sm btn-outline-dark">
+                                <i class="fas fa-check"></i> Save
+                            </button>
+                            <a href="{% url "member-home" %}" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">{% bootstrap_field form.prefix %}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">{% bootstrap_field form.first_name %}</div>
+                        <div class="col-2">{% bootstrap_field form.middle_name %}</div>
+                        <div class="col-6">{% bootstrap_field form.last_name %}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col">{% bootstrap_field form.suffix %}</div>
+                    </div>
+                    <hr>
+                    <div class="about">
+                        <div class="label">Date of Birth</div>
+                        <div class="value">
+                            {% bootstrap_field form.date_of_birth show_label=False %}
+                        </div>
+                    </div>
+                    <div class="about">
+                        <div class="label">Phone</div>
+                        <div class="value">
+                            {% bootstrap_field form.phone show_label=False %}
+                        </div>
+                        <div>
+                            {% bootstrap_field form.call_me %}
+                        </div>
+                    </div>
+                    <div class="about">
+                        <div class="label">Alternate Phone</div>
+                        <div class="value">
+                            {% bootstrap_field form.phone2 show_label=False %}
+                        </div>
+                    </div>
+                    <div class="about">
+                        <div class="label">Business Phone</div>
+                        <div class="value">
+                            {% bootstrap_field form.work show_label=False %}
+                        </div>
+                    </div>
+                    <div class="about">
+                        <div class="label">Mobile Phone</div>
+                        <div class="value">
+                            {% bootstrap_field form.cell show_label=False %}
+                        </div>
+                    </div>
+                    <div class="about multi-line">
+                        <div class="label">Address</div>
+                        <div class="value address-update">
+                            <div class="row">
+                                <div class="col-12">{% bootstrap_field form.address1 %}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">{% bootstrap_field form.address2 %}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">{% bootstrap_field form.city %}</div>
+                                <div class="col-2">{% bootstrap_field form.state %}</div>
+                                <div class="col-3">{% bootstrap_field form.zip_code %}</div>
+                                <div class="col-3">{% bootstrap_field form.plus_four %}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about">
+                        <div class="label">Email</div>
+                        <div class="value">
+                            {% bootstrap_field form.email show_label=False %}
+                        </div>
+                        <div>
+                            {% bootstrap_field form.email_me %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock member-content %}

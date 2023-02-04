@@ -17,7 +17,8 @@ chardet==5.0.0
 charset-normalizer
 cryptography
 deprecation==2.1.0
-Django==4.1.4
+Django==4.1.6
+django-admin-sortable==2.2.4
 django-allauth
 django-allauth-templates-bootstrap4
 django-ask-sdk==1.0.0

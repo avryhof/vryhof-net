@@ -1,0 +1,106 @@
+@import "../../../static/css/vars";
+
+.profile-heading {
+  display: flex;
+  align-content: space-between;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+
+  font-weight: bold;
+  font-size: 1.5em;
+  color: #2196F3;
+  border-bottom: 2px solid #414141;
+}
+
+.profile-picture {
+  border: 2px solid #414141;
+  margin-bottom: 15px;
+}
+
+.about {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+
+  .label {
+    font-weight: bold;
+  }
+
+  .value {
+    padding-left: 10px;
+  }
+}
+
+form {
+  .form-check {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .about {
+    .value {
+      display: flex;
+    }
+
+    .address-update {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+#profile-edit {
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  input {
+    margin-left: 0;
+  }
+
+  [class*=col-]:first-of-type, .col:first-of-type {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+}
+
+@media (min-width: 700px) {
+  .about {
+    flex-direction: row;
+    align-items: center;
+
+    .label {
+      width: 150px !important;
+      flex: 150px 0 0 !important;
+      text-align: right;
+      padding-right: $padding;
+    }
+
+    .label::after {
+      content: ":";
+    }
+
+    .value {
+      padding-left: 0 !important;
+    }
+
+    .address-update {
+      [class*=col-], .col {
+        padding: 0;
+        margin: 0;
+      }
+    }
+  }
+  .about.multi-line {
+    align-items: stretch !important;
+    .label {
+      padding-top: 0;
+    }
+  }
+}

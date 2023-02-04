@@ -1,0 +1,94 @@
+.document-header {
+  font-weight: bold;
+}
+
+.document {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+
+  .title {
+    font-weight: bold;
+
+    a {
+      text-decoration: none;
+    }
+  }
+}
+
+.document:nth-child(even) {
+  background: #f1f1f1;
+}
+
+@media (max-width: 700px) {
+  .document-header {
+    display: none !important;
+  }
+  [class*=doctype-] {
+    .description, .availability, .uploaded {
+      padding-left: 30px;
+    }
+  }
+}
+
+@media (min-width: 700px) {
+  .document {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-between;
+
+    .title {
+      flex: 40% 0 0;
+    }
+
+    .description {
+      flex: 20% 0 0;
+    }
+
+    .availability {
+      flex: 20% 0 0;
+    }
+
+    .uploaded {
+      flex: 20% 0 0;
+    }
+  }
+}
+
+[class*=doctype-] {
+  .title:before {
+    font-family: 'bootstrap-icons';
+    vertical-align: middle;
+    font-weight: normal !important;
+    font-size: 1.25em;
+
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.doctype-doc, .doctype-docx {
+  .title:before {
+    content: '\F38D';
+  }
+}
+
+.doctype-xls, .doctype-xlsx {
+  .title:before {
+    content: '\F368';
+  }
+}
+
+.doctype-pdf {
+  .title:before {
+    content: '\F63E';
+  }
+}
+
+.doctype-png, .doctype-jpg, .doctype-jpeg, .doctype-gif, .doctype-bmp {
+  .title:before {
+    content: '\F36D';
+  }
+}

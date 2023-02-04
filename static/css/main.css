@@ -35,24 +35,26 @@ h2, .h2 {
 /* > 992 < 1200 */
 /* > 1200 < 1400 */
 /* > 1400 */
-.container {
-  max-width: 1320px;
-  flex: 100% 0 0;
+.container, .container-fluid {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
   margin-left: auto;
   margin-right: auto;
 }
 
-.container-fluid {
-  flex: 100% 0 0;
-  margin-left: auto;
-  margin-right: auto;
+.container {
+  max-width: 1320px;
 }
 
 .row {
   display: flex;
   flex-direction: row;
+  box-sizing: border-box;
 }
-.row [class*=col-] {
+.row [class*=col-], .row .col {
+  box-sizing: border-box;
   padding-left: 1em;
   padding-right: 1em;
 }
@@ -524,6 +526,12 @@ a:link, a:visited {
 
 a:hover, a:active {
   text-decoration: underline;
+}
+
+.img-fluid {
+  box-sizing: border-box;
+  width: 100%;
+  height: auto;
 }
 
 @media (max-width: 768px) {

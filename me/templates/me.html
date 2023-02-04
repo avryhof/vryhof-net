@@ -1,0 +1,75 @@
+{% extends "member-base.html" %}
+{% load static %}
+{% block member-content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-sm-4">
+                {% if profile.photo %}
+                    <img src="{{ profile.photo.url }}" class="img-fluid profile-picture"
+                         alt="{{ profile.display_name }}">
+                {% else %}
+                    <div class="img-fluid profile-picture">{{ display_name }}</div>
+                {% endif %}
+            </div>
+            <div class="col-12 col-sm-8">
+                <h1>{{ profile.display_name }}</h1>
+                <div class="profile-heading">
+                    <div class="heading-text">About</div>
+                    <div class="heading-actions btn-group">
+                        <a href="{% url "member-edit" %}" class="btn btn-sm btn-outline-dark">
+                            <i class="bi bi-pen"></i> Edit
+                        </a>
+                    </div>
+                </div>
+                <div class="about">
+                    <div class="label">Date of Birth</div>
+                    <div class="value">
+                        {{ profile.date_of_birth }}
+                    </div>
+                </div>
+
+                {% if profile.phone %}
+                    <div class="about">
+                        <div class="label">Phone</div>
+                        <div class="value">
+                            <a href="tel:{{ profile.phone }}">{{ profile.phone }}</a>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if profile.phone2 %}
+                    <div class="about">
+                        <div class="label">Alternate Phone</div>
+                        <div class="value">
+                            <a href="tel:{{ profile.phone2 }}">{{ profile.phone2 }}</a>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if profile.work %}
+                    <div class="about">
+                        <div class="label">Business Phone</div>
+                        <div class="value">
+                            <a href="tel:{{ profile.work }}">{{ profile.work }}</a>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if profile.cell %}
+                    <div class="about">
+                        <div class="label">Mobile Phone</div>
+                        <div class="value">
+                            <a href="tel:{{ profile.cell }}">{{ profile.cell }}</a>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="about">
+                    <div class="label">Address</div>
+                    <div class="value">{{ profile.html_address }}</div>
+                </div>
+                <div class="about">
+                    <div class="label">Email</div>
+                    <div class="value">{{ profile.email_address }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock member-content %}

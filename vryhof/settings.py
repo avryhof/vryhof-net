@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.google",
+    "me",
     "bootstrap4",
     "rest_framework",
     "django_extensions",
@@ -94,6 +95,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, "weather", "templates"),
             os.path.join(BASE_DIR, "geocaching", "templates"),
             os.path.join(BASE_DIR, "kids", "templates"),
+            os.path.join(BASE_DIR, "me", "templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -234,6 +236,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "geocaching", "static"),
     os.path.join(BASE_DIR, "weather", "static"),
     os.path.join(BASE_DIR, "kids", "static"),
+    os.path.join(BASE_DIR, "me", "static"),
 )
 
 STATICFILES_FINDERS = (

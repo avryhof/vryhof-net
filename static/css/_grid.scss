@@ -1,28 +1,32 @@
 @import "vars";
 @import "mixins";
 
-.container {
-  max-width: 1320px;
-  flex: 100% 0 0;
-
+.container, .container-fluid {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
   margin-left: auto;
   margin-right: auto;
 }
 
-.container-fluid {
-  flex: 100% 0 0;
+.container {
+  max-width: 1320px;
+}
 
-  margin-left: auto;
-  margin-right: auto;
+.container-fluid {
 }
 
 .row {
   display: flex;
   flex-direction: row;
 
-  [class*=col-] {
+  box-sizing: border-box;
+
+  [class*=col-], .col {
     //position: relative;
     //width: 100%;
+    box-sizing: border-box;
     padding-left: $padding;
     padding-right: $padding;
   }
@@ -77,10 +81,10 @@
 }
 
 @media (max-width: $xs) {
-body {
-  margin: 0;
-  padding: 0;
-}
+  body {
+    margin: 0;
+    padding: 0;
+  }
 
   .container {
     margin-left: 10px;
