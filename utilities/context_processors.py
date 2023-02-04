@@ -33,6 +33,7 @@ def website_context(request):
         "site_url": "%s://%s" % (proto, site_url),
         "domain_name": domain.netloc.title(),
         "site_name": current_site.name,
+        "signup_enabled": getattr(settings, "SIGNUP_ENABLED")
     }
 
     return return_dict

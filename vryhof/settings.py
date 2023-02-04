@@ -175,6 +175,14 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+LOGIN_REDIRECT_URL = "firefox_home"
+ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_USER_DISPLAY =
+SIGNUP_ENABLED = False
+
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 

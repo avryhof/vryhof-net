@@ -1,0 +1,69 @@
+.login-container {
+  display: flex;
+  justify-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+
+  #login-box {
+    border: 1px solid #dcdcdc;
+    box-sizing: border-box;
+    padding: 1em;
+
+    width: 500px;
+
+    display: flex;
+    flex-direction: column;
+
+    .login {
+      display: flex;
+      flex-direction: column;
+
+      .submit-group {
+        justify-content: center !important;
+      }
+
+      .form-group {
+        display: flex !important;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+
+        label {
+          flex: 25% 0 0;
+          text-align: right;
+        }
+
+        .form-check {
+          display: flex;
+          justify-items: center;
+          width: 100%;
+          justify-content: center;
+          align-items: center;
+
+          label {
+            width: auto;
+          }
+        }
+      }
+    }
+
+    .socialaccount_providers {
+      list-style: none;
+      display: flex;
+      flex-direction: row;
+
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+
+      .socialaccount_provider {
+        padding: 0.5em 1em;
+        margin: 1em;
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+      }
+    }
+  }
+}

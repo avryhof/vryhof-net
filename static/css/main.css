@@ -300,6 +300,10 @@ h2, .h2 {
   z-index: 999;
 }
 
+.navbar {
+  box-sizing: border-box;
+}
+
 .navbar-dark {
   color: #ffffff;
 }
@@ -399,6 +403,93 @@ h2, .h2 {
     width: 100%;
   }
 }
+/* < 576 */
+/* > 576 < 768 */
+/* > 768 < 992 */
+/* > 992 < 1200 */
+/* > 1200 < 1400 */
+/* > 1400 */
+.nav-profile {
+  margin-left: auto;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  right: 1em;
+}
+.nav-profile .toggle-control {
+  display: none;
+}
+.nav-profile .toggle-control:checked ~ .profile-menu {
+  display: flex !important;
+  flex-direction: column;
+}
+.nav-profile .profile-menu {
+  display: none;
+  position: relative;
+  z-index: 99;
+}
+.nav-profile .profile-menu .menu-item {
+  padding: 1em;
+}
+
+.login-container {
+  display: flex;
+  justify-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+.login-container #login-box {
+  border: 1px solid #dcdcdc;
+  box-sizing: border-box;
+  padding: 1em;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+.login-container #login-box .login {
+  display: flex;
+  flex-direction: column;
+}
+.login-container #login-box .login .submit-group {
+  justify-content: center !important;
+}
+.login-container #login-box .login .form-group {
+  display: flex !important;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.login-container #login-box .login .form-group label {
+  flex: 25% 0 0;
+  text-align: right;
+}
+.login-container #login-box .login .form-group .form-check {
+  display: flex;
+  justify-items: center;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.login-container #login-box .login .form-group .form-check label {
+  width: auto;
+}
+.login-container #login-box .socialaccount_providers {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+.login-container #login-box .socialaccount_providers .socialaccount_provider {
+  padding: 0.5em 1em;
+  margin: 1em;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+}
+
 html {
   color: #333333;
   background: #FFFFFF;
@@ -421,6 +512,10 @@ body {
   border: 1px solid #cccccc;
   border-bottom: 5px solid #dcdcdc;
   background: #f1f1f1 !important;
+}
+
+.sr-only {
+  display: none;
 }
 
 a:link, a:visited {

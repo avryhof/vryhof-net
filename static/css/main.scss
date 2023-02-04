@@ -5,6 +5,8 @@
 @import "forms";
 @import "table";
 @import "navbar";
+@import "nav-profile";
+@import "account";;
 
 html {
   color: $foregroundColor;
@@ -28,6 +30,10 @@ body {
   border: 1px solid $gray;
   border-bottom: 5px solid $silver;
   background: $smoke !important;
+}
+
+.sr-only {
+  display: none;
 }
 
 a:link, a:visited {

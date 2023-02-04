@@ -1,0 +1,30 @@
+@import "vars";
+
+.nav-profile {
+  margin-left: auto;
+  position: fixed;
+
+  display: flex;
+  flex-direction: column;
+
+  right: $padding;
+
+  .toggle-control {
+    display: none;
+  }
+
+  .toggle-control:checked ~ .profile-menu {
+    display: flex !important;
+    flex-direction: column;
+  }
+
+  .profile-menu {
+    display: none;
+    position: relative;
+    z-index: 99;
+
+    .menu-item {
+      padding: 1em;
+    }
+  }
+}

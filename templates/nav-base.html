@@ -11,4 +11,24 @@
             {% include "nav-menu.html" %}
         </div>
     </div>
+
+    <div class="nav-profile">
+        {% if request.user.is_authenticated %}
+            <label for="profile-menu-toggle">
+                {% if request.user.first_name and request.user.last_name %}
+                    {{ request.user.first_name }} {{ request.user.last_name }}
+                {% else %}
+                    {{ request.user.username }}
+                {% endif %}
+            </label>
+            <input type="checkbox" id="profile-menu-toggle" class="toggle-control">
+            <div class="profile-menu">
+                <div class="menu-item">
+                    <a href="{% url 'account_logout' %}">Log Out</a>
+                </div>
+            </div>
+        {% else %}
+            <a href="{% url 'account_login' %}">Log In</a>
+        {% endif %}
+    </div>
 </nav>
