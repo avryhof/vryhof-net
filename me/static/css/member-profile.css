@@ -1,0 +1,92 @@
+/* < 576 */
+/* > 576 < 768 */
+/* > 768 < 992 */
+/* > 992 < 1200 */
+/* > 1200 < 1400 */
+/* > 1400 */
+.profile-heading {
+  display: flex;
+  align-content: space-between;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  font-weight: bold;
+  font-size: 1.5em;
+  color: #2196F3;
+  border-bottom: 2px solid #414141;
+}
+
+.profile-picture {
+  border: 2px solid #414141;
+  margin-bottom: 15px;
+}
+
+.about {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.about .label {
+  font-weight: bold;
+}
+.about .value {
+  padding-left: 10px;
+}
+
+form .form-check {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+form .about .value {
+  display: flex;
+}
+form .about .address-update {
+  display: flex;
+  flex-direction: column;
+}
+
+#profile-edit .form-group {
+  display: flex;
+  flex-direction: column;
+}
+#profile-edit input {
+  margin-left: 0;
+}
+#profile-edit [class*=col-]:first-of-type, #profile-edit .col:first-of-type {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+@media (min-width: 700px) {
+  .about {
+    flex-direction: row;
+    align-items: center;
+  }
+  .about .label {
+    width: 150px !important;
+    flex: 150px 0 0 !important;
+    text-align: right;
+    padding-right: 1em;
+  }
+  .about .label::after {
+    content: ":";
+  }
+  .about .value {
+    padding-left: 0 !important;
+  }
+  .about .address-update [class*=col-], .about .address-update .col {
+    padding: 0;
+    margin: 0;
+  }
+  .about.multi-line {
+    align-items: stretch !important;
+  }
+  .about.multi-line .label {
+    padding-top: 0;
+  }
+}
+
+/*# sourceMappingURL=member-profile.css.map */

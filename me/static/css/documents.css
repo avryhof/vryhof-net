@@ -1,0 +1,75 @@
+.document-header {
+  font-weight: bold;
+}
+
+.document {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+.document .title {
+  font-weight: bold;
+}
+.document .title a {
+  text-decoration: none;
+}
+
+.document:nth-child(even) {
+  background: #f1f1f1;
+}
+
+@media (max-width: 700px) {
+  .document-header {
+    display: none !important;
+  }
+  [class*=doctype-] .description, [class*=doctype-] .availability, [class*=doctype-] .uploaded {
+    padding-left: 30px;
+  }
+}
+@media (min-width: 700px) {
+  .document {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-between;
+  }
+  .document .title {
+    flex: 40% 0 0;
+  }
+  .document .description {
+    flex: 20% 0 0;
+  }
+  .document .availability {
+    flex: 20% 0 0;
+  }
+  .document .uploaded {
+    flex: 20% 0 0;
+  }
+}
+[class*=doctype-] .title:before {
+  font-family: "bootstrap-icons";
+  vertical-align: middle;
+  font-weight: normal !important;
+  font-size: 1.25em;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+}
+
+.doctype-doc .title:before, .doctype-docx .title:before {
+  content: "\f38d";
+}
+
+.doctype-xls .title:before, .doctype-xlsx .title:before {
+  content: "\f368";
+}
+
+.doctype-pdf .title:before {
+  content: "\f63e";
+}
+
+.doctype-png .title:before, .doctype-jpg .title:before, .doctype-jpeg .title:before, .doctype-gif .title:before, .doctype-bmp .title:before {
+  content: "\f36d";
+}
+
+/*# sourceMappingURL=documents.css.map */
