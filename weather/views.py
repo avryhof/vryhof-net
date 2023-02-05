@@ -31,15 +31,13 @@ class WeatherView(TemplateView):
         self.request = request
         context = self.get_context_data()
 
-        get_weather()
-
         weather_stations = []
 
         for station in WeatherStation.objects.all():
             weatherdata = {"tempf": "--"}
 
             try:
-                weatherdata = WeatherData.objects.filter(station=station).latest()
+                weatherdata = WeatherData.objects.filter(station=station).latest("local_date")
             except WeatherData.DoesNotExist:
                 pass
 
