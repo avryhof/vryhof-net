@@ -1,4 +1,7 @@
 import bleach
+import openai
+from django.conf import settings
+from duckduckgo_search import ddg, ddg_answers, ddg_images
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
@@ -6,6 +9,8 @@ from rest_framework.response import Response
 from api.models import GeoPostalCode
 from gis.models import PostalCode
 from gis.utility_functions import points_within_radius
+
+openai.api_key = getattr(settings, "OPENAI_API_KEY")
 
 
 @api_view(["GET", "POST"])
@@ -71,5 +76,51 @@ def zipcode_to_geoname(request, **kwargs):
             resp = gpc.as_dict()
         else:
             resp = {"error": "Place not found"}
+
+    return Response(resp, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+@authentication_classes(())
+@permission_classes(())
+def search(request, **kwargs):
+    ddg_region = "us-en"
+
+    keywords = request.data.get("q")
+
+    resp = dict(chat=None, results=[])
+
+    try:
+        completions = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=keywords,
+            max_tokens=1024,
+            n=1,
+            stop=None,
+            temperature=0.5,
+        )
+
+    except Exception as e:
+        pass
+
+    else:
+        resp["chat"] = completions.choices[0].text.strip()
+
+    resp["results"] = ddg(keywords, region=ddg_region, safesearch="Off", time="y")
+    # resp["images"] = ddg_images(
+    #     keywords,
+    #     region=ddg_region,
+    #     safesearch="moderate",
+    #     time=None,
+    #     size=None,
+    #     color=None,
+    #     type_image=None,
+    #     layout=None,
+    #     license_image=None,
+    #     max_results=None,
+    #     page=1,
+    #     output=None,
+    #     download=False,
+    # )
 
     return Response(resp, status=status.HTTP_200_OK)

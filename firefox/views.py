@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -65,6 +66,38 @@ class FirefoxHomeView(TemplateView):
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
         return super(FirefoxHomeView, self).dispatch(*args, **kwargs)
+
+
+class SearchView(TemplateView):
+    extra_css = ["css/ff-style.css"]
+    extra_javascript = ["js/search.min.js"]
+
+    template_name = "search-page.html"
+    name = "Search"
+
+    request = None
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchView, self).get_context_data(**kwargs)
+        context["page_title"] = self.name
+        context["extra_css"] = self.extra_css
+        context["extra_javascript"] = self.extra_javascript
+        context["request"] = self.request
+
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.request = request
+        context = self.get_context_data()
+
+        context["form"] = SearchForm()
+
+        return render(request, self.template_name, context)
+
+    @method_decorator(csrf_protect)
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(SearchView, self).dispatch(*args, **kwargs)
 
 
 class SignatureView(TemplateView):

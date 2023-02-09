@@ -1,14 +1,5 @@
-$white: #ffffff;
-$gray: #cccccc;
-$silver: #dcdcdc;
-$smoke: #f1f1f1;
-
-$gBlue: #4285F4;
-$gRed: #EA4335;
-$gGreen: #34A853;
-$gYellow: #FBBC05;
-
-$narrowfont: 'Pragati Narrow', 'Arial Narrow', 'Helvetica Condensed', Arial, Helvetica, sans-serif;
+@import "vars";
+@import "search";
 
 * {
   background: inherit;
