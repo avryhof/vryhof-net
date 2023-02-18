@@ -14,7 +14,9 @@ from django.db.models import (
     ManyToManyField,
 )
 
+from gis.models import GISPoint
 from livechat.constants import alphanumeric
+from livechat.devices.location.device import Geoname
 from utilities.utility_functions import is_empty
 
 
@@ -26,23 +28,25 @@ class ChatBot(Model):
     initial_chat_content = TextField(null=True)
 
 
-class ChatSession(Model):
+class ChatSession(GISPoint):
     first_name = CharField(max_length=30, blank=False, verbose_name="First Name", validators=[alphanumeric])
     last_name = CharField(max_length=30, blank=False, verbose_name="Last Name", validators=[alphanumeric])
-    date_of_birth = CharField(max_length=30, blank=True, null=True, verbose_name="Date of Birth")
     user = ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=DO_NOTHING)
     ip_address = GenericIPAddressField(blank=True, null=True)
     session_id = CharField(max_length=64, blank=True, null=True)
     created = DateTimeField(auto_now_add=True, blank=True, editable=False)
     last_replied = DateTimeField(auto_now_add=True, blank=True, editable=False)
 
-    @property
-    def name(self):
-        name = [x for x in [self.first_name, self.last_name] if isinstance(x, str)]
-        if is_empty(name):
-            return self.user.username
+    def save(
+            self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        name_str = [x for x in [self.first_name, self.last_name] if isinstance(x, str)]
+        if not is_empty(name_str):
+            self.name = " ".join(name_str)
+        elif is_empty(name_str) and not is_empty(self.user):
+            self.name = self.user.username
 
-        return name
+        super(ChatSession, self).save(force_insert, force_update, using, update_fields)
 
     def get_messages(self, include_sent=False):
         if include_sent:
@@ -67,6 +71,10 @@ class ChatSession(Model):
 
         return self.last_replied < session_expiration
 
+    @property
+    def geo(self):
+        return Geoname(latitude=self.latitude, longitude=self.longitude)
+
 
 class ChatMessage(Model):
     session = ForeignKey(ChatSession, blank=False, null=False, on_delete=DO_NOTHING)
@@ -81,7 +89,7 @@ class ChatMessage(Model):
         name = self.session.name
 
         if is_empty(name):
-            name = [x for x in [self.sender.first_name, self.sender.last_name] if isinstance(x, str)]
+            name = " ".join([x for x in [self.sender.first_name, self.sender.last_name] if isinstance(x, str)])
 
         if is_empty(name):
             return self.sender.username

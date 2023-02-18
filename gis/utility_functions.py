@@ -10,7 +10,7 @@ from django.conf import settings
 from django.db.models.expressions import RawSQL
 from django.utils.timezone import make_aware
 
-from gis.models import PostalCode
+from gis.models import PostalCode, GeoName
 from gis.us_census_class import USCensus
 from gis.usps_class import USPS
 from utilities.debugging import log_message
@@ -140,6 +140,27 @@ def get_postal_code_by_coords(latitude, longitude):
         result_count = len(postal_codes)
         if result_count > 0:
             retn = postal_codes[0]
+            break
+        radius = radius + 1
+
+    return retn
+
+def get_geoname_by_coords(latitude, longitude):
+    """
+    Finds the place to the provided coordinates.
+
+    :param latitude:
+    :param longitude:
+    :return:
+    """
+    retn = None
+    result_count = 0
+    radius = 5
+    while result_count == 0:
+        geoname_places = points_within_radius(GeoName, latitude, longitude, radius=radius)
+        result_count = len(geoname_places)
+        if result_count > 0:
+            retn = geoname_places[0]
             break
         radius = radius + 1
 

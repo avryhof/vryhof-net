@@ -5,6 +5,7 @@ import json
 from functools import cmp_to_key
 from operator import itemgetter
 
+import requests
 from dateutil.parser import parse
 from django.utils.timezone import make_aware
 
@@ -36,8 +37,14 @@ def get_client_ip(request):
     x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for:
         ip = x_forwarded_for.split(",")[0]
+
     else:
         ip = request.META.get("REMOTE_ADDR")
+
+    if "127.0.0.1" in ip:
+        req = requests.get("https://api.ipify.org/?format=text")
+        ip = req.text
+
     return ip
 
 

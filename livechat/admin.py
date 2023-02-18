@@ -15,7 +15,6 @@ class ChatSessionAdmin(admin.ModelAdmin):
     list_display = (
         "first_name",
         "last_name",
-        "date_of_birth",
         "user",
         "ip_address",
         "session_id",
@@ -25,7 +24,6 @@ class ChatSessionAdmin(admin.ModelAdmin):
     list_display_links = (
         "first_name",
         "last_name",
-        "date_of_birth",
         "session_id",
     )
     list_filter = ("user", "created", "last_replied")

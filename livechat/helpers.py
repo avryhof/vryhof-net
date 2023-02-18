@@ -9,35 +9,7 @@ from django.urls import reverse
 from django.utils.timezone import make_aware
 from nltk.chat.util import reflections
 
-from livechat.constants import API_FORWARD_IP_KEY
 from livechat.models import ChatSession, NLTKPairs, NLTKReflections, ChatBot
-from utilities.debugging import log_message
-
-
-def check_forwarded_ip(user_ip, request):
-    """When requests come from the website we get the IP of the server rather than the IP of the user when we hit
-    the api level.  To fix this, when a request can be verified to come from the webserver then look for a
-    forwarded ip of the user and if it is present use that for user ip.
-
-    :param user_ip Real IP as gotten from HTTP request
-    :param request the django rest framework request
-    :return IP to use, either original (None if not provided) or a forwarded IP if request from this server and sent
-    """
-
-    if user_ip:
-        # Make sure we use forwarded user ip when request comes from website only
-        server_ip = getattr(settings, "SERVER_IP", "")
-
-        if user_ip == server_ip:
-            website_requestor = getattr(settings, "WEBSITE_KPH_AGENT", "")
-
-            if request.auth == website_requestor:
-                forwarded_ip = request.data.get(API_FORWARD_IP_KEY, None)
-
-                if forwarded_ip:
-                    user_ip = forwarded_ip
-
-    return user_ip
 
 
 def bytes_to_str(value):

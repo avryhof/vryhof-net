@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.response import Response
 
 from api.models import GeoPostalCode
+from api.rest_auth import CsrfExemptSessionAuthentication
 from gis.models import PostalCode
 from gis.utility_functions import points_within_radius
 
@@ -14,7 +15,7 @@ openai.api_key = getattr(settings, "OPENAI_API_KEY")
 
 
 @api_view(["GET", "POST"])
-@authentication_classes(())
+@authentication_classes((CsrfExemptSessionAuthentication))
 @permission_classes(())
 def get_zipcodes_in_radius(request, **kwargs):
     """

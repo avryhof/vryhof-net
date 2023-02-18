@@ -224,6 +224,15 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
+GEOIP_KEY = os.environ.get("GEOIP_KEY")
+NWS_EMAIL = "amos@vryhof.net"
+
+BASE_RESPONDER = "chatgpt"
+# BASE_RESPONDER = "nltk"
+SKILLS_REGISTRY = []
+
+LOCATION = None
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
@@ -368,13 +377,19 @@ CKEDITOR_CONFIGS = {
 
 
 REST_FRAMEWORK = {
-    # "DEFAULT_AUTHENTICATION_CLASSES": ("assistant.api_auth.AssistantAuthentication",),
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.BasicAuthentication",
+        "api.rest_auth.CsrfExemptSessionAuthentication",
+    ],
     "DEFAULT_PARSER_CLASSES": (
         "rest_framework.parsers.JSONParser",
         "rest_framework.parsers.FormParser",
         "rest_framework.parsers.MultiPartParser",
     ),
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAdminUser",),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+        # "rest_framework.permissions.IsAdminUser",
+    ],
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
 }
 

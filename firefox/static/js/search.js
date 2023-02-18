@@ -7,7 +7,7 @@ $(document).on("submit", "#search-form", function (e) {
         headers: {},
         data: {q: $("#id_search").val()},
         success: function (retn) {
-            $("#search-results").append('<div class="chat-bubble">' + retn.chat + '</div>');
+            $("#search-results").html('<div class="chat-bubble">' + retn.chat + '</div>');
 
             for (var i in retn.results) {
                 var result_html = '<div class="title">' +
@@ -25,3 +25,30 @@ $(document).on("submit", "#search-form", function (e) {
     });
 
 });
+
+document.onload = function () {
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(function (location) {
+            $.ajax({
+                url: "/livechat/send-message/",
+                method: 'POST',
+                headers: {},
+                data: location.coords,
+                success: function (retn) {
+                    $("#chat-input").val("");
+
+                    if (!chat_started) {
+                        setInterval(get_messages, 3000);
+                        chat_started = true;
+                    }
+
+                    get_messages()
+                },
+                error: function (msg) {
+                    console.log("ERROR:");
+                    console.log(msg);
+                }
+            });
+        });
+    }
+}
