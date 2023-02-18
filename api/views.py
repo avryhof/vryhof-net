@@ -12,6 +12,7 @@ from gis.utility_functions import points_within_radius
 from livechat.helpers import get_chat_session
 from livechat.personal_assistant.classes import Bot
 from utilities.helpers import get_client_ip
+from utilities.utility_functions import is_empty
 
 openai.api_key = getattr(settings, "OPENAI_API_KEY")
 
@@ -98,21 +99,12 @@ def search(request, **kwargs):
     else:
         resp["chat"], response_source = bot.respond(keywords)
 
-    resp["results"] = ddg(keywords, region=ddg_region, safesearch="Off", time="y")
-    # resp["images"] = ddg_images(
-    #     keywords,
-    #     region=ddg_region,
-    #     safesearch="moderate",
-    #     time=None,
-    #     size=None,
-    #     color=None,
-    #     type_image=None,
-    #     layout=None,
-    #     license_image=None,
-    #     max_results=None,
-    #     page=1,
-    #     output=None,
-    #     download=False,
-    # )
+    if not is_empty(chat_session.latitude) and not is_empty(chat_session.longitude):
+        location = chat_session.geo()
+        loc = f"{location.city}, {location.state}"
+
+        resp["results"] = ddg(f"{keywords} location:{loc}", region=ddg_region, safesearch="Off", time="y")
+    else:
+        resp["results"] = ddg(keywords, region=ddg_region, safesearch="Off", time="y")
 
     return Response(resp, status=status.HTTP_200_OK)
