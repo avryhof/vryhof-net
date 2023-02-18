@@ -48,10 +48,10 @@ def get_chat_bot(request):
 
 
 def get_chat_session(request):
-    session_expiration = make_aware(datetime.datetime.now()) - datetime.timedelta(hours=2)
+    # session_expiration = make_aware(datetime.datetime.now()) - datetime.timedelta(hours=2)
 
-    for old_session in ChatSession.objects.filter(last_replied__lt=session_expiration):
-        old_session.delete()
+    # for old_session in ChatSession.objects.filter(last_replied__lt=session_expiration):
+    #     old_session.delete()
 
     session_id = request.session.get("chat_id")
     if not session_id:
@@ -59,7 +59,7 @@ def get_chat_session(request):
         request.session["chat_id"] = session_id
 
     try:
-        chat_session = ChatSession.objects.get(user=request.user, last_replied__gt=session_expiration)
+        chat_session = ChatSession.objects.get(user=request.user)
     except ChatSession.DoesNotExist:
         chat_session = ChatSession.objects.create(
             user=request.user, last_replied=make_aware(datetime.datetime.now())
