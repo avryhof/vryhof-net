@@ -44,7 +44,7 @@ future==0.18.2
 geo-ez==0.1.5
 geolite2utils
 holidays
-idna==3.3
+idna==3.4
 iso18245==1.2.0
 jsonpickle
 lxml==4.9.2
