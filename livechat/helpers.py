@@ -7,9 +7,10 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.urls import reverse
 from django.utils.timezone import make_aware
-from nltk.chat.util import reflections
 
-from livechat.models import ChatSession, NLTKPairs, NLTKReflections, ChatBot
+from livechat.models import ChatSession, ChatBot
+from me.models import Member
+from utilities.utility_functions import get_client_ip
 
 
 def bytes_to_str(value):
@@ -48,11 +49,6 @@ def get_chat_bot(request):
 
 
 def get_chat_session(request):
-    # session_expiration = make_aware(datetime.datetime.now()) - datetime.timedelta(hours=2)
-
-    # for old_session in ChatSession.objects.filter(last_replied__lt=session_expiration):
-    #     old_session.delete()
-
     session_id = request.session.get("chat_id")
     if not session_id:
         session_id = generate_token()
@@ -61,31 +57,21 @@ def get_chat_session(request):
     try:
         chat_session = ChatSession.objects.get(user=request.user)
     except ChatSession.DoesNotExist:
-        chat_session = ChatSession.objects.create(
-            user=request.user, last_replied=make_aware(datetime.datetime.now())
-        )
+        chat_session = ChatSession.objects.create(user=request.user, last_replied=make_aware(datetime.datetime.now()))
+
+    if request.user.is_authenticated:
+        try:
+            profile = Member.objects.get(user=request.user)
+        except Member.DoesNotExist:
+            pass
+        else:
+            chat_session.first_name = profile.first_name
+            chat_session.last_name = profile.last_name
+
+    chat_session.ip_address = get_client_ip(request)
+    chat_session.save()
 
     return chat_session
-
-
-def get_reflections():
-    return_reflections = reflections
-
-    for my_reflection in NLTKReflections.objects.filter(active=True):
-        return_reflections.update({my_reflection.reflection_phrase: my_reflection.reflection})
-
-    return return_reflections
-
-
-def get_pairs():
-    pairs = []
-
-    nltk_pairs = NLTKPairs.objects.filter(active=True)
-
-    for pair in nltk_pairs:
-        pairs.append([pair.question, [pair.answer]])
-
-    return pairs
 
 
 def response_template_function(function_name, function_parameter):

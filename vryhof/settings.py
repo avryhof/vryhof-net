@@ -228,7 +228,6 @@ GEOIP_KEY = os.environ.get("GEOIP_KEY")
 NWS_EMAIL = "amos@vryhof.net"
 
 BASE_RESPONDER = "chatgpt"
-# BASE_RESPONDER = "nltk"
 SKILLS_REGISTRY = []
 
 LOCATION = None

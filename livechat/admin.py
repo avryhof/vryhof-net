@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import ChatSession, ChatMessage, NLTKReflections, NLTKPairs, ChatBot
+from .models import ChatSession, ChatMessage, ChatBot
 
 
 @admin.register(ChatBot)
 class ChatBotAdmin(admin.ModelAdmin):
-    list_display = ("bot_name", "active",)
+    list_display = (
+        "bot_name",
+        "active",
+    )
     filter_horizontal = ("sites",)
 
 
@@ -33,23 +36,3 @@ class ChatSessionAdmin(admin.ModelAdmin):
 class ChatMessageAdmin(admin.ModelAdmin):
     list_display = ("session", "sender", "sent", "shown", "message")
     list_filter = ("session", "sender", "sent", "shown")
-
-
-@admin.register(NLTKReflections)
-class NLTKReflectionsAdmin(admin.ModelAdmin):
-    list_display = (
-        "reflection_phrase",
-        "reflection",
-        "active",
-    )
-    list_filter = ("active",)
-
-
-@admin.register(NLTKPairs)
-class NLTKPairsAdmin(admin.ModelAdmin):
-    list_display = (
-        "question",
-        "answer",
-        "active",
-    )
-    list_filter = ("active",)

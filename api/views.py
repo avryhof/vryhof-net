@@ -10,7 +10,6 @@ from api.models import GeoPostalCode
 from gis.models import PostalCode
 from gis.utility_functions import points_within_radius
 from livechat.helpers import get_chat_session
-from livechat.personal_assistant.classes import Bot
 from utilities.helpers import get_client_ip
 from utilities.utility_functions import is_empty
 
@@ -86,12 +85,11 @@ def search(request, **kwargs):
 
     keywords = request.data.get("q")
 
-    resp = dict(chat=None, results=[])
+    resp = dict(chat=None, results=[], answers=[])
 
     chat_session = get_chat_session(request)
-
     try:
-        bot = Bot(chat_session=chat_session, client_ip=get_client_ip(request), debug=False)
+        bot = chat_session.bot(client_ip=get_client_ip(request), debug=False)
 
     except Exception as e:
         pass
@@ -99,12 +97,15 @@ def search(request, **kwargs):
     else:
         resp["chat"], response_source = bot.respond(keywords)
 
+    ddg_keywords = keywords
     if not is_empty(chat_session.latitude) and not is_empty(chat_session.longitude):
-        location = chat_session.geo()
+        location = chat_session.geo
         loc = f"{location.city}, {location.state}"
+        ddg_keywords = f"{keywords} location:{loc}"
 
-        resp["results"] = ddg(f"{keywords} location:{loc}", region=ddg_region, safesearch="Off", time="y")
-    else:
-        resp["results"] = ddg(keywords, region=ddg_region, safesearch="Off", time="y")
+    resp["results"] = ddg(ddg_keywords, region=ddg_region, safesearch="Off", time="y")
+    # resp["answers"] = ddg_answers(ddg_keywords, related=False, output=None)
+
+    # log_message(resp, pretty=True)
 
     return Response(resp, status=status.HTTP_200_OK)

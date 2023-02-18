@@ -17,7 +17,8 @@ from django.db.models import (
 from gis.models import GISPoint
 from livechat.constants import alphanumeric
 from livechat.devices.location.device import Geoname
-from utilities.utility_functions import is_empty
+from livechat.personal_assistant.classes import Bot
+from utilities.utility_functions import is_empty, aware_now
 
 
 class ChatBot(Model):
@@ -37,9 +38,7 @@ class ChatSession(GISPoint):
     created = DateTimeField(auto_now_add=True, blank=True, editable=False)
     last_replied = DateTimeField(auto_now_add=True, blank=True, editable=False)
 
-    def save(
-            self, force_insert=False, force_update=False, using=None, update_fields=None
-    ):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         name_str = [x for x in [self.first_name, self.last_name] if isinstance(x, str)]
         if not is_empty(name_str):
             self.name = " ".join(name_str)
@@ -60,10 +59,22 @@ class ChatSession(GISPoint):
 
         return messages
 
+    def add_message(self, user, message, source="Authenticated User"):
+        ChatMessage.objects.create(
+            session=self,
+            sender=user,
+            sent=aware_now(),
+            message=message.strip(),
+            source=source,
+        )
+
     def delete(self, using=None, keep_parents=False):
         ChatMessage.objects.filter(session_id=self.pk).delete()
 
         super(ChatSession, self).delete(using, keep_parents)
+
+    def bot(self, **kwargs):
+        return Bot(chat_session=self, **kwargs)
 
     @property
     def expired(self):
@@ -79,39 +90,18 @@ class ChatSession(GISPoint):
 class ChatMessage(Model):
     session = ForeignKey(ChatSession, blank=False, null=False, on_delete=DO_NOTHING)
     sender = ForeignKey(settings.AUTH_USER_MODEL, default=None, blank=True, null=True, on_delete=DO_NOTHING)
+    name = CharField(max_length=50, blank=True, null=True)
     sent = DateTimeField(auto_now_add=True, blank=True, editable=False)
     shown = BooleanField(default=False)
     message = TextField(null=True)
+    message_type = CharField(max_length=20, blank=True, null=True)
     source = CharField(max_length=100, blank=True, null=True)
 
     @property
-    def name(self):
-        name = self.session.name
-
-        if is_empty(name):
-            name = " ".join([x for x in [self.sender.first_name, self.sender.last_name] if isinstance(x, str)])
-
-        if is_empty(name):
-            return self.sender.username
-
-        return name
-
-
-class NLTKReflections(Model):
-    active = BooleanField(default=True)
-    reflection_phrase = TextField(null=True)
-    reflection = TextField(null=True)
-
-    class Meta:
-        verbose_name = "Reflection"
-        verbose_name_plural = "Reflections"
-
-
-class NLTKPairs(Model):
-    active = BooleanField(default=True)
-    question = TextField(null=True)
-    answer = TextField(null=True)
-
-    class Meta:
-        verbose_name = "Question pattern"
-        verbose_name_plural = "Question Patterns"
+    def response_dict(self):
+        return {
+            "name": self.name,
+            "message": self.message,
+            "sent": self.sent.isoformat(),
+            "type": self.message_type,
+        }

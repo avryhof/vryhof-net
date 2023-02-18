@@ -127,22 +127,32 @@ class Geoname(BaseClass):
 
     @property
     def city(self):
+        if is_empty(self.postalcode_data):
+            self.get_location()
         return self.postalcode_data.city
 
     @property
     def state(self):
+        if is_empty(self.postalcode_data):
+            self.get_location()
         return self.postalcode_data.state
 
     @property
     def state_name(self):
+        if is_empty(self.postalcode_data):
+            self.get_location()
         return self.postalcode_data.admin_name1
 
     @property
     def zip_code(self):
+        if is_empty(self.postalcode_data):
+            self.get_location()
         return self.postalcode_data.postal_code
 
     @property
     def time_zone(self):
+        if is_empty(self.geoname_data):
+            self.get_location()
         return self.geoname_data.timezone
 
     @property

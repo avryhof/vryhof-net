@@ -4,10 +4,8 @@ from importlib import import_module
 
 import openai
 from django.conf import settings
-from nltk.chat.util import Chat
 
-from livechat.devices.location.device import GeoIP, Geoname
-from livechat.helpers import get_pairs, get_reflections
+from livechat.devices.location.device import GeoIP
 from livechat.personal_assistant.base_class import BaseClass
 from utilities.utility_functions import is_empty
 
@@ -118,30 +116,19 @@ class Bot(BaseClass):
                     return responded, str(skill)
 
         if is_empty(responded):
-            if getattr(settings, "BASE_RESPONDER") == "chatgpt":
-                completions = openai.Completion.create(
-                    engine="text-davinci-002",
-                    prompt=chat_query,
-                    max_tokens=1024,
-                    n=1,
-                    stop=None,
-                    temperature=0.5,
-                )
+            completions = openai.Completion.create(
+                engine="text-davinci-002",
+                prompt=chat_query,
+                max_tokens=1024,
+                n=1,
+                stop=None,
+                temperature=0.5,
+            )
 
-                message = completions.choices[0].text
-                source = "ChatGPT"
+            message = completions.choices[0].text
+            source = "ChatGPT"
 
-                responded = True
-
-            elif getattr(settings, "BASE_RESPONDER") == "nltk":
-                pairs = get_pairs()
-                reflections = get_reflections()
-
-                chat = Chat(pairs, reflections)
-                message = chat.respond(chat_query)
-                source = "NLTK Reflections"
-
-                responded = True
+            responded = True
 
             if responded:
                 return message, source
