@@ -1,22 +1,22 @@
 import bleach
 import openai
 from django.conf import settings
-from duckduckgo_search import ddg, ddg_answers, ddg_images
+from duckduckgo_search import ddg
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from api.models import GeoPostalCode
-from api.rest_auth import CsrfExemptSessionAuthentication
 from gis.models import PostalCode
 from gis.utility_functions import points_within_radius
+from livechat.helpers import get_chat_session
+from livechat.personal_assistant.classes import Bot
+from utilities.helpers import get_client_ip
 
 openai.api_key = getattr(settings, "OPENAI_API_KEY")
 
 
 @api_view(["GET", "POST"])
-@authentication_classes((CsrfExemptSessionAuthentication))
-@permission_classes(())
 def get_zipcodes_in_radius(request, **kwargs):
     """
     Finds ZipCodes within a radius of the specified Zip Code
@@ -56,8 +56,6 @@ def get_zipcodes_in_radius(request, **kwargs):
 
 
 @api_view(["GET", "POST"])
-@authentication_classes(())
-@permission_classes(())
 def zipcode_to_geoname(request, **kwargs):
     """
     Finds ZipCodes within a radius of the specified Zip Code
@@ -82,8 +80,6 @@ def zipcode_to_geoname(request, **kwargs):
 
 
 @api_view(["POST"])
-@authentication_classes(())
-@permission_classes(())
 def search(request, **kwargs):
     ddg_region = "us-en"
 
@@ -91,21 +87,16 @@ def search(request, **kwargs):
 
     resp = dict(chat=None, results=[])
 
+    chat_session = get_chat_session(request)
+
     try:
-        completions = openai.Completion.create(
-            engine="text-davinci-002",
-            prompt=keywords,
-            max_tokens=1024,
-            n=1,
-            stop=None,
-            temperature=0.5,
-        )
+        bot = Bot(chat_session=chat_session, client_ip=get_client_ip(request), debug=False)
 
     except Exception as e:
         pass
 
     else:
-        resp["chat"] = completions.choices[0].text.strip()
+        resp["chat"], response_source = bot.respond(keywords)
 
     resp["results"] = ddg(keywords, region=ddg_region, safesearch="Off", time="y")
     # resp["images"] = ddg_images(

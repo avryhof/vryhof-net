@@ -30,19 +30,12 @@ document.onload = function () {
     if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(function (location) {
             $.ajax({
-                url: "/livechat/send-message/",
+                url: "/livechat/set-location/",
                 method: 'POST',
                 headers: {},
                 data: location.coords,
                 success: function (retn) {
-                    $("#chat-input").val("");
-
-                    if (!chat_started) {
-                        setInterval(get_messages, 3000);
-                        chat_started = true;
-                    }
-
-                    get_messages()
+                    console.log("location set");
                 },
                 error: function (msg) {
                     console.log("ERROR:");
