@@ -377,7 +377,6 @@ CKEDITOR_CONFIGS = {
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.BasicAuthentication",
         "api.rest_auth.CsrfExemptSessionAuthentication",
     ],
     "DEFAULT_PARSER_CLASSES": (

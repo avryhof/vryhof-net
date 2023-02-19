@@ -63,6 +63,10 @@ $(document).ready(function () {
     $("#chat-dialog").hide();
     message_div = $("#chat-messages");
 
+    message_div.stop().animate({
+        scrollTop: message_div[0].scrollHeight * 2
+    }, 800);
+
     document.addEventListener("click", function (e) {
         if (e.target.className == "chat-answer") {
             e.preventDefault();

@@ -1,0 +1,127 @@
+@import "../../../static/css/vars";
+
+@media (prefers-color-scheme: light) {
+  body {
+    color: $foregroundColor;
+    background: $backgroundColor;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: $backgroundColor;
+    background: $foregroundColor;
+  }
+}
+
+html {
+  font-family: $normalfont;
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.sr-only {
+  display: none;
+}
+
+#chat-container {
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  #chat-notifier {
+    color: #FFFFFF;
+    background: #000000;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    padding-left: 1.0rem;
+    padding-right: 1.0rem;
+    font-size: 2.0em;
+    box-sizing: border-box;
+    height: 50px;
+  }
+
+  #chat-message-container {
+    height: calc(100% - 100px);
+
+    #chat-messages {
+      display: flex;
+      flex-direction: column;
+      justify-items: auto;
+
+      max-height: calc(100% - 2.0rem) !important;
+      overflow-y: scroll !important;
+
+      .chat-message {
+        display: flex;
+        flex-direction: column;
+
+        color: $foregroundColor;
+
+        border-radius: 0.5rem;
+        margin-top: 1.0rem;
+        margin-bottom: 1.0rem;
+        width: auto;
+        padding: 0.5em;
+
+        .message-date {
+          border-top: 1px dotted $dark-color;
+          color: $dark-color;
+          font-size: 0.75rem;
+          font-style: italic;
+          align-self: flex-end;
+        }
+      }
+
+      .chat-message.sent {
+        background-color: #b3d4fc;
+        margin: 1.0rem 1.0rem 1.0rem auto;
+      }
+
+      .chat-message.received {
+        background-color: #fbd850;
+        margin: 1.0rem auto 1.0rem 1.0rem;
+      }
+    }
+  }
+
+  #chat-input-area {
+    display: flex;
+    flex-direction: row;
+
+    border-top: 1px solid #000044;
+    box-sizing: border-box;
+    height: 50px;
+
+    #chat-input, #chat-input:focus {
+      padding-left: 1.0rem;
+      padding-right: 1.0rem;
+      width: calc(100% - 100px);
+      border: none !important;
+    }
+
+    .btn {
+      width: 100px;
+      display: flex;
+      flex-direction: column;
+
+      justify-items: center;
+      align-items: center;
+      justify-content: center;
+
+      color: #ffffff;
+      background: #000066;
+
+      text-decoration: none !important;
+    }
+
+  }
+}
