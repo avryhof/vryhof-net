@@ -2,6 +2,7 @@ import re
 
 import contractions
 
+from livechat.constants import VALID_CHARS
 from livechat.personal_assistant.base_class import BaseClass
 from utilities.utility_functions import is_empty
 
@@ -65,21 +66,34 @@ class AssistantSkill(BaseClass):
         should_respond = False
         responded = False
         match_phrase = contractions.fix(phrase).strip().lower()
+        match_phrase_string = "".join([x for x in match_phrase if x in VALID_CHARS])
 
-        self.log(f"{self.name}, {match_phrase}, {self.utterance_expressions}")
+        self.log(
+            f"Name: {self.name}, Query:  {match_phrase}, "
+            f"Query(str): {match_phrase_string}, "
+            f"Expressions: {self.utterance_expressions}")
 
         for utterance_expression in self.utterance_expressions:
-            if match_phrase == utterance_expression or re.search(
-                    utterance_expression, match_phrase
+            if "<phrase>" in utterance_expression and (
+                    match_phrase == utterance_expression or re.search(utterance_expression, match_phrase)
             ):
-                m = re.search(utterance_expression, match_phrase)
+                self.log(f"Regex match: {utterance_expression}")
+                m = re.match(utterance_expression, match_phrase)
                 if m is not None:
                     for param in self.params:
                         try:
                             self.param_values.update({param: m.group(param)})
                         except IndexError:
                             pass
+                        else:
+                            self.log(self.param_values)
 
+                responded = self.handle()
+                if not is_empty(responded):
+                    break
+
+            elif match_phrase_string.lower().strip() == utterance_expression.lower().strip():
+                self.log("String match")
                 responded = self.handle()
                 if not is_empty(responded):
                     break
@@ -87,9 +101,7 @@ class AssistantSkill(BaseClass):
         return responded
 
     def handle(self):
-        raise NotImplementedError(
-            "subclasses of AssistantSkill must provide a handle() method"
-        )
+        raise NotImplementedError("subclasses of AssistantSkill must provide a handle() method")
 
     def speak(self, phrase=None):
         if phrase is None:

@@ -186,12 +186,46 @@ class TimeSkill(AssistantSkill):
         minute = self.now.minute
         ap = self.now.strftime("%p")
 
-        ap = f"{ap[0]} {ap[1]}"
+        phrase = "{}:{} {}".format(hour, str(minute).zfill(2), ap)
+        self.log("Saying: {}".format(phrase))
 
-        if minute < 10:
-            minute = f"oh {minute}"
+        return phrase
 
-        phrase = "{}:{} {}".format(hour, minute, self.now.strftime("%p"))
+
+class TimeZoneSkill(AssistantSkill):
+    name = "TimeZone Skill"
+    utterances = [
+        "what is the time zone",
+        "what is the timezone",
+        "what timezone am I in",
+        "what time zone am I in",
+        "what is the local timezone"
+        "what is the local time zone"
+    ]
+
+    location = None
+    now = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if not is_empty(self.chat_session):
+            self.location = self.chat_session.geo
+
+        else:
+            self.log("Updating Location")
+            self.location = GeoIP()
+            setattr(settings, "LOCATION", self.location)
+
+        if not is_empty(self.location):
+            self.location.get_location()
+            self.now = self.location.get_local_time()
+
+        else:
+            self.now = AwareDateTime(datetime.datetime.now(), settings.TIME_ZONE)
+
+    def handle(self):
+        phrase = self.location.time_zone
         self.log("Saying: {}".format(phrase))
 
         return phrase

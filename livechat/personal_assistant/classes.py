@@ -91,11 +91,13 @@ class Bot(BaseClass):
 
                             self.log(f"Found Skill: {skill_name}")
                             if (
-                                    not hasattr(skill_class, "disabled")
-                                    or not getattr(skill_class, "disabled")
-                                    and hasattr(skill_class, "parse")
+                                not hasattr(skill_class, "disabled")
+                                or not getattr(skill_class, "disabled")
+                                and hasattr(skill_class, "parse")
                             ):
-                                settings.SKILLS_REGISTRY.append(skill_class(chat_session=self.chat_session))
+                                settings.SKILLS_REGISTRY.append(
+                                    skill_class(chat_session=self.chat_session, debug=self.debug)
+                                )
                             else:
                                 self.log(f"{skill_name} skill is disabled.")
 

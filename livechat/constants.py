@@ -1,3 +1,5 @@
+import string
+
 from django.core.validators import RegexValidator
 
 alphanumeric = RegexValidator(
@@ -16,3 +18,6 @@ NO_CACHE_HEADERS = {
 }
 
 MOBILE_APP_AGENT = "ErWsatQyfJ93y4TnzUbaPtRwVa62tXbuTGNspRx8MweHsPaRr7"
+
+VALID_CHARS = string.ascii_letters + string.digits + " "
+
