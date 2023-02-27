@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% load leaflet %}
+{% load  static leaflet %}
 {% block extra_css %}
-    {% leaflet_css %}
-    {% leaflet_javascript %}
-    {% leaflet_tiles %}
+    <link rel="stylesheet" href="{% static "/leaflet/leaflet.css" %}"/>
+    <script src="{% static "/leaflet/leaflet.js" %}"></script>
+{#    {% leaflet_tiles %}#}
 {% endblock %}
 {% block content %}
     <div class="container">
