@@ -87,7 +87,7 @@ tinycss2==1.2.1
 tzdata==2022.7
 ua-parser==0.16.1
 Unidecode
-urllib3==1.26.13
+urllib3==2.0.6
 user-agents==2.2.0
 uuid0==0.2.7
 webencodings==0.5.1
