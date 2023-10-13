@@ -7,3 +7,68 @@
   flex: $colwidth 0 0 !important;
   max-width: $colwidth !important;
 }
+
+@mixin shadow {
+  -moz-box-shadow: 0 0 6px rgba(0, 0, 0, 0.16);
+  -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.16);
+}
+
+@mixin fill-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 950;
+}
+
+@mixin fill-parent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+}
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Bases for modals */
+@mixin modal-container {
+  @include fill-screen;
+  display: block !important;
+  margin: 0;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+@mixin modal-content {
+  @include fill-parent;
+  @include flex-center;
+}
+
+@mixin modal-dialog {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 0.3rem;
+
+  > div {
+    border-bottom: 1px solid var(--body-fg);
+  }
+  div:last-of-type {
+    border-bottom: none !important;
+  }
+}
+
+@mixin modal-dialog-part {
+  flex: 1 1 auto;
+  padding: 1rem;
+}

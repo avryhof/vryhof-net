@@ -1,0 +1,116 @@
+@import "theme-colors";
+@import "vars";
+@import "mixins";
+
+.user-menu {
+  position: absolute;
+
+  .user-info {
+    display: flex;
+
+    .user-username {
+      color: var(--body-fg);
+      background: var(--body-loud-color);
+    }
+
+    .user-icon {
+      text-transform: uppercase;
+      font-weight: bold;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      overflow: hidden;
+      color: var(--body-fg);
+      background: var(--body-loud-color);
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
+
+@media (max-width: $sm) {
+  .user-menu {
+    @include flex-center;
+    background: #2b2b2b;
+
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    .label {
+      display: none;
+    }
+
+    .auth-button {
+      position: absolute;
+      top: 1.0em;
+      right: 1.0em;
+    }
+
+
+    .user-info {
+      @include flex-center;
+      flex-direction: column;
+
+      .user-username {
+        border-radius: $controlRadius;
+        padding: 1.0em 0.5em 0.5em 0.5em;
+        border: 1.5px solid var(--body-fg);
+        order: 2;
+
+        position: relative;
+        right: 0;
+        top: -1.0em;
+      }
+
+      .user-icon {
+        border-top: 1.5px solid var(--body-fg);
+        border-right: 1.5px solid var(--body-fg);
+        border-left: 1.5px solid var(--body-fg);
+        order: 1;
+        position: relative;
+        z-index: 999;
+      }
+    }
+  }
+
+  .content-container {
+    margin-top: calc(75px + 1.0em) !important;
+  }
+
+}
+
+@media (min-width: $sm) {
+  .user-menu {
+    top: calc(55px + 1.0em);
+    right: 1.0em;
+
+    .user-info {
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      .user-username {
+        padding: 0.5em 1.0em 0.5em 0.5em;
+        border-top: 1.5px solid var(--body-fg);
+        border-bottom: 1.5px solid var(--body-fg);
+        border-left: 1.5px solid var(--body-fg);
+        border-top-left-radius: $controlRadius;
+        border-bottom-left-radius: $controlRadius;
+      }
+
+      .user-icon {
+        @include flex-center;
+        position: relative;
+        left: -0.5em;
+
+        border-top: 1.5px solid var(--body-fg);
+        border-right: 1.5px solid var(--body-fg);
+        border-bottom: 1.5px solid var(--body-fg);
+      }
+    }
+  }
+}

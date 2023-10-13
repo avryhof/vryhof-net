@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from geocaching.utility_functions import camel_to_words, process_pocket_query
-from .models import GPXFile, PocketQuery, Point
+from poi.utility_functions import camel_to_words, process_pocket_query
+from .models import GPXFile, PocketQuery, Point, PlaceImport, PointOfInterest, PointCategory
 
 
 @admin.register(GPXFile)
@@ -38,4 +38,25 @@ class PocketQueryAdmin(admin.ModelAdmin):
 class PointAdmin(admin.ModelAdmin):
     list_display = ("name", "urlname", "point_type", "latitude", "longitude", "country", "state")
     list_filter = ("time", "point_type", "gpx_type", "container", "difficulty", "terrain")
-    search_fields = ("name", "urlname", "desc", "long_description",)
+    search_fields = (
+        "name",
+        "urlname",
+        "desc",
+        "long_description",
+    )
+
+
+@admin.register(PointCategory)
+class PointCategoryAdmin(admin.ModelAdmin):
+    list_display = ["name", ]
+
+
+@admin.register(PlaceImport)
+class PlaceImportAdmin(admin.ModelAdmin):
+    list_display = ["category", "imported"]
+    readonly_fields = ["datestamp"]
+
+
+@admin.register(PointOfInterest)
+class PointofInterestAdmin(admin.ModelAdmin):
+    list_display = ["name", "category"]

@@ -1,0 +1,82 @@
+@import "vars";
+@import "effects";
+
+.sidebar {
+  padding: 1.0em;
+
+  .sidebar-container {
+    background: var(--body-loud-color);
+    border-radius: 8px;
+
+    .sidebar-item {
+      padding: 0.75em;
+
+      a:link, a:visited {
+        color: var(--body-fg);
+        text-decoration: none;
+      }
+
+    }
+  }
+}
+
+
+@media (max-width: $sm) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 900;
+
+    .sidebar-container {
+      display: flex;
+      flex-direction: row;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+
+      .sidebar-item {
+        .label {
+          display: none;
+        }
+      }
+    }
+
+  }
+}
+
+@media (min-width: $sm) {
+  .sidebar {
+    .sidebar-container {
+      width: auto;
+
+      display: flex;
+      flex-direction: column;
+      justify-items: stretch;
+
+      .sidebar-item {
+        display: flex;
+
+        a {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          .label {
+            display: none;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+  .sidebar:hover {
+    .icon {
+      margin-right: 1.0em;
+    }
+
+    .label {
+      animation: fadeSlideInFromLeft 0.5s;
+      display: block !important;
+    }
+  }
+}

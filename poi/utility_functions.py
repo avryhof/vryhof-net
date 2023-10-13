@@ -10,8 +10,8 @@ from django.conf import settings
 from filer.management.commands.import_files import FileImporter
 from filer.models import Folder, File
 
-from geocaching.constants import GPX_WAYPOINTS, GPX_GEOCACHES
-from geocaching.models import GPXFile, Point
+from poi.constants import GPX_WAYPOINTS, GPX_GEOCACHES
+from poi.models import GPXFile, Point
 from gis.utility_functions import points_within_radius
 
 

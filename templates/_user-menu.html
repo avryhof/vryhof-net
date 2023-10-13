@@ -1,0 +1,23 @@
+{% load user_tags %}
+<div class="user-menu">
+    {% if request.user.is_authenticated and not hide_logout %}
+        <div class="user-info">
+            <div class="user-username">
+                {% user_name request %}
+            </div>
+            {% user_icon request %}
+        </div>
+        <form action="{% url "logout" %}?next=/" method='POST' class="auth-button">
+            {% csrf_token %}
+            <button id="signout-button" class="btn btn-outline signout-btn" title="{{ _('Sign out') }}"
+                    aria-label="{{ _('Sign Out') }}">
+                <i class="fa-solid fa-right-to-bracket"></i> <span class="label">Sign Out</span>
+            </button>
+        </form>
+    {% else %}
+        <a class="btn btn-outline login-button auth-button" href="{% url "account_login" %}">
+            <i class="fa-solid fa-key"></i> <span class="label">Sign In</span>
+        </a>
+    {% endif %}
+
+</div>

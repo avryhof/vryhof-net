@@ -1,22 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'page-base.html' %}
 {% block extra_meta %}
     <meta http-equiv="refresh" content="900">
 {% endblock %}
-{% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-12 search-col">
-                {% include "search-form.html" %}
-            </div>
+{% block page_content %}
+    {% include "search-form.html" %}
+    {% for post in news %}
+        <div class="post-container">
+            {% include 'post.html' %}
         </div>
-        {% for post in news %}
-            <div class="row">
-                <div class="col-12">
-
-                    {% include 'post.html' %}
-
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+    {% endfor %}
 {% endblock %}

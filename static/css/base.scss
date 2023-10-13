@@ -1,0 +1,64 @@
+@import "theme-colors";
+@import "vars";
+
+@import "forms";
+@import "messages";
+
+@import "navbar";
+@import "nav-profile";
+@import "account";;
+
+@import "sidebar";
+@import "user-menu";
+@import "modal";
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: $fontSansSerif;
+  font-size: 16px;
+}
+
+body {
+  color: var(--body-fg);
+  background: var(--body-bg);
+  padding: 0;
+  margin: 0;
+}
+
+.page-container {
+  min-height: 100vh;
+
+  .content-container {
+    padding: 1.0em;
+  }
+}
+
+.sr-only {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  font-size: 0;
+}
+
+@media (max-width: $sm) {
+  .content-container {
+    margin-bottom: 150px;
+  }
+}
+
+@media (min-width: $sm) {
+  .page-container {
+    display: flex;
+    flex-direction: row;
+
+    margin-top: $navbarHeight;
+    min-height: calc(100vh - 55px);
+
+    .content-container {
+      width: 100%;
+    }
+  }
+}

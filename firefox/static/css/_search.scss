@@ -1,4 +1,37 @@
+@import "../../../static/css/_vars.scss";
+@import "../../../static/css/_effects.scss";
 @import "vars";
+
+.search-container {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  #search-form {
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    width: 100% !important;
+
+    .form-group {
+      flex-direction: row !important;
+    }
+
+    .form-group:first-of-type {
+      flex: 3 0 0;
+        label {
+          flex: 1 0 0;
+          text-align: center;
+        }
+        .form-control {
+          flex: 9 0 0;
+        }
+    }
+  }
+}
+
 
 .search-col form {
   display: flex;
@@ -67,5 +100,13 @@
 
   .title {
     font-weight: bold;
+  }
+}
+
+@media (min-width: $sm) {
+  .search-container {
+    #search-form {
+      max-width: 50%;
+    }
   }
 }

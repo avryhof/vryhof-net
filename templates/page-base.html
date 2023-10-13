@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block page %}
+
+    <div class="page-container">
+        <div class="nav-container">
+            {% include "_sidebar.html" %}
+        </div>
+        <div class="content-container">
+            {% block page_content %}
+            {% endblock %}
+        </div>
+    </div>
+
+{% endblock %}

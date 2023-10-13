@@ -1,0 +1,10 @@
+{% load frontend_tags %}
+<div class="sidebar">
+    <div class="sidebar-container">
+        {% sidebar_items False %}
+        <hr>
+        {% if request.user.is_authenticated %}
+            {% sidebar_items True %}
+        {% endif %}
+    </div>
+</div>

@@ -6,15 +6,16 @@ import zipfile
 from urllib.request import urlretrieve
 
 import bleach
+import requests
 from django.conf import settings
 from django.db.models.expressions import RawSQL
 from django.utils.timezone import make_aware
 
-from gis.models import PostalCode, GeoName
+from gis.models import PostalCode, GeoName, AbstractStreetAddress
 from gis.us_census_class import USCensus
 from gis.usps_class import USPS
 from utilities.debugging import log_message
-from utilities.utility_functions import string_or_none, int_or_none
+from utilities.utility_functions import string_or_none, int_or_none, make_list
 
 
 def geocode(address_dict, **kwargs):
@@ -144,6 +145,7 @@ def get_postal_code_by_coords(latitude, longitude):
         radius = radius + 1
 
     return retn
+
 
 def get_geoname_by_coords(latitude, longitude):
     """
@@ -275,3 +277,204 @@ def zip_codes_in_radius(**kwargs):
         )
 
     return zip_codes
+
+
+def autocomplete_openroute(query):
+    url = "https://api.openrouteservice.org/geocode/autocomplete"
+    params = {
+        "api_key": os.environ.get("OPENROUTE_API_KEY"),
+        "text": query,
+        "boundary.country": "US",
+    }
+    resp = requests.get(url, params=params)
+
+    return resp.json()
+
+
+def search_openroute(query):
+    url = "https://api.openrouteservice.org/geocode/search"
+    params = {
+        "api_key": os.environ.get("OPENROUTE_API_KEY"),
+        "text": query,
+        "boundary.country": "US",
+    }
+    resp = requests.get(url, params=params)
+
+    return resp.json()
+
+
+def openroute_reverse_geocode(latitude, longitude):
+    url = "https://api.openrouteservice.org/geocode/reverse"
+    params = {
+        "api_key": os.environ.get("OPENROUTE_API_KEY"),
+        "point.lat": latitude,
+        "point.lon": longitude,
+    }
+    resp = requests.get(url, params=params)
+    data = resp.json()
+    places = make_list(data.get("features"))
+
+    if len(places) > 0:
+        place = places[0]
+
+        properties = place.get("properties")
+        latitude, longitude = place.get("geometry").get("coordinates")
+        label = properties.get("label")
+
+        return {
+            "value": label,
+            "label": label,
+            "latitude": latitude,
+            "longitude": longitude,
+        }
+
+    return {
+        "value": None,
+        "label": None,
+        "latitude": latitude,
+        "longitude": longitude,
+    }
+
+
+def openroute_to_address(response_dict):
+    places = make_list(response_dict.get("features"))
+    if len(places) == 0:
+        return False
+    else:
+        try:
+            place = places[0]
+        except IndexError:
+            return False
+        else:
+            properties = place.get("properties")
+            longitude, latitude = place.get("geometry").get("coordinates")
+            label = properties.get("label")
+
+            zip_code = properties.get("postalcode")
+            state = properties.get("region")
+            try:
+                postal_code = PostalCode.objects.get(postal_code=zip_code)
+            except PostalCode.DoesNotExist:
+                postal_code = None
+                try:
+                    pc = PostalCode.objects.filter(admin_name1__iexact=properties.get("region")).first()
+                except PostalCode.DoesNotExist:
+                    state = "".join([x[0] for x in properties.get("region").split(" ")]).strip()
+                else:
+                    if pc is not None:
+                        state = pc.state
+            else:
+                state = postal_code.state
+
+            return_dict = dict(
+                latitude=latitude,
+                longitude=longitude,
+                address1=label,
+                city=properties.get("localadmin"),
+                state=state,
+                zip_code=zip_code,
+                postal_code=postal_code,
+            )
+
+            return return_dict
+
+
+def openroute_geocode(address_dict):
+    url = "https://api.openrouteservice.org/geocode/search/structured"
+
+    params = None
+
+    if isinstance(address_dict, dict):
+        params = {
+            "api_key": os.environ.get("OPENROUTE_API_KEY"),
+            "address": address_dict.get("address1", address_dict.get("address")),
+            "locality": address_dict.get("city"),
+            "region": address_dict.get("state"),
+            "postalcode": address_dict.get("zip_code"),
+            "country": "US",
+            "boundary.country": "US",
+        }
+
+    elif isinstance(address_dict, AbstractStreetAddress):
+        params = {
+            "api_key": os.environ.get("OPENROUTE_API_KEY"),
+            "address": address_dict.address1,
+            "locality": address_dict.city,
+            "region": address_dict.state,
+            "postalcode": address_dict.zip_code,
+            "country": "US",
+            "boundary.country": "US",
+        }
+
+    if isinstance(params, dict):
+        resp = requests.get(url, params=params)
+
+        return resp.json()
+
+    else:
+        return None
+
+
+def autocomplete_zipcodes(query):
+    postal_codes = PostalCode.objects.filter(postal_code__istartswith=query)
+    results = [
+        {
+            "value": "{} - {}, {}".format(postal_code.postal_code, postal_code.place_name, postal_code.admin_code1),
+            "label": "{} - {}, {}".format(postal_code.postal_code, postal_code.place_name, postal_code.admin_code1),
+            "latitude": postal_code.latitude,
+            "longitude": postal_code.longitude,
+        }
+        for postal_code in postal_codes
+    ]
+
+    return results
+
+
+def autocomplete_address(query, **kwargs):
+    service = kwargs.get("service", autocomplete_openroute)
+
+    results = []
+
+    if len(query) <= 5 and " " not in query:
+        results = autocomplete_zipcodes(query)
+    else:
+        data = service(query)
+        places = data.get("features")
+        for place in places:
+            properties = place.get("properties")
+            longitude, latitude = place.get("geometry").get("coordinates")
+            label = properties.get("label")
+            results.append(
+                {
+                    "value": label,
+                    "label": label,
+                    "latitude": latitude,
+                    "longitude": longitude,
+                }
+            )
+
+    return results
+
+
+def address_search(query, **kwargs):
+    service = kwargs.get("service", autocomplete_openroute)
+
+    results = []
+
+    data = service(query)
+    places = data.get("features")
+    for place in places:
+        log_message(place, pretty=True)
+        properties = place.get("properties")
+        longitude, latitude = place.get("geometry").get("coordinates")
+        label = properties.get("label")
+        results.append(
+            {
+                "value": label,
+                "label": label,
+                "latitude": latitude,
+                "longitude": longitude,
+            }
+        )
+
+    return results

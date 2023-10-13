@@ -1,26 +1,50 @@
+@import "theme-colors";
 @import "vars";
 
-.form-control, .btn {
+input[type="email"],
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+input[type="color"],
+input[type="submit"],
+textarea, button, .form-control, .btn {
   font-size: 1.0em;
   padding: 6px 12px;
   margin: $padding / 2;
-  border-radius: 8px;
+  border-radius: $controlRadius;
+  border: 1px solid var(--body-quiet-color);
   text-decoration: none;
   font-weight: bold;
 }
 
-.btn {
-  border: 1px solid transparent;
+input[type="submit"], .btn, button {
+  cursor: pointer;
+  display: inline-block;
+  border: 1px solid var(--body-quiet-color);
+
+  text-decoration: none;
+  font: bold 1.0em $fontSansSerif;
 }
 
-.form-control {
-  border: 1px solid $silver;
+.btn {
+  border: 1px solid transparent !important;
 }
 
 .btn-primary {
   color: $foregroundColor;
   background-color: $gBlue;
 }
+
+.btn-outline {
+  color: var(--body-fg) !important;
+  background: var(--body-bg) !important;
+  border: 1px solid var(--body-fg) !important;
+}
+
 
 .form-inline {
   display: flex;
@@ -30,6 +54,33 @@
 
 .form-row {
   display: flex;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    margin: 10px 10px auto 10px;
+  }
+
+  label ~ .input-group input {
+    margin-top: auto !important;
+  }
+
+  .input-group {
+    width: 100%;
+
+    input {
+      width: 100%;
+    }
+  }
+}
+
+.help-block {
+  font-size: 0.75em;
+  color: $dustyBlue;
+  font-style: italic;
 }
 
 @media (max-width: $xs) {

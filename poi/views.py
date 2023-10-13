@@ -4,10 +4,10 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 
-from geocaching.constants import GPX_GEOCACHES, GPX_WAYPOINTS
-from geocaching.forms import CacheSearchForm
-from geocaching.models import Point
-from geocaching.utility_functions import get_points_in_radius
+from poi.constants import GPX_GEOCACHES, GPX_WAYPOINTS
+from poi.forms import CacheSearchForm
+from poi.models import Point
+from poi.utility_functions import get_points_in_radius
 
 
 class ShowCachesView(TemplateView):

@@ -1,0 +1,37 @@
+@import "vars";
+@import "mixins";
+@import "effects";
+
+.message {
+  @include flex-center;
+  width: auto;
+  animation: fadeIn 0.5s;
+  margin: 0.5em;
+  padding: 0.5em;
+  border-radius: $controlRadius;
+}
+
+.message-debug {
+  color: var(--body-fg);
+  background: var(--body-quiet-color);
+}
+
+.message-error {
+  color: #000;
+  background: $dustyRed;
+}
+
+.message-info {
+  color: #fff;
+  background: $dustyBlue;
+}
+
+.message-success {
+  color: #000;
+  background: $dustyGreen;
+}
+
+.message-warning {
+  color: #000;
+  background: #f39c12;
+}

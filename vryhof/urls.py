@@ -31,8 +31,9 @@ urlpatterns = [
     path("blog/", include("blog.urls")),
     path("chat/", include("livechat.urls")),
     path("", include("firefox.urls")),
+    path("", include("content.urls")),
     path("weather/", include("weather.urls")),
-    path("geocaching/", include("geocaching.urls")),
+    path("poi/", include("poi.urls")),
     path("kids/", include("kids.urls")),
     path("ckeditor/", include("ckeditor_uploader.urls")),
 ]
