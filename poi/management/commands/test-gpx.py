@@ -5,8 +5,8 @@ import math
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from geocaching.models import GPXFile, PocketQuery
-from geocaching.utility_functions import process_gpx_file
+from poi.models import GPXFile, PocketQuery
+from poi.utility_functions import process_gpx_file
 
 logger = logging.getLogger(__name__)
 
