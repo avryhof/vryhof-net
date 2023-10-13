@@ -21,7 +21,7 @@ def page_content(page):
 
 @register.simple_tag
 def sidebar_icon(url_name, icon_class):
-    page_model = load_model("frontend.Page")
+    page_model = load_model("content.Page")
 
     try:
         page = page_model.objects.get(url_name=url_name)
