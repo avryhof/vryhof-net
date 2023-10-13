@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from urllib.parse import urlsplit
+
+from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
@@ -27,6 +29,9 @@ class HomeView(TemplateView):
         return context
 
     def get(self, request, *args, **kwargs):
+        if "firefox.vryhof.net" in urlsplit(request.build_absolute_uri()).hostname:
+            return redirect("firefox:firefox_home")
+
         self.request = request
         context = self.get_context_data()
 
