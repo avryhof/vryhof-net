@@ -1,11 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'page-base.html' %}
 {% load  static leaflet %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static "/leaflet/leaflet.css" %}"/>
     <script src="{% static "/leaflet/leaflet.js" %}"></script>
 {#    {% leaflet_tiles %}#}
 {% endblock %}
-{% block content %}
+{% block page_content %}
     <div class="container">
         {% for weather_station in weather_stations %}
             <div class="row">
