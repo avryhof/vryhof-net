@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 
 from content.helpers import get_page_context
+from utilities.debugging import log_message
 from utilities.model_helper import load_model
 
 
@@ -31,11 +32,11 @@ class HomeView(TemplateView):
         return context
 
     def get(self, request, *args, **kwargs):
-        if "firefox.vryhof.net" in urlsplit(request.build_absolute_uri()).hostname:
-            return redirect("firefox:firefox_home")
-
         self.request = request
         context = self.get_context_data()
+
+        log_message(request.build_absolute_uri())
+        log_message(urlsplit(request.build_absolute_uri()))
 
         return render(request, self.template_name, context)
 
