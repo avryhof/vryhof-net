@@ -1,0 +1,8 @@
+@import "../../../static/css/_vars.scss";
+@import "../../../static/css/_effects.scss";
+
+@media (min-width: $sm) {
+    .page-container {
+        margin-right: 200px;
+    }
+}

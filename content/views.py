@@ -51,7 +51,7 @@ class HomeView(TemplateView):
 
 
 class PageView(TemplateView):
-    extra_css = []
+    extra_css = ["css/home.css"]
     extra_javascript = []
 
     template_name = "home.html"
