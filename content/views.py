@@ -35,8 +35,8 @@ class HomeView(TemplateView):
         self.request = request
         context = self.get_context_data()
 
-        log_message(request.build_absolute_uri())
-        log_message(urlsplit(request.build_absolute_uri()))
+        context["absolute_url"] = request.build_absolute_uri()
+        context["parsed_url"] = urlsplit(request.build_absolute_uri())
 
         return render(request, self.template_name, context)
 
