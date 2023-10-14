@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 
 from content.helpers import get_page_context
+from utilities.custom_site_class import CustomSite
 from utilities.debugging import log_message
 from utilities.model_helper import load_model
 
@@ -34,6 +35,10 @@ class HomeView(TemplateView):
     def get(self, request, *args, **kwargs):
         self.request = request
         context = self.get_context_data()
+
+        the_site = CustomSite(request)
+        if the_site.domain == "firefox.vryhof.net":
+            return redirect("firefox_home")
 
         context["absolute_url"] = request.build_absolute_uri()
         context["parsed_url"] = urlsplit(request.build_absolute_uri())
