@@ -7,7 +7,7 @@
             </div>
             {% user_icon request %}
         </div>
-        <form action="{% url "logout" %}?next=/" method='POST' class="auth-button">
+        <form action="{% url "account_logout" %}?next=/" method='POST' class="auth-button">
             {% csrf_token %}
             <button id="signout-button" class="btn btn-outline signout-btn" title="{{ _('Sign out') }}"
                     aria-label="{{ _('Sign Out') }}">

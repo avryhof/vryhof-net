@@ -92,6 +92,7 @@ TEMPLATES = [
         "DIRS": [
             os.path.join(BASE_DIR, "templates"),
             os.path.join(BASE_DIR, "firefox", "templates"),
+            os.path.join(BASE_DIR, "blog", "templates"),
             os.path.join(BASE_DIR, "livechat", "templates"),
             os.path.join(BASE_DIR, "weather", "templates"),
             os.path.join(BASE_DIR, "poi", "templates"),
@@ -242,6 +243,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
     os.path.join(BASE_DIR, "firefox", "static"),
     os.path.join(BASE_DIR, "livechat", "static"),
+    os.path.join(BASE_DIR, "blog", "static"),
     os.path.join(BASE_DIR, "poi", "static"),
     os.path.join(BASE_DIR, "weather", "static"),
     os.path.join(BASE_DIR, "kids", "static"),

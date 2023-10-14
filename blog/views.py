@@ -14,7 +14,7 @@ class BlogHomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(BlogHomeView, self).get_context_data(**kwargs)
         context["page_title"] = self.page_title
-        context["extra_css"] = []
+        context["extra_css"] = ["css/blog.css"]
         context["extra_javascript"] = []
 
         return context
@@ -36,7 +36,7 @@ class BlogCategoryView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(BlogCategoryView, self).get_context_data(**kwargs)
         context["page_title"] = self.page_title
-        context["extra_css"] = []
+        context["extra_css"] = ["css/blog.css"]
         context["extra_javascript"] = []
 
         return context
@@ -72,7 +72,7 @@ class BlogPostView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(BlogPostView, self).get_context_data(**kwargs)
         context["page_title"] = self.page_title
-        context["extra_css"] = []
+        context["extra_css"] = ["css/blog.css"]
         context["extra_javascript"] = []
 
         return context

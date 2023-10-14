@@ -1,7 +1,8 @@
 from ckeditor.fields import RichTextField
 from django.db import models
-from django.urls import reverse
+from django.urls import reverse, NoReverseMatch
 from django.utils.safestring import mark_safe
+from django.utils.text import slugify
 
 from utilities.utility_functions import is_empty
 
@@ -16,8 +17,14 @@ class Page(models.Model):
         return self.page_title
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if is_empty(self.url_name):
+            self.url_name = slugify(self.page_title)
+
         if not is_empty(self.url_name):
-            self.page_url = reverse(self.url_name)
+            try:
+                self.page_url = reverse(self.url_name)
+            except NoReverseMatch:
+                self.page_url = "/page/{}/".format(self.url_name)
 
         super().save(force_insert, force_update, using, update_fields)
 
@@ -50,7 +57,7 @@ class SidebarItem(models.Model):
         default="fa-solid fa-",
         help_text=mark_safe(
             "Font Awesome icon from "
-            '<a href="https://fontawesome.com/search?q=halle%20berry&o=r&m=free" target="_blank">here</a>.'
+            '<a href="https://fontawesome.com/search?o=r&m=free" target="_blank">here</a>.'
         ),
     )
     authenticated = models.BooleanField(default=False)

@@ -1,11 +1,13 @@
 from urllib.parse import urlsplit
 
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 
 from content.helpers import get_page_context
+from utilities.model_helper import load_model
 
 
 class HomeView(TemplateView):
@@ -67,6 +69,12 @@ class PageView(TemplateView):
         self.request = request
         context = self.get_context_data()
         self.page_name = kwargs.get("page_name")
+
+        page_model = load_model("content.Page")
+        try:
+            page_model.objects.get(url_name=self.page_name)
+        except page_model.DoesNotExist:
+            raise Http404("Page not found.")
 
         return render(request, self.template_name, context)
 

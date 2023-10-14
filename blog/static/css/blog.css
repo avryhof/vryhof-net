@@ -1,0 +1,12 @@
+.category-link {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-left: 1px solid var(--body-fg);
+}
+.category-link a, .category-link a:visited {
+  color: var(--body-fg);
+  text-decoration: none;
+}
+
+/*# sourceMappingURL=blog.css.map */

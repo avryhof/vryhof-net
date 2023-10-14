@@ -63,7 +63,7 @@ class PageAdmin(admin.ModelAdmin):
     ]
     readonly_fields = ["page_url"]
     inlines = [PageContentInline]
-    actions = [clone_page, ]
+    actions = [clone_page, page_to_sidebar_item]
 
 
 @admin.register(PageContent)
