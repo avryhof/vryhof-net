@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "easy_thumbnails",
     "filer",
     "ckeditor",
+    "ckeditor_filebrowser_filer",
     "ckeditor_uploader",
     "mptt",
     "favorites_icons",
@@ -287,7 +288,12 @@ CKEDITOR_CONFIGS = {
             {"name": "links", "items": ["Link", "Unlink", "Anchor"]},
             {
                 "name": "insert",
-                "items": ["Image", "Table", "HorizontalRule", "SpecialChar"],
+                "items": [
+                    "FilerImage",
+                    # "Image",
+                    "Table",
+                    "HorizontalRule",
+                    "SpecialChar"],
             },
             {
                 "name": "editing",
@@ -319,6 +325,7 @@ CKEDITOR_CONFIGS = {
         "extraPlugins": ",".join(
             [
                 "uploadimage",  # the upload image feature
+                "filerimage",
                 # your extra plugins here
                 "div",
                 "autolink",
