@@ -32,6 +32,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Application definition
 INSTALLED_APPS = [
+    "custom_admin",
     "django.contrib.admin",
     "django.contrib.postgres",
     "django.contrib.auth",
@@ -91,6 +92,7 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             os.path.join(BASE_DIR, "templates"),
+            os.path.join(BASE_DIR, "custom_admin", "templates"),
             os.path.join(BASE_DIR, "firefox", "templates"),
             os.path.join(BASE_DIR, "blog", "templates"),
             os.path.join(BASE_DIR, "livechat", "templates"),
@@ -241,6 +243,7 @@ STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "custom_admin", "static"),
     os.path.join(BASE_DIR, "firefox", "static"),
     os.path.join(BASE_DIR, "livechat", "static"),
     os.path.join(BASE_DIR, "blog", "static"),

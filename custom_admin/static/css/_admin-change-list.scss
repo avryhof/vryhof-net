@@ -1,0 +1,27 @@
+$iconSize: 24px;
+
+#changelist-form {
+  #toolbar, #changelist-search {
+    div {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      label, input {
+        margin-right: 15px;
+
+        img {
+          width: $iconSize;
+          height: $iconSize;
+        }
+      }
+    }
+  }
+}
+
+label[for=searchbar] {
+  img {
+    width: $iconSize !important;
+    height: $iconSize !important;
+  }
+}

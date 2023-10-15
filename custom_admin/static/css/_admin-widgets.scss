@@ -1,0 +1,23 @@
+#header {
+  .custom-time {
+    display: flex;
+    flex-direction: row;
+
+    .custom-time-icon {
+      margin-right: 5px !important;
+    }
+
+    .custom-time-display {
+      display: flex;
+      flex-direction: column;
+
+      font-size: 12px;
+    }
+  }
+}
+
+.login, .popup {
+  .custom-time {
+    display: none !important;
+  }
+}

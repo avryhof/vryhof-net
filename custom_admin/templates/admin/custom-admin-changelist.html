@@ -1,0 +1,32 @@
+{% extends "admin/custom-admin-base.html" %}
+{% load static i18n %}
+{% block extrastyle %}
+    <link href="{% static "admin/css/changelists.css" %}" rel="stylesheet">
+{% endblock %}
+{% block bodyclass %}change-list{% endblock %}
+{% block content %}
+    <div class="content-main">
+        <div id="changelist" class="module filtered">
+            <div class="changelist-form-container">
+                <form id="changelist-form">
+                    <div id="toolbar">
+                        <form id="changelist-search">
+                            <div><!-- DIV needed for valid HTML -->
+                                <label for="searchbar">
+                                    <img src="{% static "svg/search.svg" %}" alt="Search">
+                                </label>
+                                <input type="text" size="40" name="q" value="" id="searchbar" autofocus="">
+                                <input type="submit" value="Search">
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="results">
+                        {% block results %}
+                        {% endblock %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

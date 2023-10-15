@@ -1,0 +1,14 @@
+@mixin colwidth($cols) {
+  flex: ((100% / 12) * $cols) 0 0;
+  max-width: ((100% / 12) * $cols);
+}
+
+@mixin col($colwidth) {
+  flex: $colwidth 0 0;
+  max-width: $colwidth;
+}
+
+@mixin col-override($colwidth) {
+  flex: $colwidth 0 0 !important;
+  max-width: $colwidth !important;
+}

@@ -1,0 +1,69 @@
+.change-form {
+  form > div {
+    .submit-row {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-content: center;
+      justify-content: flex-start;
+      align-items: stretch;
+
+      text-align: center;
+
+      input[type=submit], input.default, .deletelink {
+        float: none;
+        margin: 0 0 10px 0 !important;
+      }
+
+      label[for=searchbar] {
+        img {
+          max-width: 24px;
+          max-height: 24px;
+        }
+      }
+
+      p.deletelink-box {
+        margin: 0;
+        padding: 0;
+      }
+    }
+  }
+
+  #content {
+    width: auto !important;
+  }
+}
+
+.flex-row {
+  .fieldset-column, #submit-buttons {
+    margin-right: 10px;
+  }
+
+  .fieldset-column {
+    flex: 80% 0 0;
+  }
+
+  #submit-buttons {
+    flex: 20% 0 0;
+
+    .btn {
+      max-width: 100%;
+    }
+  }
+}
+
+.change-form-table {
+  width: 100%;
+
+  thead, tbody {
+  }
+
+  tr {
+  }
+
+  th, td {
+    padding: 5px 10px !important;
+  }
+
+}
+

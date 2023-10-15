@@ -1,0 +1,114 @@
+@import "vars";
+@import "mixins";
+
+.print-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+
+  h6 {
+    display: block;
+    width: 100%;
+    flex: 0 0 100%;
+    border-bottom: 2px solid #313131;
+    margin-top: 20px;
+    font-size: 125%;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: row;
+
+    .field-label {
+      font-weight: bold;
+      padding-right: 15px;
+    }
+  }
+
+  .field-1 { @include colwidth(1); }
+  .field-2 { @include colwidth(2); }
+  .field-3 { @include colwidth(3); }
+  .field-4 { @include colwidth(4); }
+  .field-5 { @include colwidth(5); }
+  .field-6 { @include colwidth(6); }
+  .field-7 { @include colwidth(7); }
+  .field-8 { @include colwidth(8); }
+  .field-9 { @include colwidth(9); }
+  .field-10 { @include colwidth(10); }
+  .field-11 { @include colwidth(11); }
+  .field-12 { @include colwidth(12); }
+}
+
+.print-row:first-of-type {
+  border-top: none !important;
+}
+
+.dependent-row {
+  display: block;
+  width: 100%;
+
+  .dependent {
+    display: inline-block;
+    width: 40%;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 25px;
+
+    .field-inline {
+      display: inline-block !important;
+    }
+
+    .field {
+      display: block;
+
+      .field-label, .field-value {
+        display: inline-block;
+        padding-right: 15px;
+      }
+
+      .field-label {
+        font-weight: bold;
+      }
+    }
+
+    .textbox-field {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+@media print {
+  .custom-sidebar {
+    display: none !important;
+  }
+  .custom-content {
+    flex: 100% 0 0 !important;
+    max-width: 100% !important;
+  }
+
+  [class*=field-] {
+    display: inline-block;
+  }
+
+  .field-2 { width: $width-2 !important; }
+  .field-3 { width: $width-3 !important; }
+  .field-4 { width: $width-4 !important; }
+  .field-5 { width: $width-5 !important; }
+  .field-6 { width: $width-6 !important; }
+  .field-7 { width: $width-7 !important; }
+  .field-8 { width: $width-8 !important; }
+  .field-9 { width: $width-9 !important; }
+  .field-10 { width: $width-10 !important; }
+  .field-11 { width: $width-11 !important; }
+  .field-12 { width: $width-12 !important; }
+
+
+  .field-inline {
+    display: inline-block !important;
+    width: auto !important;
+  }
+  .print-row {
+    display: flex;
+    flex-direction: row;
+  }
+}

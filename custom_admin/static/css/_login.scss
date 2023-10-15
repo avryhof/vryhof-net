@@ -1,0 +1,63 @@
+@import "effects";
+/* LOGIN FORM */
+
+.login {
+  background: var(--darkened-bg);
+  height: auto;
+
+  #header {
+    height: auto;
+    padding: 15px 16px;
+    justify-content: center;
+
+    h1 {
+      font-size: 18px;
+
+      a {
+        color: var(--header-link-color);
+      }
+    }
+  }
+
+  #content {
+    padding: 20px 20px 0;
+  }
+
+  #container {
+    animation: flipInFromRight 1s;
+
+    background: var(--body-bg);
+    border: 1px solid var(--hairline-color);
+    border-radius: 4px;
+    overflow: hidden;
+    width: 28em !important;
+    min-width: 300px;
+    margin: 100px auto;
+    height: auto;
+  }
+
+  .form-row {
+    padding: 4px 0;
+
+    label {
+      display: block;
+      line-height: 2em;
+    }
+
+    #id_username, #id_password {
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+
+  .submit-row {
+    padding: 1em 0 0 0;
+    margin: 0;
+    text-align: center;
+  }
+
+  .password-reset-link {
+    text-align: center;
+  }
+}

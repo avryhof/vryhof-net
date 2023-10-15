@@ -1,0 +1,13 @@
+{% extends "admin/custom-admin-base.html" %}
+{% load static utility_tags humanize %}
+{% block extrastyle %}
+    <link href="{% static "admin/css/changelists.css" %}" rel="stylesheet">
+{% endblock %}
+{% block bodyclass %}change-form{% endblock %}
+{% block content %}
+    <div class="content-main">
+        {% block form-content %}
+        {% endblock %}
+    </div>
+
+{% endblock %}

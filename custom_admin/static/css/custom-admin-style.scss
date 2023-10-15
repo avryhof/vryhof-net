@@ -1,0 +1,103 @@
+@import "vars";
+@import "effects";
+@import "admin-sidebar";
+@import "login";
+@import "admin-widgets";
+@import "admin-change-list";
+@import "admin-change-form";
+@import "admin-headers";
+@import "admin-forms";
+@import "print-styles";
+@import "external-plugins";
+
+#header {
+  background: var(--primary);
+  color: var(--header-link-color);
+
+  #branding {
+    font-size: 1.5em;
+    font-weight: bold;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    div {
+      margin-right: 20px;
+    }
+  }
+
+  #user-tools {
+    font-size: 0.9em;
+  }
+
+  a {
+    font-weight: bold;
+  }
+
+  a:link, a:visited {
+    color: var(--header-link-color);
+  }
+
+  a:hover {
+    color: var(--header-link-color);
+    text-decoration: underline !important;
+  }
+}
+
+.dashboard, .change-list, .change-form, .delete-confirmation {
+  .custom-admin-row {
+    display: flex;
+    flex-direction: row;
+
+    .custom-content {
+      flex: 85% 0 0;
+      max-width: 85%;
+
+      #content {
+        //width: auto !important;
+      }
+    }
+  }
+}
+
+.login {
+  #container {
+    animation: flipInFromRight 1s;
+  }
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+table {
+  .text {
+    padding: 10px !important;
+  }
+}
+
+.popup {
+  .custom-content {
+    flex: 100% 0 0;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .fieldset-column {
+    .fieldBox {
+      width: auto !important;
+      display: flex;
+
+      label {
+        flex: 40% 0 0;
+        max-width: 40% !important;
+      }
+      input {
+        flex: 60% 0 0;
+        max-width: 60% !important;
+      }
+    }
+  }
+}

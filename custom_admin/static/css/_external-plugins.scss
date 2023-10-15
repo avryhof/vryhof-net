@@ -1,0 +1,60 @@
+.filer-dropzone {
+  background: var(--darkened-bg) !important;
+
+  .filerFile {
+    .related-lookup {
+      appearance: none;
+      border: none;
+      font-weight: 400;
+      background: var(--button-bg) !important;
+      color: var(--button-fg) !important;
+      cursor: pointer;
+    }
+  }
+}
+
+.filebrowser {
+  color: var(--body-fg) !important;
+  background: var(--body-bg) !important;
+
+  .navigator-top-nav {
+    background: var(--darkened-bg) !important;
+  }
+
+  .navigator-table {
+    background-color: transparent !important;
+
+    .unfiled td, .unfiled [class*=column] {
+      color: var(--body-fg) !important;
+      background-color: var(--darkened-bg) !important;
+      background: var(--darkened-bg) !important;
+    }
+  }
+
+  input, .filter-files-field {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 5px 6px;
+    margin-top: 0;
+    color: var(--body-fg) !important;
+    background-color: var(--body-bg) !important;
+  }
+
+  .navigator-table .column-action .action-button,
+  .navigator-table .column-action a.action-button,
+  .navigator-table .column-action a[class*=action-] {
+    appearance: none !important;
+    border: none !important;
+    font-weight: 400;
+    background-color: var(--button-bg) !important;
+    background: var(--button-bg) !important;
+    color: var(--button-fg) !important;
+    cursor: pointer;
+  }
+
+  .nav-pages {
+    color: var(--body-fg) !important;
+    background-color: var(--darkened-bg) !important;
+    background: var(--darkened-bg) !important;
+  }
+}

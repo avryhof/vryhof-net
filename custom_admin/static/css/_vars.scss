@@ -1,0 +1,40 @@
+$dark-color: #414141;
+
+$foregroundColor: var(--body-fg);
+$backgroundColor: var(--body-bg);
+
+$white: #ffffff;
+$gray: #cccccc;
+$silver: var(--border-color);
+$smoke: #f1f1f1;
+
+$gBlue: #4285F4;
+$gRed: #EA4335;
+$gGreen: #34A853;
+$gYellow: #FBBC05;
+
+$baseFontSize: 16px;
+$normalfont: 'Open Sans', sans-serif;
+$narrowfont: 'Pragati Narrow', 'Arial Narrow', 'Helvetica Condensed', Arial, Helvetica, sans-serif;
+
+$xs: 576px; /* < 576 */
+$sm: 768px; /* > 576 < 768 */
+$md: 992px; /* > 768 < 992 */
+$lg: 1200px; /* > 992 < 1200 */
+$xl: 1400px; /* > 1200 < 1400 */
+$xxl: 1400px; /* > 1400 */
+
+$padding: 1.0em;
+
+$width-12: 100%;
+$width-11: ((100% / 12) * 11);
+$width-10: ((100% / 12) * 10);
+$width-9: ((100% / 12) * 9);
+$width-8: ((100% / 12) * 8);
+$width-7: ((100% / 12) * 7);
+$width-6: ((100% / 12) * 6);
+$width-5: ((100% / 12) * 5);
+$width-4: ((100% / 12) * 4);
+$width-3: ((100% / 12) * 3);
+$width-2: ((100% / 12) * 2);
+$width-1: ((100% / 12) * 1);
