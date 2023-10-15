@@ -11,9 +11,9 @@
     --body-bg: #fff;
     --body-quiet-color: #666;
     --body-loud-color: #000;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 @media (prefers-color-scheme: dark) {
@@ -22,9 +22,9 @@
     --body-bg: #333;
     --body-quiet-color: #000;
     --body-loud-color: #666;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 /* < 576 */
@@ -33,6 +33,196 @@
 /* > 992 < 1200 */
 /* > 1200 < 1400 */
 /* > 1400 */
+/* < 576 */
+/* > 576 < 768 */
+/* > 768 < 992 */
+/* > 992 < 1200 */
+/* > 1200 < 1400 */
+/* > 1400 */
+/* Bases for modals */
+.container, .container-fluid {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container {
+  max-width: 1320px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+}
+.row [class*=col-], .row .col {
+  box-sizing: border-box;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+.row .col-12 {
+  flex: 100% 0 0;
+  max-width: 100%;
+}
+.row .col-11 {
+  flex: 91.6666666667% 0 0;
+  max-width: 91.6666666667%;
+}
+.row .col-10 {
+  flex: 83.3333333333% 0 0;
+  max-width: 83.3333333333%;
+}
+.row .col-9 {
+  flex: 75% 0 0;
+  max-width: 75%;
+}
+.row .col-8 {
+  flex: 66.6666666667% 0 0;
+  max-width: 66.6666666667%;
+}
+.row .col-7 {
+  flex: 58.3333333333% 0 0;
+  max-width: 58.3333333333%;
+}
+.row .col-6 {
+  flex: 50% 0 0;
+  max-width: 50%;
+}
+.row .col-5 {
+  flex: 41.6666666667% 0 0;
+  max-width: 41.6666666667%;
+}
+.row .col-4 {
+  flex: 33.3333333333% 0 0;
+  max-width: 33.3333333333%;
+}
+.row .col-3 {
+  flex: 25% 0 0;
+  max-width: 25%;
+}
+.row .col-2 {
+  flex: 16.6666666667% 0 0;
+  max-width: 16.6666666667%;
+}
+.row .col-1 {
+  flex: 8.3333333333% 0 0;
+  max-width: 8.3333333333%;
+}
+
+@media (max-width: 576px) {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .hidden-xs {
+    display: none !important;
+  }
+  .col-xs-12 {
+    flex: 100% 0 0 !important;
+    max-width: 100% !important;
+  }
+  .col-xs-11 {
+    flex: 91.6666666667% 0 0 !important;
+    max-width: 91.6666666667% !important;
+  }
+  .col-xs-10 {
+    flex: 83.3333333333% 0 0 !important;
+    max-width: 83.3333333333% !important;
+  }
+  .col-xs-9 {
+    flex: 75% 0 0 !important;
+    max-width: 75% !important;
+  }
+  .col-xs-8 {
+    flex: 66.6666666667% 0 0 !important;
+    max-width: 66.6666666667% !important;
+  }
+  .col-xs-7 {
+    flex: 58.3333333333% 0 0 !important;
+    max-width: 58.3333333333% !important;
+  }
+  .col-xs-6 {
+    flex: 50% 0 0 !important;
+    max-width: 50% !important;
+  }
+  .col-xs-5 {
+    flex: 41.6666666667% 0 0 !important;
+    max-width: 41.6666666667% !important;
+  }
+  .col-xs-4 {
+    flex: 33.3333333333% 0 0 !important;
+    max-width: 33.3333333333% !important;
+  }
+  .col-xs-3 {
+    flex: 25% 0 0 !important;
+    max-width: 25% !important;
+  }
+  .col-xs-2 {
+    flex: 16.6666666667% 0 0 !important;
+    max-width: 16.6666666667% !important;
+  }
+  .col-xs-1 {
+    flex: 8.3333333333% 0 0 !important;
+    max-width: 8.3333333333% !important;
+  }
+}
+@media (min-width: 576px) {
+  .col-sm-12 {
+    flex: 100% 0 0 !important;
+    max-width: 100% !important;
+  }
+  .col-sm-11 {
+    flex: 91.6666666667% 0 0 !important;
+    max-width: 91.6666666667% !important;
+  }
+  .col-sm-10 {
+    flex: 83.3333333333% 0 0 !important;
+    max-width: 83.3333333333% !important;
+  }
+  .col-sm-9 {
+    flex: 75% 0 0 !important;
+    max-width: 75% !important;
+  }
+  .col-sm-8 {
+    flex: 66.6666666667% 0 0 !important;
+    max-width: 66.6666666667% !important;
+  }
+  .col-sm-7 {
+    flex: 58.3333333333% 0 0 !important;
+    max-width: 58.3333333333% !important;
+  }
+  .col-sm-6 {
+    flex: 50% 0 0 !important;
+    max-width: 50% !important;
+  }
+  .col-sm-5 {
+    flex: 41.6666666667% 0 0 !important;
+    max-width: 41.6666666667% !important;
+  }
+  .col-sm-4 {
+    flex: 33.3333333333% 0 0 !important;
+    max-width: 33.3333333333% !important;
+  }
+  .col-sm-3 {
+    flex: 25% 0 0 !important;
+    max-width: 25% !important;
+  }
+  .col-sm-2 {
+    flex: 16.6666666667% 0 0 !important;
+    max-width: 16.6666666667% !important;
+  }
+  .col-sm-1 {
+    flex: 8.3333333333% 0 0 !important;
+    max-width: 8.3333333333% !important;
+  }
+}
 :root {
   --body-fg: #333;
   --body-bg: #fff;
@@ -46,9 +236,9 @@
     --body-bg: #fff;
     --body-quiet-color: #666;
     --body-loud-color: #000;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 @media (prefers-color-scheme: dark) {
@@ -57,9 +247,9 @@
     --body-bg: #333;
     --body-quiet-color: #000;
     --body-loud-color: #666;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 /* < 576 */
@@ -178,9 +368,9 @@ input[type=submit], .btn, button {
     --body-bg: #fff;
     --body-quiet-color: #666;
     --body-loud-color: #000;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 @media (prefers-color-scheme: dark) {
@@ -189,9 +379,9 @@ input[type=submit], .btn, button {
     --body-bg: #333;
     --body-quiet-color: #000;
     --body-loud-color: #666;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 @keyframes slideDown {
@@ -568,196 +758,6 @@ input[type=submit], .btn, button {
 /* > 992 < 1200 */
 /* > 1200 < 1400 */
 /* > 1400 */
-/* Bases for modals */
-.container, .container-fluid {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  box-sizing: border-box;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.container {
-  max-width: 1320px;
-}
-
-.row {
-  display: flex;
-  flex-direction: row;
-  box-sizing: border-box;
-}
-.row [class*=col-], .row .col {
-  box-sizing: border-box;
-  padding-left: 1em;
-  padding-right: 1em;
-}
-.row .col-12 {
-  flex: 100% 0 0;
-  max-width: 100%;
-}
-.row .col-11 {
-  flex: 91.6666666667% 0 0;
-  max-width: 91.6666666667%;
-}
-.row .col-10 {
-  flex: 83.3333333333% 0 0;
-  max-width: 83.3333333333%;
-}
-.row .col-9 {
-  flex: 75% 0 0;
-  max-width: 75%;
-}
-.row .col-8 {
-  flex: 66.6666666667% 0 0;
-  max-width: 66.6666666667%;
-}
-.row .col-7 {
-  flex: 58.3333333333% 0 0;
-  max-width: 58.3333333333%;
-}
-.row .col-6 {
-  flex: 50% 0 0;
-  max-width: 50%;
-}
-.row .col-5 {
-  flex: 41.6666666667% 0 0;
-  max-width: 41.6666666667%;
-}
-.row .col-4 {
-  flex: 33.3333333333% 0 0;
-  max-width: 33.3333333333%;
-}
-.row .col-3 {
-  flex: 25% 0 0;
-  max-width: 25%;
-}
-.row .col-2 {
-  flex: 16.6666666667% 0 0;
-  max-width: 16.6666666667%;
-}
-.row .col-1 {
-  flex: 8.3333333333% 0 0;
-  max-width: 8.3333333333%;
-}
-
-@media (max-width: 576px) {
-  body {
-    margin: 0;
-    padding: 0;
-  }
-  .container {
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-  .hidden-xs {
-    display: none !important;
-  }
-  .col-xs-12 {
-    flex: 100% 0 0 !important;
-    max-width: 100% !important;
-  }
-  .col-xs-11 {
-    flex: 91.6666666667% 0 0 !important;
-    max-width: 91.6666666667% !important;
-  }
-  .col-xs-10 {
-    flex: 83.3333333333% 0 0 !important;
-    max-width: 83.3333333333% !important;
-  }
-  .col-xs-9 {
-    flex: 75% 0 0 !important;
-    max-width: 75% !important;
-  }
-  .col-xs-8 {
-    flex: 66.6666666667% 0 0 !important;
-    max-width: 66.6666666667% !important;
-  }
-  .col-xs-7 {
-    flex: 58.3333333333% 0 0 !important;
-    max-width: 58.3333333333% !important;
-  }
-  .col-xs-6 {
-    flex: 50% 0 0 !important;
-    max-width: 50% !important;
-  }
-  .col-xs-5 {
-    flex: 41.6666666667% 0 0 !important;
-    max-width: 41.6666666667% !important;
-  }
-  .col-xs-4 {
-    flex: 33.3333333333% 0 0 !important;
-    max-width: 33.3333333333% !important;
-  }
-  .col-xs-3 {
-    flex: 25% 0 0 !important;
-    max-width: 25% !important;
-  }
-  .col-xs-2 {
-    flex: 16.6666666667% 0 0 !important;
-    max-width: 16.6666666667% !important;
-  }
-  .col-xs-1 {
-    flex: 8.3333333333% 0 0 !important;
-    max-width: 8.3333333333% !important;
-  }
-}
-@media (min-width: 576px) {
-  .col-sm-12 {
-    flex: 100% 0 0 !important;
-    max-width: 100% !important;
-  }
-  .col-sm-11 {
-    flex: 91.6666666667% 0 0 !important;
-    max-width: 91.6666666667% !important;
-  }
-  .col-sm-10 {
-    flex: 83.3333333333% 0 0 !important;
-    max-width: 83.3333333333% !important;
-  }
-  .col-sm-9 {
-    flex: 75% 0 0 !important;
-    max-width: 75% !important;
-  }
-  .col-sm-8 {
-    flex: 66.6666666667% 0 0 !important;
-    max-width: 66.6666666667% !important;
-  }
-  .col-sm-7 {
-    flex: 58.3333333333% 0 0 !important;
-    max-width: 58.3333333333% !important;
-  }
-  .col-sm-6 {
-    flex: 50% 0 0 !important;
-    max-width: 50% !important;
-  }
-  .col-sm-5 {
-    flex: 41.6666666667% 0 0 !important;
-    max-width: 41.6666666667% !important;
-  }
-  .col-sm-4 {
-    flex: 33.3333333333% 0 0 !important;
-    max-width: 33.3333333333% !important;
-  }
-  .col-sm-3 {
-    flex: 25% 0 0 !important;
-    max-width: 25% !important;
-  }
-  .col-sm-2 {
-    flex: 16.6666666667% 0 0 !important;
-    max-width: 16.6666666667% !important;
-  }
-  .col-sm-1 {
-    flex: 8.3333333333% 0 0 !important;
-    max-width: 8.3333333333% !important;
-  }
-}
-/* < 576 */
-/* > 576 < 768 */
-/* > 768 < 992 */
-/* > 992 < 1200 */
-/* > 1200 < 1400 */
-/* > 1400 */
 :root {
   --body-fg: #333;
   --body-bg: #fff;
@@ -771,9 +771,9 @@ input[type=submit], .btn, button {
     --body-bg: #fff;
     --body-quiet-color: #666;
     --body-loud-color: #000;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 @media (prefers-color-scheme: dark) {
@@ -782,9 +782,9 @@ input[type=submit], .btn, button {
     --body-bg: #333;
     --body-quiet-color: #000;
     --body-loud-color: #666;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 @keyframes slideDown {
@@ -988,9 +988,9 @@ input[type=submit], .btn, button {
     --body-bg: #fff;
     --body-quiet-color: #666;
     --body-loud-color: #000;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 @media (prefers-color-scheme: dark) {
@@ -999,9 +999,9 @@ input[type=submit], .btn, button {
     --body-bg: #333;
     --body-quiet-color: #000;
     --body-loud-color: #666;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 /* < 576 */
@@ -1130,9 +1130,9 @@ input[type=submit], .btn, button {
     --body-bg: #fff;
     --body-quiet-color: #666;
     --body-loud-color: #000;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 @media (prefers-color-scheme: dark) {
@@ -1141,9 +1141,9 @@ input[type=submit], .btn, button {
     --body-bg: #333;
     --body-quiet-color: #000;
     --body-loud-color: #666;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 @keyframes slideDown {

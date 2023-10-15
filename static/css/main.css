@@ -232,9 +232,9 @@ h2, .h2 {
     --body-bg: #fff;
     --body-quiet-color: #666;
     --body-loud-color: #000;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 @media (prefers-color-scheme: dark) {
@@ -243,9 +243,9 @@ h2, .h2 {
     --body-bg: #333;
     --body-quiet-color: #000;
     --body-loud-color: #666;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 /* < 576 */

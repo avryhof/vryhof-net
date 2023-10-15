@@ -5,23 +5,15 @@
   --body-loud-color: #000;
 }
 
-$dustyBlue: #587d94;
-$blackberry: #895A74;
-$dustyGreen: rgb(90, 137, 111);
-$dustyRed: rgb(255, 53, 94);
-$sageGreen: rgb(132, 139, 121);
-$whiteSmoke: rgba(245, 245, 245, .8);
-
-
 @media (prefers-color-scheme: light) {
   :root {
     --body-fg: #333;
     --body-bg: #fff;
     --body-quiet-color: #666;
     --body-loud-color: #000;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 
@@ -31,9 +23,9 @@ $whiteSmoke: rgba(245, 245, 245, .8);
     --body-bg: #333;
     --body-quiet-color: #000;
     --body-loud-color: #666;
-    --success-fg: $blackberry;
-    --success-color: $dustyGreen;
-    --error-color: $dustyRed;
+    --success-fg: #895A74;
+    --success-color: rgb(90, 137, 111);
+    --error-color: rgb(255, 53, 94);
   }
 }
 
