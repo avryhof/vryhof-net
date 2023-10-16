@@ -37,6 +37,15 @@ body {
   }
 }
 
+a:link, a:visited {
+  color: var(--link-fg);
+  text-decoration: none;
+}
+a:hover, a:active {
+  color: var(--link-visited-fg);
+  text-decoration: underline;
+}
+
 .sr-only {
   display: inline-block;
   width: 0;
