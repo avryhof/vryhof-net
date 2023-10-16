@@ -35,7 +35,7 @@ input[type="submit"], .btn, button {
 }
 
 .btn-primary {
-  color: $foregroundColor;
+  color: var(--body-fg) !important;
   background-color: $gBlue;
 }
 

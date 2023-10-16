@@ -235,6 +235,8 @@ h2, .h2 {
     --success-fg: #895A74;
     --success-color: rgb(90, 137, 111);
     --error-color: rgb(255, 53, 94);
+    --link-fg: #587d94;
+    --link-visited-fg: #895A74;
   }
 }
 @media (prefers-color-scheme: dark) {
@@ -246,6 +248,8 @@ h2, .h2 {
     --success-fg: #895A74;
     --success-color: rgb(90, 137, 111);
     --error-color: rgb(255, 53, 94);
+    --link-fg: #4285F4;
+    --link-visited-fg: #895A74;
   }
 }
 /* < 576 */
@@ -287,7 +291,7 @@ input[type=submit], .btn, button {
 }
 
 .btn-primary {
-  color: #333333;
+  color: var(--body-fg) !important;
   background-color: #4285F4;
 }
 

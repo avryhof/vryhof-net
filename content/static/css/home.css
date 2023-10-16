@@ -20,6 +20,8 @@
     --success-fg: #895A74;
     --success-color: rgb(90, 137, 111);
     --error-color: rgb(255, 53, 94);
+    --link-fg: #587d94;
+    --link-visited-fg: #895A74;
   }
 }
 @media (prefers-color-scheme: dark) {
@@ -31,6 +33,8 @@
     --success-fg: #895A74;
     --success-color: rgb(90, 137, 111);
     --error-color: rgb(255, 53, 94);
+    --link-fg: #4285F4;
+    --link-visited-fg: #895A74;
   }
 }
 @keyframes slideDown {
