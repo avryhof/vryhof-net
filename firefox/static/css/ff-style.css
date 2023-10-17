@@ -436,8 +436,8 @@
   flex-direction: column;
   margin: 10px;
   width: 100%;
-  border: 1px solid var(--body-fg);
-  border-bottom: 5px solid var(--body-fg);
+  border: 1px solid var(--body-quiet-color);
+  border-bottom: 5px solid var(--body-quiet-color);
   border-radius: 8px;
   background: #454545;
   padding: 0;
@@ -462,7 +462,7 @@
   flex-direction: column;
 }
 .post-container .post .post-action {
-  border-top: 1px solid #dcdcdc;
+  border-top: 1px solid var(--body-quiet-color);
 }
 .post-container .post .post-action a {
   text-transform: uppercase;

@@ -21,8 +21,8 @@
 
     margin: 10px;
     width: 100%;
-    border: 1px solid var(--body-fg);
-    border-bottom: 5px solid var(--body-fg);
+    border: 1px solid var(--body-quiet-color);
+    border-bottom: 5px solid var(--body-quiet-color);
     border-radius: $controlRadius;
     background: #454545;
     padding: 0;
@@ -52,7 +52,7 @@
     }
 
     .post-action {
-      border-top: 1px solid $silver;
+      border-top: 1px solid var(--body-quiet-color);
 
       a {
         text-transform: uppercase;
