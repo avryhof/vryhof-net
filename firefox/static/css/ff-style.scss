@@ -24,10 +24,21 @@
     border: 1px solid var(--body-fg);
     border-bottom: 5px solid var(--body-fg);
     border-radius: $controlRadius;
-    padding: 1.0em;
+    background: #454545;
+    padding: 0;
 
-    .post-content, .post-action {
-      padding: 5px 10px 5px 10px;
+    .post-content, .post-action, .post-header {
+      padding: 1.0em;
+    }
+
+    > div:first-child {
+      border-top-left-radius: $controlRadius;
+      border-top-right-radius: $controlRadius;
+    }
+
+    > div:last-child {
+      border-bottom-left-radius: $controlRadius;
+      border-bottom-right-radius: $controlRadius;
     }
 
     .post-action, .post-reveal {
@@ -57,13 +68,13 @@
       font-size: 18px;
       font-family: 'Roboto Condensed', Roboto, sans-serif;
       font-weight: 700;
-      padding: 5px 10px 0 10px;
+      padding-bottom: 0;
     }
 
     .post-metadata {
       font-size: 0.75em;
       font-style: italic;
-      padding: 0 10px 5px 10px;
+      padding-top: 0;
     }
 
     .post-content {
