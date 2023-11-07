@@ -5,6 +5,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 
 from blog.models import BlogCategory, BlogPost
+from content.helpers import get_page_context
+from utilities.utility_functions import is_empty
 
 
 class BlogHomeView(TemplateView):
@@ -16,6 +18,8 @@ class BlogHomeView(TemplateView):
         context["page_title"] = self.page_title
         context["extra_css"] = ["css/blog.css"]
         context["extra_javascript"] = []
+
+        context = get_page_context("blog_home", context)
 
         return context
 
@@ -38,6 +42,8 @@ class BlogCategoryView(TemplateView):
         context["page_title"] = self.page_title
         context["extra_css"] = ["css/blog.css"]
         context["extra_javascript"] = []
+
+        context = get_page_context("blog_category", context)
 
         return context
 
@@ -74,6 +80,8 @@ class BlogPostView(TemplateView):
         context["page_title"] = self.page_title
         context["extra_css"] = ["css/blog.css"]
         context["extra_javascript"] = []
+
+        context = get_page_context("blog_post", context)
 
         return context
 
