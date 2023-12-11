@@ -24,7 +24,10 @@ class Page(models.Model):
             try:
                 self.page_url = reverse(self.url_name)
             except NoReverseMatch:
-                self.page_url = "/page/{}/".format(self.url_name)
+                if "http" in self.url_name:
+                    self.page_url = self.url_name
+                else:
+                    self.page_url = "/page/{}/".format(self.url_name)
 
         super().save(force_insert, force_update, using, update_fields)
 

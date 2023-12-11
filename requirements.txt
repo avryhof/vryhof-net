@@ -20,7 +20,7 @@ cryptography
 deprecation==2.1.0
 Django==4.1.10
 django-admin-sortable==2.2.4
-django-allauth
+django-allauth==0.58.2
 django-allauth-templates-bootstrap4
 django-ask-sdk==1.0.0
 django-bootstrap4==22.3
