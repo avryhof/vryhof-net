@@ -24,7 +24,7 @@ class Page(models.Model):
             try:
                 self.page_url = reverse(self.url_name)
             except NoReverseMatch:
-                if "http" in self.url_name:
+                if self.url_name.lower()[0:4] == "http":
                     self.page_url = self.url_name
                 else:
                     self.page_url = "/page/{}/".format(self.url_name)
