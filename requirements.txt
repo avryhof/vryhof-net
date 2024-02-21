@@ -24,7 +24,7 @@ django-allauth==0.58.2
 django-allauth-templates-bootstrap4
 django-ask-sdk==1.0.0
 django-bootstrap4==22.3
-django-ckeditor==6.5.1
+django-ckeditor==6.7.0
 django-ckeditor-filebrowser-filer==0.5.0
 django-extensions==3.2.1
 django-filer==2.2.3

@@ -35,6 +35,7 @@ urlpatterns = [
     path("weather/", include("weather.urls")),
     path("poi/", include("poi.urls")),
     path("kids/", include("kids.urls")),
+    path("amos/", include("amos.urls")),
     path("ckeditor/", include("ckeditor_uploader.urls")),
 ]
 

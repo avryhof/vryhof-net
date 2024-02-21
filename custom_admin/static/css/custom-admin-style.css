@@ -710,6 +710,10 @@ h1, .cms-pagetree-header-title h1 {
   background: var(--darkened-bg) !important;
 }
 
+textarea.cke_source {
+  color: #333 !important;
+}
+
 #header {
   background: var(--primary);
   color: var(--header-link-color);

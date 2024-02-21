@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     "kids",
     "app",
     "subsonic",
+    "amos",
 ]
 
 MIDDLEWARE = [
@@ -106,6 +107,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, "poi", "templates"),
             os.path.join(BASE_DIR, "kids", "templates"),
             os.path.join(BASE_DIR, "me", "templates"),
+            os.path.join(BASE_DIR, "amos", "templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -257,6 +259,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "weather", "static"),
     os.path.join(BASE_DIR, "kids", "static"),
     os.path.join(BASE_DIR, "me", "static"),
+    os.path.join(BASE_DIR, "amos", "static"),
 )
 
 STATICFILES_FINDERS = (
@@ -345,6 +348,8 @@ CKEDITOR_CONFIGS = {
                 "dialogui",
                 "elementspath",
                 "uploadimage",
+                "codesnippet",
+                "stylesheetparser",
             ]
         ),
     }

@@ -1,0 +1,8 @@
+{% extends "card-base.html" %}
+{% block page_content %}
+    <div class="cv-page">
+        {% for block in page.content_blocks %}
+            {{ block.content|safe }}
+        {% endfor %}
+    </div>
+{% endblock %}
