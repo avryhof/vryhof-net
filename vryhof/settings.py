@@ -36,7 +36,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Application definition
 INSTALLED_APPS = [
-    "daphne"
+    "daphne",
     "custom_admin",
     "django.contrib.admin",
     "django.contrib.postgres",
