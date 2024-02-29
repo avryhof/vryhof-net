@@ -36,6 +36,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Application definition
 INSTALLED_APPS = [
+    "daphne"
     "custom_admin",
     "django.contrib.admin",
     "django.contrib.postgres",
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.sitemaps",
     "django.contrib.humanize",
+    "channels",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",

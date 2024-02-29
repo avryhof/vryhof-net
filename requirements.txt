@@ -14,6 +14,7 @@ certifi==2023.7.22
 certvalidator==0.11.1
 contractions
 cffi==1.15.1
+channels[daphne]
 chardet==5.1.0
 charset-normalizer
 cryptography
@@ -83,6 +84,7 @@ squareup
 ssml-builder==1.1.1
 starkbank-ecdsa==2.2.0
 subresource-integrity==0.2
+Twisted[tls,http2]
 svglib==1.4.1
 tinycss2==1.2.1
 tzdata==2022.7
