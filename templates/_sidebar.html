@@ -1,6 +1,7 @@
 {% load frontend_tags %}
 <div class="sidebar">
     <div class="sidebar-container">
+        {% include "_user-sidebar.html" %}
         {% sidebar_items False %}
         <hr>
         {% if request.user.is_authenticated %}

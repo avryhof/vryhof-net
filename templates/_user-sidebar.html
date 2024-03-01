@@ -1,0 +1,21 @@
+{% load user_tags %}
+{% if request.user.is_authenticated %}
+    {% url "account-logout" as user_sidebar_url %}
+{% else %}
+    {% url "account-login" as user_sidebar_url %}
+{% endif %}
+<div class="sidebar-item">
+    <div class="icon">
+        {% user_icon request %}
+    </div>
+    <div class="label">
+        {% if request.user.is_authenticated and not hide_logout %}
+            {% user_name request %}<br>
+            <a href="{{ user_sidebar_url }}?next=/"><i class="fa-solid fa-right-to-bracket"></i> Log out</a>
+        {% else %}
+            <a class="" href="{{ user_sidebar_url }}">
+                <span class="label">Sign In</span>
+            </a>
+        {% endif %}
+    </div>
+</div>

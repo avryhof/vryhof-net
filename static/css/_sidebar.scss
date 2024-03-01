@@ -1,4 +1,5 @@
 @import "vars";
+@import "mixins";
 @import "effects";
 
 .sidebar {
@@ -14,6 +15,23 @@
       a:link, a:visited {
         color: var(--body-fg);
         text-decoration: none;
+      }
+
+      .icon {
+        @include flex-center;
+        width: 40px;
+        height: 40px;
+
+        img, .user-icon {
+          border-radius: 50%;
+          width: 100%;
+        }
+
+        img[src$= "svg" ] {
+          @include svg-white;
+          width: 100%;
+          height: 100%;
+        }
       }
 
     }
@@ -53,19 +71,23 @@
       flex-direction: column;
       justify-items: stretch;
 
-      .sidebar-item {
+      .sidebar-item, .sidebar-item a {
         display: flex;
+        flex-direction: row;
+        align-items: center;
 
-        a {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
+        .label {
+          display: none;
+          white-space: nowrap;
 
-          .label {
+          a {
             display: none;
-            white-space: nowrap;
           }
         }
+      }
+
+      hr {
+        width: 100%;
       }
     }
   }
@@ -77,6 +99,10 @@
     .label {
       animation: fadeSlideInFromLeft 0.5s;
       display: block !important;
+
+      a {
+        display: inline-block !important;
+      }
     }
   }
 }

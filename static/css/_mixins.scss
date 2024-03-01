@@ -72,3 +72,10 @@
   flex: 1 1 auto;
   padding: 1rem;
 }
+@mixin svg-white {
+  filter: invert(98%) sepia(4%) saturate(201%) hue-rotate(87deg) brightness(113%) contrast(100%);
+}
+
+@mixin svg-black {
+  filter: invert(0%) sepia(96%) saturate(16%) hue-rotate(246deg) brightness(98%) contrast(105%);
+}
