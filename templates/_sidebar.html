@@ -3,8 +3,9 @@
     <div class="sidebar-container">
         {% include "_user-sidebar.html" %}
         {% sidebar_items False %}
-        <hr>
+
         {% if request.user.is_authenticated %}
+            <hr>
             {% sidebar_items True %}
         {% endif %}
     </div>

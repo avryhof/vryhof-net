@@ -90,11 +90,16 @@ class MSAuth:
         self.application_key = getattr(settings, "MS_CLIENT_ID")
         self.application_password = getattr(settings, "MS_CLIENT_SECRET")
 
-        self.application_scopes = getattr(settings, "MS_SCOPE", ["openid", "profile", "offline_access", "user.read"])
+        self.application_scopes = getattr(settings, "MS_SCOPE",
+                                          ["openid", "profile", "offline_access", "user.read", "User.ReadBasic.All"])
 
         self.application_redirect = self.get_callback_url()
 
         self.token = request.session.get("token", False)
+
+        if self.request.user.is_authenticated and is_empty(self.token):
+            self.user_session = self.session_model.objects.filter(user=self.request.user).latest("expires_at")
+            self.token = self.user_session.token
 
         if self.token:
             self.user_session = self.session_model.get_or_create_session(self.token, request)
@@ -218,7 +223,7 @@ class MSAuth:
                 username=username, email=email, first_name=first_name, last_name=last_name, is_active=True
             )
             # We don't actually use the password stored in the user_model
-            self.user.set_password("%x" % random.randint(0, 2**256))
+            self.user.set_password("%x" % random.randint(0, 2 ** 256))
             self.user.save()
 
         if not self.user.id:
@@ -280,6 +285,7 @@ class MSAuth:
             refresh_params = {
                 "client_id": self.application_key,
                 "client_secret": self.application_password,
+                "refresh_token": token.get("refresh_token"),
             }
             new_token = aad_auth.refresh_token(self.token_url, **refresh_params)
 
@@ -331,8 +337,8 @@ class MSGraph:
     def get_user(self):
         return self.user_session.get_user()
 
-    def get_user_photo(self, width=False, height=False):
-        return self.user_session.get_photo(width, height)
+    def get_user_photo(self):
+        return self.user_session.get_photo()
 
     def get_group_membership(self):
         return self.user_session.get_group_membership()

@@ -1,4 +1,5 @@
 import datetime
+import io
 import json
 
 from django.contrib.auth import get_user_model
@@ -7,21 +8,104 @@ from django.db import models
 from django.http import HttpResponse
 from requests_oauthlib import OAuth2Session
 
-from accounts.auth_helper import MSAuth
+from accounts.auth_helper import MSAuth, MSGraph
 from accounts.utils import is_empty, log_message, aware_now, not_empty
 
 
 class ExtendedUser(models.Model):
-    user = models.ForeignKey(get_user_model(), blank=True, null=True, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(
+        get_user_model(), blank=True, null=True, on_delete=models.DO_NOTHING
+    )
+    ms_id = models.CharField(max_length=255, blank=True, null=True)
+    business_phones = models.JSONField(blank=True, null=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    first_name = models.CharField(max_length=100, blank=True, null=True)
+    last_name = models.CharField(max_length=100, blank=True, null=True)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    mobile_phone = models.CharField(max_length=50, blank=True, null=True)
+    office_location = models.CharField(max_length=255, blank=True, null=True)
+    preferred_language = models.CharField(max_length=50, blank=True, null=True)
+    user_principal_name = models.CharField(max_length=255, blank=True, null=True)
+    photo = models.ImageField(blank=True, null=True, upload_to="profile_pics")
+    user_json = models.JSONField(blank=True, null=True)
 
     class Meta:
         permissions = (
-            ("is_tester", "User is a tester, and can see parts of the site open for testing purposes"),
-            ("is_developer", "User is a developer and can see parts of the site for developers only"),
+            (
+                "is_tester",
+                "User is a tester, and can see parts of the site open for testing purposes",
+            ),
+            (
+                "is_developer",
+                "User is a developer and can see parts of the site for developers only",
+            ),
         )
 
     def __str__(self):
-        return self.user
+        if isinstance(self.user_principal_name, str):
+            return self.user_principal_name
+        elif not is_empty(self.user) and isinstance(self.user.email, str):
+            return self.user.email
+
+        return super().__str__()
+
+    @classmethod
+    def create_from_response(cls, auth_user, user):
+        principal_name = user.get("userPrincipalName")
+
+        try:
+            u = cls.objects.get(user_principal_name=principal_name)
+        except cls.DoesNotExist:
+            u = cls.objects.create(
+                user=auth_user,
+                ms_id=user.get("id"),
+                business_phones=user.get("businessPhones"),
+                name=user.get("displayName"),
+                first_name=user.get("givenName"),
+                last_name=user.get("surname"),
+                title=user.get("jobTitle"),
+                email=user.get("mail"),
+                mobile_phone=user.get("mobilePhone"),
+                office_location=user.get("officeLocation"),
+                preferred_language=user.get("preferredLanguage"),
+                user_principal_name=principal_name,
+                user_json=user,
+            )
+        else:
+            u.ms_id = user.get("id")
+            u.business_phones = user.get("businessPhones")
+            u.name = user.get("displayName")
+            u.first_name = user.get("givenName")
+            u.last_name = user.get("surname")
+            u.title = user.get("jobTitle")
+            u.email = user.get("mail")
+            u.mobile_phone = user.get("mobilePhone")
+            u.office_location = user.get("officeLocation")
+            u.preferred_language = user.get("preferredLanguage")
+            u.user_principal_name = user.get("userPrincipalName")
+            u.user_json = user
+            u.save()
+
+        return u
+
+    @property
+    def session(self):
+        try:
+            return GraphSession.objects.get(user=self.user, expires_at__gte=aware_now())
+        except GraphSession.DoesNotExist as e:
+            log_message(f"Session not found for {self.user}")
+            return None
+
+    def get_photo(self):
+        photo = self.session.graph.get_user_photo()
+
+        if is_empty(self.photo) and not is_empty(photo):
+            image_file = io.BytesIO(photo.content)
+            self.photo.save(f"{self.ms_id}.jpg", image_file)
+            self.save()
+
+        return photo
 
 
 class GraphSession(models.Model):
@@ -50,6 +134,14 @@ class GraphSession(models.Model):
     @property
     def ms_auth(self):
         return MSAuth(self.token)
+
+    @property
+    def graph(self):
+        return MSGraph(self.token)
+
+    @property
+    def refresh_token(self):
+        return self.token.get("refresh_token")
 
     @classmethod
     def get_or_create_session(cls, token, request=None, **kwargs):
@@ -123,14 +215,14 @@ class GraphSession(models.Model):
 
         return self.user_json
 
-    def get_photo(self, width=False, height=False):
-        if is_empty(width) and is_empty(height):
-            photo = self.graph_client.get("{0}/me/photo/$value".format(self.graph_url))
-        else:
-            photo = self.graph_client.get("{0}/me/photos/{1}x{2}/$value".format(self.graph_url, width, height))
+    def get_photo(self):
+        photo = self.graph_client.get(f"{self.graph_url}/me/photo/$value")
 
-        resp = HttpResponse(content_type="image/jpg")
-        resp.write(photo.content)
+        if "error" not in photo.content.decode():
+            return photo.content
+
+        else:
+            resp = None
 
         return resp
 
@@ -154,3 +246,18 @@ class GraphSession(models.Model):
         messages = self.graph_client.get("{0}/me/messages".format(self.graph_url))
 
         return messages.json()
+
+    @property
+    def user_profile(self):
+        try:
+            return ExtendedUser.objects.get(user=self.user)
+
+        except ExtendedUser.DoesNotExist:
+            g = MSGraph(self.token)
+            return ExtendedUser.create_from_response(self.user, g.get_user())
+
+        except ExtendedUser.MultipleObjectsReturned:
+            g = MSGraph(self.token)
+            return g.get_user()
+
+        return None
