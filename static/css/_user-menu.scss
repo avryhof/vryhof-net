@@ -13,21 +13,39 @@
       background: var(--body-loud-color);
     }
 
-    .user-icon {
-      text-transform: uppercase;
-      font-weight: bold;
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      overflow: hidden;
-      color: var(--body-fg);
-      background: var(--body-loud-color);
 
-      img {
-        width: 100%;
-        height: 100%;
+  }
+}
+
+.user-icon {
+  text-transform: uppercase;
+  font-weight: bold;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  color: var(--body-fg);
+  background: var(--body-loud-color);
+
+  img  {
+    width: 100%;
+    height: 100%;
+  }
+
+  .user-initial {
+    @include flex-center;
+    position: relative;
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .user-icon {
+      .user-initial {
+          color: var(--body-bg);
+          background: var(--body-fg);
       }
-    }
   }
 }
 

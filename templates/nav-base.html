@@ -22,12 +22,12 @@
                 <div class="menu-item">
                     <a href="{% url 'member-home' %}">Profile</a>
                 </div>
-                <div class="menu-item">
-                    <a href="{% url 'account_logout' %}">Log Out</a>
-                </div>
+{#                <div class="menu-item">#}
+{#                    <a href="{% url 'account_logout' %}">Log Out</a>#}
+{#                </div>#}
             </div>
         {% else %}
-            <a href="{% url 'account_login' %}">Log In</a>
+{#            <a href="{% url 'account_login' %}">Log In</a>#}
         {% endif %}
     </div>
 </nav>

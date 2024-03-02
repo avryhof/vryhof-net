@@ -13,18 +13,30 @@
       padding: 0.75em;
 
       a:link, a:visited {
-        color: var(--body-fg);
+        color: $whiteSmoke;
         text-decoration: none;
       }
 
       .icon {
         @include flex-center;
+        position: relative;
         width: 40px;
         height: 40px;
 
         img, .user-icon {
           border-radius: 50%;
           width: 100%;
+        }
+
+        .user-initial {
+          @include flex-center;
+          position: relative;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          color: #333333;
+          background: $whiteSmoke;
+          font-weight: bold;
         }
 
         img[src$= "svg" ] {

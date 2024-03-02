@@ -11,7 +11,7 @@ def user_icon(request):
     icon_html = '<div class="user-icon">'
 
     if request.user.is_authenticated and not is_empty(request.user.email):
-        icon_html += request.user.username[0].upper()
+        icon_html += f'<div class="user-initial">{request.user.username[0].upper()}</div>'
     else:
         icon_html += '<img src="/static/icons/feather/user.svg" alt="User">'
 

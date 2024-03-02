@@ -49,11 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.sitemaps",
     "django.contrib.humanize",
     "channels",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.github",
-    "allauth.socialaccount.providers.google",
+    "accounts",
     "me",
     "bootstrap4",
     "rest_framework",
@@ -91,7 +87,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
-     "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "vryhof.urls"
@@ -127,6 +122,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "vryhof.wsgi.application"
+ASGI_APPLICATION = "vryhof.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -143,53 +139,18 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
-
-AUTHENTICATION_BACKENDS = [
-    # Needed to login by username in Django admin, regardless of `allauth`
+AUTHENTICATION_BACKENDS = (
+    "accounts.backends.MSGraphBackend",
     "django.contrib.auth.backends.ModelBackend",
-    # `allauth` specific authentication methods, such as login by e-mail
-    "allauth.account.auth_backends.AuthenticationBackend",
-]
+)
 
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
-        "APP": {
-            "client_id": os.environ.get("GOOGLE_CLIENT_ID"),
-            "secret": os.environ.get("GOOGLE_CLIENT_SECRET"),
-            "key": os.environ.get("GOOGLE_API_KEY"),
-        },
-        "SCOPE": [
-            "profile",
-            "email",
-        ],
-        "AUTH_PARAMS": {
-            "access_type": "online",
-        },
-        "OAUTH_PKCE_ENABLED": True,
-    },
-    "github": {
-        "APP": {
-            "client_id": os.environ.get("GITHUB_CLIENT_ID"),
-            "secret": os.environ.get("GITHUB_CLIENT_SECRET"),
-            # "key": os.environ.get("GOOGLE_API_KEY"),
-        },
-        "SCOPE": [
-            "user",
-            "repo",
-            "read:org",
-        ],
-    },
-}
+MS_TENANT_ID = os.environ.get("MS_TENANT_ID")
+MS_CLIENT_ID = os.environ.get("MS_CLIENT_ID")
+MS_CLIENT_SECRET = os.environ.get("MS_CLIENT_SECRET")
+
+MS_SECURE_TRANSPORT = False
+MS_RELAX_TOKEN_SCOPE = True
+MS_IGNORE_SCOPE_CHANGE = True
 
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"

@@ -22,7 +22,7 @@ from django.views.static import serve
 urlpatterns = [
     # path("vryhof-admin/multifactor/", include("multifactor.urls")),
     path("vryhof-admin/", admin.site.urls),
-    path("accounts/", include("allauth.urls")),
+    path("accounts/", include("accounts.urls")),
     path("me/", include("me.urls")),
     path("subsonic/", include("subsonic.urls")),
     path("livechat/", include("livechat.api_urls")),

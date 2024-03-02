@@ -1,8 +1,8 @@
 {% load user_tags %}
 {% if request.user.is_authenticated %}
-    {% url "account-logout" as user_sidebar_url %}
+    {% url "signout" as user_sidebar_url %}
 {% else %}
-    {% url "account-login" as user_sidebar_url %}
+    {% url "login" as user_sidebar_url %}
 {% endif %}
 <div class="sidebar-item">
     <div class="icon">
