@@ -118,7 +118,9 @@ class MSAuth:
             port = url.port
 
             if is_empty(port):
-                if url.scheme == "https":
+                if not is_empty(getattr(settings, "FORCE_PORT")):
+                    port = settings.FORCE_PORT
+                elif url.scheme == "https":
                     port = 443
                 else:
                     port = 80
