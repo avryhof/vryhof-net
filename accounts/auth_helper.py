@@ -115,8 +115,15 @@ class MSAuth:
 
         if is_empty(callback_url):
             url = urlparse(self.request.build_absolute_uri())
+            port = url.port
 
-            if int(url.port) not in [80, 443]:
+            if is_empty(port):
+                if url.scheme == "https":
+                    port = 443
+                else:
+                    port = 80
+
+            if int(port) not in [80, 443]:
                 callback_url = f"{url.scheme}://{url.hostname}:{url.port}{reverse('callback')}"
             else:
                 callback_url = f"{url.scheme}://{url.hostname}{reverse('callback')}"
