@@ -7,11 +7,11 @@ from .models import Member
 @admin.register(Member)
 class MemberAdmin(admin.ModelAdmin):
     list_display = (
-        "display_name",
+        "user",
+        "name",
         "city",
         "state",
         "zip_code",
-        "user",
     )
     list_filter = (
         "city",

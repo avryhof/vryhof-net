@@ -31,6 +31,13 @@ class Member(AbstractStreetAddress):
     def __str__(self):
         return self.display_name
 
+    def save(self, *args, **kwargs):
+        if self.name is None:
+            name_parts = [self.prefix, self.first_name, self.middle_name, self.last_name, self.suffix]
+            self.name = " ".join([part for part in name_parts if isinstance(part, str)])
+
+        return super().save(*args, **kwargs)
+
     @property
     def display_name(self):
         if self.name is None:

@@ -507,8 +507,13 @@ input[type=submit], .btn, button {
 }
 .nav-profile .profile-menu {
   display: none;
+  background: #333333;
   position: relative;
+  top: 1em;
   z-index: 99;
+  border-right: 1px solid #e1e1e1;
+  border-bottom: 1px solid #e1e1e1;
+  border-left: 1px solid #e1e1e1;
 }
 .nav-profile .profile-menu .menu-item {
   padding: 1em;

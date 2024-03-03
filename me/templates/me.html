@@ -21,12 +21,14 @@
                         </a>
                     </div>
                 </div>
-                <div class="about">
-                    <div class="label">Date of Birth</div>
-                    <div class="value">
-                        {{ profile.date_of_birth }}
+                {% if profile.date_of_birth %}
+                    <div class="about">
+                        <div class="label">Date of Birth</div>
+                        <div class="value">
+                            {{ profile.date_of_birth }}
+                        </div>
                     </div>
-                </div>
+                {% endif %}
 
                 {% if profile.phone %}
                     <div class="about">
@@ -61,10 +63,12 @@
                     </div>
                 {% endif %}
 
-                <div class="about">
-                    <div class="label">Address</div>
-                    <div class="value">{{ profile.html_address }}</div>
-                </div>
+                {% if profile.address1 %}
+                    <div class="about">
+                        <div class="label">Address</div>
+                        <div class="value">{{ profile.html_address }}</div>
+                    </div>
+                {% endif %}
                 <div class="about">
                     <div class="label">Email</div>
                     <div class="value">{{ profile.email_address }}</div>
