@@ -966,8 +966,9 @@ input[type=submit], .btn, button {
 }
 .sidebar .sidebar-container .sidebar-item .icon img img, .sidebar .sidebar-container .sidebar-item .icon .user-icon img {
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 40px !important;
+  height: 40px !important;
+  object-fit: cover;
 }
 .sidebar .sidebar-container .sidebar-item .icon .user-initial {
   display: flex;
