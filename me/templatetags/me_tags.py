@@ -32,6 +32,6 @@ def user_icon(request):
 def user_name(request):
     if request.user.is_authenticated:
         profile = get_profile(request)
-        if not_empty(profile) and not_empty(profile.name):
+        if not_empty(profile) and hasattr(profile, "name") and not_empty(profile.name):
             return profile.name
     return request.user.username
