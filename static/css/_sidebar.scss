@@ -8,6 +8,7 @@
   .sidebar-container {
     background: var(--body-loud-color);
     border-radius: 8px;
+    background-clip: content-box;
 
     .sidebar-item {
       padding: 0.75em;

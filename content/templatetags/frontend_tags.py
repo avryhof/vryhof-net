@@ -39,4 +39,10 @@ def sidebar_icon(url_name, icon_class):
 
 @register.simple_tag
 def sidebar_items(authenticated=False):
-    return mark_safe("".join([item.html for item in SidebarItem.objects.filter(authenticated=authenticated).order_by("order")]))
+    return mark_safe(
+        "".join([item.html for item in SidebarItem.objects.filter(authenticated=authenticated).order_by("order")]))
+
+
+@register.simple_tag
+def sidebar_items_authenticated():
+    return mark_safe("".join([item.html for item in SidebarItem.objects.filter(authenticated=True).order_by("order")]))

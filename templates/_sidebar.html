@@ -4,9 +4,9 @@
         {% include "_user-sidebar.html" %}
         {% sidebar_items False %}
 
-        {% if request.user.is_authenticated %}
+        {% if request.user.is_authenticated and sidebar_items_authenticated|length > 0 %}
             <hr>
-            {% sidebar_items True %}
+            {% sidebar_items_authenticated %}
         {% endif %}
     </div>
 </div>
