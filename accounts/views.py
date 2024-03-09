@@ -91,7 +91,7 @@ class LoginView(TemplateView):
                 login_link = session.get_external_url(request)
 
                 send_multipart_email(
-                    "[ProAct Summit] Your login token",
+                    f"[{settings.EMAIL_PREFIX}] Your login token",
                     [user.email],
                     None,
                     "accounts/email/login-code-email.html",
