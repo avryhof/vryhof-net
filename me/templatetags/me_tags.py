@@ -16,7 +16,7 @@ def user_icon(request):
         profile = get_profile(request)
         if not_empty(profile) and hasattr(profile, "photo") and not_empty(profile.photo):
             icon_html += f'<img src="{profile.photo.url}" alt="Photo of User">'
-        elif not_empty(profile) and isinstance(profile.first_name, str):
+        elif not_empty(profile) and isinstance(profile.first_name, str) and len(profile.first_name) > 0:
             icon_html += f'<div class="user-initial">{profile.first_name[0].upper()}</div>'
         else:
             icon_html += f'<div class="user-initial">{request.user.username[0].upper()}</div>'
