@@ -3,6 +3,8 @@ import inspect
 import logging
 import os
 import pprint
+import random
+import string
 import sys
 
 from django.apps import apps as django_apps
@@ -25,6 +27,13 @@ def not_empty(value):
     return not is_empty(value)
 
 
+def random_password():
+    valid_chars = string.ascii_letters + string.digits
+    length = random.randint(32, 64)
+
+    return "".join(random.choice(valid_chars) for i in range(length))
+
+
 def load_model(app_name, model_name=None):
     if is_empty(model_name):
         accessor = app_name
@@ -35,10 +44,14 @@ def load_model(app_name, model_name=None):
     try:
         return django_apps.get_model(accessor, require_ready=False)
     except ValueError:
-        raise ImproperlyConfigured(f"{accessor} must be of the form 'app_label.model_name'")
+        raise ImproperlyConfigured(
+            f"{accessor} must be of the form 'app_label.model_name'"
+        )
 
     except LookupError:
-        raise ImproperlyConfigured(f"{accessor} refers to model '{model_name}' that has not been installed")
+        raise ImproperlyConfigured(
+            f"{accessor} refers to model '{model_name}' that has not been installed"
+        )
 
 
 def log_message(message, **kwargs):
@@ -62,7 +75,12 @@ def log_message(message, **kwargs):
             message,
         )
     else:
-        message = "%s - %s (%s):\n%s" % (debug_filename, debug_function_name, debug_line_number, message)
+        message = "%s - %s (%s):\n%s" % (
+            debug_filename,
+            debug_function_name,
+            debug_line_number,
+            message,
+        )
 
     if settings.DEBUG:
         sys.stdout.write("%s: %s\n\n" % (debug_timestamp, message))

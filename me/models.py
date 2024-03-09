@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 
 from gis.models import AbstractStreetAddress
 from me.helpers import photo_upload_path
+from utilities.model_helper import load_model
 from utilities.utility_functions import is_empty
 
 
@@ -35,6 +36,16 @@ class Member(AbstractStreetAddress):
         if self.name is None:
             name_parts = [self.prefix, self.first_name, self.middle_name, self.last_name, self.suffix]
             self.name = " ".join([part for part in name_parts if isinstance(part, str)])
+
+        if not is_empty(self.photo):
+            user_prefs_model = load_model("accounts.UserPrefs")
+            try:
+                prefs = user_prefs_model.objects.get(user=self.user)
+            except user_prefs_model.DoesNotExist:
+                pass
+            else:
+                prefs.photo = self.photo
+                prefs.save()
 
         return super().save(*args, **kwargs)
 

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block page %}
+    <div id="login-container">
+        <div class="login-form-container">
+            <form action="{% url 'login-token' %}" method="post">
+                {% csrf_token %}
+                <div class="field-group">
+                    <div class="label">
+                        <label for="{{ form.token.id_for_label }}">
+                            {{ form.token.label }}
+                        </label>
+                    </div>
+                    <div class="field">
+                        {{ form.token }}
+                    </div>
+                </div>
+                <button type="submit">
+                    {% trans 'Continue' %}
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

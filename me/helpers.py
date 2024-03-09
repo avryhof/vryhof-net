@@ -1,6 +1,6 @@
 import os
 
-from accounts.utils import not_empty, log_message
+from accounts.lib_utils import not_empty, log_message
 from utilities.model_helper import load_model
 
 
@@ -10,13 +10,13 @@ def get_profile(request):
         try:
             profile = member_profile.objects.get(user=request.user)
         except member_profile.DoesNotExist:
-            profile_model = load_model("accounts.ExtendedUser")
+            profile_model = load_model("accounts.UserPrefs")
             try:
                 profile = profile_model.objects.get(user=request.user)
             except profile_model.DoesNotExist:
                 return request.user
             else:
-                log_message("Profile from accounts.ExtendedUser")
+                log_message("Profile from accounts.UserPrefs")
         else:
             log_message("Profile from me.Member")
 

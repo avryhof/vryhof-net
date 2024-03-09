@@ -7,7 +7,7 @@ from django.conf import settings
 from django.core import signing
 from django.core.signing import Signer
 
-from accounts.base64safe import strip_padding, unstrip_padding, b64decode
+from accounts.lib_base64safe import b64decode, strip_padding, unstrip_padding
 
 logger = logging.getLogger(__name__)
 

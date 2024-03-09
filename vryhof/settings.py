@@ -139,18 +139,18 @@ DATABASES = {
     }
 }
 
-AUTHENTICATION_BACKENDS = (
-    "accounts.backends.MSGraphBackend",
-    "django.contrib.auth.backends.ModelBackend",
-)
+# AUTHENTICATION_BACKENDS = (
+#     "accounts.backends.MSGraphBackend",
+#     "django.contrib.auth.backends.ModelBackend",
+# )
 
-MS_TENANT_ID = os.environ.get("MS_TENANT_ID")
-MS_CLIENT_ID = os.environ.get("MS_CLIENT_ID")
-MS_CLIENT_SECRET = os.environ.get("MS_CLIENT_SECRET")
-
-MS_SECURE_TRANSPORT = False
-MS_RELAX_TOKEN_SCOPE = True
-MS_IGNORE_SCOPE_CHANGE = True
+# MS_TENANT_ID = os.environ.get("MS_TENANT_ID")
+# MS_CLIENT_ID = os.environ.get("MS_CLIENT_ID")
+# MS_CLIENT_SECRET = os.environ.get("MS_CLIENT_SECRET")
+#
+# MS_SECURE_TRANSPORT = False
+# MS_RELAX_TOKEN_SCOPE = True
+# MS_IGNORE_SCOPE_CHANGE = True
 
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
@@ -361,20 +361,32 @@ CKEDITOR_CONFIGS = {
 # }
 
 
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "accounts.backends.AuthTokenBackend",
+)
+
+AUTH_SESSION_LIFETIME = 10  # minutes
+
+
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "api.rest_auth.CsrfExemptSessionAuthentication",
-    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "accounts.rest_auth.RemoteSessionAuthentication",
+    ),
     "DEFAULT_PARSER_CLASSES": (
         "rest_framework.parsers.JSONParser",
         "rest_framework.parsers.FormParser",
         "rest_framework.parsers.MultiPartParser",
     ),
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
-        # "rest_framework.permissions.IsAdminUser",
+    "DEFAULT_PERMISSION_CLASSES": (
+        "accounts.rest_permissions.AuthorizedAgentPermission",
+        "rest_framework.permissions.IsAdminUser",
+    ),
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        # Commenting out browseable api until there is time to do it right
+        # 'rest_framework.renderers.BrowsableAPIRenderer',
     ],
-    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
 }
 
 ICON_SRC = os.path.join(BASE_DIR, "static", "favorites_icon.png")

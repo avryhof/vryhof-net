@@ -1,7 +1,7 @@
 from django import template
 from django.utils.safestring import mark_safe
 
-from accounts.utils import not_empty
+from accounts.lib_utils import not_empty
 from me.helpers import get_profile
 from utilities.model_helper import load_model
 
@@ -14,7 +14,9 @@ def user_icon(request):
 
     if request.user.is_authenticated:
         profile = get_profile(request)
-        if not_empty(profile) and isinstance(profile.first_name, str):
+        if not_empty(profile) and not_empty(profile.photo):
+            icon_html += f'<img src="{profile.photo.url}" alt="Photo of User">'
+        elif not_empty(profile) and isinstance(profile.first_name, str):
             icon_html += f'<div class="user-initial">{profile.first_name[0].upper()}</div>'
         else:
             icon_html += f'<div class="user-initial">{request.user.username[0].upper()}</div>'

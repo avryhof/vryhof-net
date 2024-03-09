@@ -1,11 +1,12 @@
 from django.urls import path
+from django.views.generic import RedirectView
 
 from .views import *
 
 urlpatterns = [
-    path("login/", sign_in, name="login"),
-    path("signout/", sign_out, name="signout"),
-    path("callback", callback, name="callback"),
-    path("photo/", get_photo, name="photo"),
-    path("photo/<int:width>/<int:height>/", get_photo, name="photo_sized")
+    path("login/", LoginView.as_view(), name="login"),
+    path("login/token/<str:token>/", LoginTokenView.as_view(), name="login-token"),
+    path("login/token/", LoginTokenView.as_view(), name="login-token"),
+    path("signout/", sign_out, name="logout"),
+    path("sign-out/", RedirectView.as_view(pattern_name="logout"), name="signout"),
 ]

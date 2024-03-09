@@ -1,163 +1,193 @@
-import io
-
-from PIL import Image
 from django.conf import settings
-from django.contrib.auth import authenticate, login
-from django.http import HttpResponseRedirect, HttpResponse, FileResponse
-from django.shortcuts import redirect
+from django.contrib.auth import logout, get_user_model
+from django.shortcuts import redirect, render
 from django.urls import NoReverseMatch
-from oauthlib.oauth2 import TokenExpiredError
-from rest_framework import status
+from django.utils.decorators import method_decorator
+from django.utils.safestring import mark_safe
+from django.views.decorators.csrf import csrf_protect
+from django.views.generic import TemplateView
 
-from .auth_helper import MSAuth, MSGraph
-from .cookies import set_cookie_in_response, get_cookie_in_request
-from .utils import not_empty, load_model, is_empty, log_message
-
-
-def sign_in(request, *args, **kwargs):
-    msauth = MSAuth(request, debug=True)
-
-    next_url = request.GET.get("next")
-
-    if msauth.user_session:
-        user = authenticate(username=msauth.user_session.user.username, password=msauth.user_session.user.password)
-        login(request, user, backend="accounts.backends.MSGraphBackend")
-
-        resp = HttpResponseRedirect(request.META["HTTP_REFERER"])
-
-    else:
-        # Get the sign-in URL
-        sign_in_url, state = msauth.get_sign_in_url()
-        # Save the expected state so we can validate in the callback
-        request.session["auth_state"] = state
-        # Redirect to the Azure sign-in page
-
-        resp = HttpResponseRedirect(sign_in_url)
-
-    resp = set_cookie_in_response(resp, "next_url", next_url, 1)
-
-    return resp
+from .forms import LoginForm, LoginTokenForm
+from .lib_cookies import set_cookie_in_response, get_cookie_in_request
+from .lib_email_helpers import send_multipart_email
+from .lib_utils import load_model, not_empty, random_password, log_message, is_empty
 
 
-def callback(request):
-    session_model = load_model("accounts.GraphSession")
-    extended_user_model = load_model("accounts.ExtendedUser")
+class LoginView(TemplateView):
+    template_name = "accounts/login.html"
+    extra_css = ["css/accounts/login.css"]
+    extra_javascript = []
 
-    msauth = MSAuth(request)
+    name = "Login"
+    form = LoginForm
 
-    # Get the state saved in session
-    expected_state = request.session.pop("auth_state", "")
-    # Make the token request
-    token = msauth.get_token_from_code(request.get_full_path(), expected_state)
-    # Save token and user
-    # msauth.store_token(token=token)
+    def get_context_data(self, **kwargs):
+        context = super(LoginView, self).get_context_data(**kwargs)
+        context["page_title"] = self.name
+        context["extra_css"] = self.extra_css
+        context["extra_javascript"] = self.extra_javascript
+        context["request"] = self.request
 
-    # Get the user's profile
-    g = MSGraph(token)
-    user_json = g.get_user()
-    auth_user = msauth.store_user(user_json)
+        return context
 
-    remote_session = session_model.get_or_create_session(token, request, is_authenticated=True)
-    if is_empty(remote_session.user):
-        session_model.objects.filter(user=auth_user).exclude(pk=remote_session.pk).delete()
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
 
-        remote_session.user = auth_user
-        remote_session.save()
+        form = self.form()
 
-    msauth.user_session = remote_session
+        context["form"] = form
 
-    authenticated_user = authenticate(username=remote_session.user.username, password=remote_session.user.password)
-    login(request, authenticated_user, backend="accounts.backends.MSGraphBackend")
+        response = render(request, self.template_name, context)
 
-    extended_user = extended_user_model.create_from_response(authenticated_user, user_json)
-    photo = extended_user.get_photo()
+        next_url = request.GET.get("next")
+        if not_empty(next_url):
+            response = set_cookie_in_response(response, "next_url", next_url, 1)
 
-    next_url = get_cookie_in_request(request, "next_url")
+        return response
 
-    resp = redirect(settings.LOGIN_REDIRECT_URL)
-    if not_empty(next_url):
-        try:
-            resp = redirect(next_url)
-        except NoReverseMatch:
-            pass
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data()
 
-    return resp
+        form = self.form(request.POST)
+        if not form.is_valid():
+            log_message(form.errors)
+
+        else:
+            user = None
+
+            username = form.cleaned_data.get("username")
+            if isinstance(username, str):
+                username = username.lower()
+
+            try:
+                user = get_user_model().objects.get(email__iexact=username)
+            except (
+                    get_user_model().DoesNotExist,
+                    get_user_model().MultipleObjectsReturned,
+            ):
+                email_domain_model = load_model("accounts.EmailDomain")
+                if not email_domain_model.is_valid_domain(username):
+                    log_message("Domain not enabled.")
+
+                else:
+                    user = get_user_model().objects.create(
+                        username=username,
+                        email=username,
+                        password=random_password(),
+                        is_active=True,
+                    )
+
+            if is_empty(user):
+                log_message("User does not exist.")
+
+            else:
+                auth_session_model = load_model("accounts.AuthSession")
+                try:
+                    session = auth_session_model.objects.get(user=user)
+                except auth_session_model.DoesNotExist:
+                    session = auth_session_model.objects.create(user=user)
+
+                token = session.generate_access_token()
+                login_link = session.get_external_url(request)
+
+                send_multipart_email(
+                    "[ProAct Summit] Your login token",
+                    [user.email],
+                    None,
+                    "accounts/email/login-code-email.html",
+                    {
+                        "code": token,
+                        "message": mark_safe(
+                            "<p>Your login token is {}.</p>"
+                            '<p>Enter it at the prompt, or click <a href="{}">here</a> to log in.</p>'.format(
+                                token, login_link
+                            )
+                        ),
+                    },
+                )
+
+                return redirect("login-token")
+
+        context["form"] = form
+
+        return render(request, self.template_name, context)
+
+    @method_decorator(csrf_protect)
+    def dispatch(self, request, *args, **kwargs):
+        return super(LoginView, self).dispatch(request, *args, **kwargs)
+
+
+class LoginTokenView(TemplateView):
+    template_name = "accounts/login-code.html"
+    extra_css = ["css/accounts/login.css"]
+    extra_javascript = []
+
+    name = "Login Token"
+    form = LoginTokenForm
+
+    def get_context_data(self, **kwargs):
+        context = super(LoginTokenView, self).get_context_data(**kwargs)
+        context["page_title"] = self.name
+        context["extra_css"] = self.extra_css
+        context["extra_javascript"] = self.extra_javascript
+        context["request"] = self.request
+
+        return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
+
+        if not_empty(kwargs.get("token")):
+            form = self.form(initial={"token": kwargs["token"]})
+        else:
+            form = self.form()
+
+        context["form"] = form
+
+        response = render(request, self.template_name, context)
+
+        next_url = request.GET.get("next")
+        if not_empty(next_url):
+            response = set_cookie_in_response(response, "next_url", next_url, 1)
+
+        return response
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data()
+
+        form = self.form(request.POST)
+        if form.is_valid():
+            auth_session_model = load_model("accounts.AuthSession")
+
+            session = auth_session_model.check_token(
+                request, token=form.cleaned_data["token"]
+            )
+            if not session:
+                return redirect("login")
+
+            next_url = get_cookie_in_request(request, "next_url")
+
+            resp = redirect(settings.LOGIN_REDIRECT_URL)
+            if not_empty(next_url):
+                try:
+                    resp = redirect(next_url)
+                except NoReverseMatch:
+                    pass
+
+            return resp
+
+        context["form"] = form
+
+        return render(request, self.template_name, context)
+
+    @method_decorator(csrf_protect)
+    def dispatch(self, request, *args, **kwargs):
+        return super(LoginTokenView, self).dispatch(request, *args, **kwargs)
 
 
 def sign_out(request):
-    msauth = MSAuth(request)
-    # Clear out the user and token
-    msauth.remove_user_and_token()
+    request.COOKIES["auth_token"] = ""
+    logout(request)
+    request.session.flush()
 
     return redirect(settings.LOGIN_REDIRECT_URL)
-
-
-def get_photo(request, **kwargs):
-    width = kwargs.get("width", False)
-    height = kwargs.get("height", False)
-
-    msauth = MSAuth(request)
-    token = msauth.get_token()
-
-    if token:
-        session = msauth.get_or_create_session()
-        profile = session.user_profile
-
-        if not is_empty(profile) and is_empty(profile.photo):
-            photo = profile.get_photo()
-
-        else:
-            photo = profile.photo
-
-        if not is_empty(profile) and not is_empty(profile.photo):
-            if not is_empty(width) and not is_empty(height):
-                pil_image = Image.open(profile.photo.path)
-                pil_image.thumbnail((width, height))
-
-                response = HttpResponse(content_type="image/jpeg")
-                pil_image.save(response, format="JPEG")
-
-            else:
-                img = open(profile.photo.path, "rb")
-                response = FileResponse(img)
-
-            return response
-
-        else:
-            try:
-                g = MSGraph(token)
-                photo = g.get_user_photo()
-
-            except TokenExpiredError:
-                photo = HttpResponse()
-                photo.status_code = status.HTTP_404_NOT_FOUND
-
-            else:
-                if not is_empty(photo):
-                    session = msauth.get_or_create_session()
-                    profile = session.user_profile
-
-                    image_file = io.BytesIO(photo.content)
-                    # user_photo = Image(image_file)
-                    if is_empty(profile.photo):
-                        profile.photo.save(f"{profile.ms_id}.jpg", image_file)
-                        profile.save()
-
-                    if not is_empty(width) and not is_empty(height):
-                        pil_image = Image.open(profile.photo.path)
-                        pil_image.thumbnail((width, height))
-
-                        response = HttpResponse(content_type="image/jpeg")
-                        pil_image.save(response, format="JPEG")
-
-                        return response
-
-    else:
-        photo = HttpResponse()
-        photo.status_code = status.HTTP_404_NOT_FOUND
-
-    if photo is None:
-        photo = HttpResponse()
-        photo.status_code = status.HTTP_404_NOT_FOUND
-
-    return photo

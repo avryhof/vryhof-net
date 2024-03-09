@@ -1,0 +1,55 @@
+@import "../../../../static/css/mixins";
+
+#login-container {
+  @include fill-screen;
+  @include flex-center;
+
+  .login-form-container {
+    display: flex;
+    flex-direction: column;
+
+    color: var(--body-bg);
+    background: var(--body-fg);
+
+    width: 100%;
+    padding: 0;
+
+    .form-title {
+      padding: 0.5em;
+      color: var(--body-bg);
+      background: var(--body-fg);
+    }
+
+    .field-group, .btn-group {
+      padding: 0.5em 0.5em 0 0.5em;
+      .label, .field {
+        width: 100%;
+        padding: 0.5em;
+
+        input {
+          width: 100%;
+          margin: 0;
+        }
+      }
+    }
+    .btn-group {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  #login-container {
+    padding: 1.0em;
+  }
+}
+
+@media (min-width: 900px) {
+  #login-container {
+    .login-form-container {
+      max-width: 395px;
+    }
+  }
+}

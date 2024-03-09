@@ -1,4 +1,4 @@
-{% load user_tags %}
+{% load me_tags %}
 {% if request.user.is_authenticated %}
     {% url "signout" as user_sidebar_url %}
 {% else %}

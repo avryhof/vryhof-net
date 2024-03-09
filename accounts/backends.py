@@ -1,16 +1,16 @@
 import logging
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 
-from accounts.models import GraphSession
-from accounts.utils import log_message, aware_now
+from accounts.lib_utils import log_message, load_model, aware_now
 
 logger = logging.getLogger(__name__)
 ldap_print_debug = True
 
 
-class MSGraphBackend(ModelBackend):
+class AuthTokenBackend(ModelBackend):
     user_model = None
 
     def __init__(self):
@@ -20,20 +20,22 @@ class MSGraphBackend(ModelBackend):
         user = None
 
         if username:
+            auth_session_model = load_model("accounts.AuthSession")
+
             try:
-                user = self.user_model.objects.get(username=username)
+                auth_user = self.user_model.objects.get(username=username)
             except self.user_model.DoesNotExist:
                 log_message(f"User {username} does not exist.")
                 user = None
             else:
                 try:
-                    remote_session = GraphSession.objects.get(
-                        user=user,
-                        is_authenticated=True,
-                        expires_at__gt=aware_now()
-                    )
-                except GraphSession.DoesNotExist:
-                    log_message(f"Could not find remote session for {username}")
+                    session = auth_session_model.objects.get(user=auth_user, token=password, expires_at__gte=aware_now())
+                except auth_session_model.DoesNotExist:
+                    if settings.DEBUG:
+                        log_message(f"Session with token {password} does not exist.")
+
                     user = None
+                else:
+                    user = session.user
 
         return user

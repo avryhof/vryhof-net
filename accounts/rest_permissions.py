@@ -1,7 +1,7 @@
 from django.conf import settings
 from rest_framework import permissions
 
-from accounts.session_helpers import get_oauth_session
+from accounts.lib_utils import load_model
 
 
 class AuthorizedAgentPermission(permissions.BasePermission):
@@ -11,7 +11,7 @@ class AuthorizedAgentPermission(permissions.BasePermission):
 
     def has_permission(self, request, view):
         is_authorized = False
-        allowed_agents = getattr(settings, 'ALLOWED_API_AGENTS', '')
+        allowed_agents = getattr(settings, "ALLOWED_API_AGENTS", "")
 
         agent = request.headers.get("KPH-Agent")
 
@@ -25,14 +25,11 @@ class LoggedInPermission(permissions.BasePermission):
     """Check if user is logged in"""
 
     def has_permission(self, request, view):
-        oauth_session = get_oauth_session(request, active=True)
-        if oauth_session is not None:
-            user = oauth_session.user
-        else:
-            user = request.user
+        session_model = load_model("accounts.AuthSession")
 
-        if not user or not user.is_active:
+        try:
+            auth_session = session_model.objects.get(user=request.user)
+        except session_model.DoesNotExist:
             return False
-
         else:
-            return True
+            return auth_session.is_authenticated
