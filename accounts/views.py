@@ -9,7 +9,7 @@ from django.views.generic import TemplateView
 
 from .forms import LoginForm, LoginTokenForm
 from .lib_cookies import set_cookie_in_response, get_cookie_in_request
-from .lib_email_helpers import send_multipart_email
+from .lib_email_helpers import send_multipart_email, send_push
 from .lib_utils import load_model, not_empty, random_password, log_message, is_empty
 
 
@@ -90,21 +90,26 @@ class LoginView(TemplateView):
                 token = session.generate_access_token()
                 login_link = session.get_external_url(request)
 
+                subject = f"[{settings.EMAIL_PREFIX}] Your login token"
+                text_message = f'Your login token is {token}.\n' \
+                               f'Enter it at the prompt, or visit {login_link} to log in.'
+
                 send_multipart_email(
-                    f"[{settings.EMAIL_PREFIX}] Your login token",
+                    subject,
                     [user.email],
                     None,
-                    "accounts/email/login-code-email.html",
-                    {
+                    text_message=text_message,
+                    html_template_path="accounts/email/login-code-email.html",
+                    html_context={
                         "code": token,
                         "message": mark_safe(
-                            "<p>Your login token is {}.</p>"
-                            '<p>Enter it at the prompt, or click <a href="{}">here</a> to log in.</p>'.format(
-                                token, login_link
-                            )
+                            f'<p>Your login token is {token}.</p>'
+                            f'<p>Enter it at the prompt, or click <a href="{login_link}">here</a> to log in.</p>'
                         ),
                     },
                 )
+
+                send_push(text_message, subject)
 
                 return redirect("login-token")
 

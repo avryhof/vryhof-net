@@ -368,7 +368,6 @@ AUTHENTICATION_BACKENDS = (
 
 AUTH_SESSION_LIFETIME = 10  # minutes
 
-
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "accounts.rest_auth.RemoteSessionAuthentication",
@@ -399,3 +398,6 @@ PDL_KEY = "b63861db1bfed5591be4480bf64cd73d743fc981844d8064a5b5fa72dcfa4d83"
 SUBSONIC_URL = os.environ.get("SUBSONIC_URL")
 SUBSONIC_USER = os.environ.get("SUBSONIC_USER")
 SUBSONIC_PASSWORD = os.environ.get("SUBSONIC_PASSWORD")
+
+GOTIFY_URL = os.environ.get("GOTIFY_URL")
+GOTIFY_TOKEN = os.environ.get("GOTIFY_TOKEN")
