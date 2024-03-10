@@ -8,19 +8,17 @@
   .sidebar-container {
     background: var(--body-loud-color);
     border-radius: 8px;
-    background-clip: content-box;
 
     .sidebar-item {
       padding: 0.75em;
 
       a:link, a:visited {
-        color: $whiteSmoke;
+        color: var(--body-fg);
         text-decoration: none;
       }
 
       .icon {
         @include flex-center;
-        position: relative;
         width: 40px;
         height: 40px;
 
@@ -29,22 +27,10 @@
           width: 100%;
 
           img {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            width: 40px !important;
-            height: 40px !important;
-            object-fit: cover;
           }
-        }
-
-        .user-initial {
-          @include flex-center;
-          position: relative;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          color: #333333;
-          background: $whiteSmoke;
-          font-weight: bold;
         }
 
         img[src$= "svg" ] {
@@ -53,7 +39,6 @@
           height: 100%;
         }
       }
-
     }
   }
 }
@@ -118,7 +103,12 @@
 
     .label {
       animation: fadeSlideInFromLeft 0.5s;
-      display: block !important;
+      display: flex !important;
+      flex-direction: column;
+
+      .user-link {
+        display: block;
+      }
 
       a {
         display: inline-block !important;

@@ -944,20 +944,18 @@ input[type=submit], .btn, button {
 .sidebar .sidebar-container {
   background: var(--body-loud-color);
   border-radius: 8px;
-  background-clip: content-box;
 }
 .sidebar .sidebar-container .sidebar-item {
   padding: 0.75em;
 }
 .sidebar .sidebar-container .sidebar-item a:link, .sidebar .sidebar-container .sidebar-item a:visited {
-  color: rgba(245, 245, 245, 0.8);
+  color: var(--body-fg);
   text-decoration: none;
 }
 .sidebar .sidebar-container .sidebar-item .icon {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
   width: 40px;
   height: 40px;
 }
@@ -966,22 +964,9 @@ input[type=submit], .btn, button {
   width: 100%;
 }
 .sidebar .sidebar-container .sidebar-item .icon img img, .sidebar .sidebar-container .sidebar-item .icon .user-icon img {
-  border-radius: 50%;
-  width: 40px !important;
-  height: 40px !important;
-  object-fit: cover;
-}
-.sidebar .sidebar-container .sidebar-item .icon .user-initial {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  color: #333333;
-  background: rgba(245, 245, 245, 0.8);
-  font-weight: bold;
 }
 .sidebar .sidebar-container .sidebar-item .icon img[src$=svg] {
   filter: invert(98%) sepia(4%) saturate(201%) hue-rotate(87deg) brightness(113%) contrast(100%);
@@ -1033,7 +1018,11 @@ input[type=submit], .btn, button {
   }
   .sidebar:hover .label {
     animation: fadeSlideInFromLeft 0.5s;
-    display: block !important;
+    display: flex !important;
+    flex-direction: column;
+  }
+  .sidebar:hover .label .user-link {
+    display: block;
   }
   .sidebar:hover .label a {
     display: inline-block !important;
