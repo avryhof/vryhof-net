@@ -944,6 +944,7 @@ input[type=submit], .btn, button {
 .sidebar .sidebar-container {
   background: var(--body-loud-color);
   border-radius: 8px;
+  background-clip: content-box;
 }
 .sidebar .sidebar-container .sidebar-item {
   padding: 0.75em;
