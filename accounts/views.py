@@ -60,25 +60,27 @@ class LoginView(TemplateView):
                 username = username.lower()
 
             try:
-                user = get_user_model().objects.get(email__iexact=username)
-            except (
-                    get_user_model().DoesNotExist,
-                    get_user_model().MultipleObjectsReturned,
-            ):
+                user = get_user_model().objects.get(username__iexact=username)
+            except get_user_model().DoesNotExist:
                 email_domain_model = load_model("accounts.EmailDomain")
-                if not email_domain_model.is_valid_domain(username):
-                    log_message("Domain not enabled.")
+                if email_domain_model.is_valid_domain(username):
+                    try:
+                        user = get_user_model().objects.get(email__iexact=username)
 
-                else:
-                    user = get_user_model().objects.create(
-                        username=username,
-                        email=username,
-                        password=random_password(),
-                        is_active=True,
-                    )
+                    except get_user_model().MultipleObjectsReturned:
+                        form.add_error("username", "This account cannot login with email address.")
+
+                    except get_user_model().DoesNotExist:
+                        user = get_user_model().objects.create(
+                            username=username,
+                            email=username,
+                            password=random_password(),
+                            is_active=True,
+                        )
 
             if is_empty(user):
                 log_message("User does not exist.")
+                form.add_error("username", "User does not exist.")
 
             else:
                 auth_session_model = load_model("accounts.AuthSession")
@@ -102,8 +104,8 @@ class LoginView(TemplateView):
                     subject,
                     [user.email],
                     None,
-                    text_message=text_message,
-                    html_template_path="accounts/email/login-code-email.html",
+                    request=request,
+                    html_template="accounts/email/login-code-email.html",
                     html_context={
                         "code": token,
                         "message": mark_safe(
@@ -111,6 +113,7 @@ class LoginView(TemplateView):
                             f'<p>Enter it at the prompt, or click <a href="{login_link}">here</a> to log in.</p>'
                         ),
                     },
+                    text_message=text_message,
                 )
 
                 send_push(text_message, subject)

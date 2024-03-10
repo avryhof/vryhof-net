@@ -2,7 +2,7 @@ from django import forms
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(label="Username", max_length=100)
+    username = forms.CharField(label="Username or Email address", max_length=100)
 
 
 class LoginTokenForm(forms.Form):

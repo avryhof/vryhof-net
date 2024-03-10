@@ -17,6 +17,11 @@
                     <div class="field">
                         {{ form.username }}
                     </div>
+                    {% if form.username.errors %}
+                        <div class="error">
+                            {{ form.username.errors }}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="btn-group">
                     <button type="submit">

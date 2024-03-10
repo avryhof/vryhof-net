@@ -22,12 +22,14 @@ class EmailDomain(models.Model):
         if "@" in email:
             email = email.split("@")[1]
 
-        try:
-            cls.objects.get(domain__iexact=email, enabled=True)
-        except cls.DoesNotExist:
-            return False
+            try:
+                cls.objects.get(domain__iexact=email, enabled=True)
+            except cls.DoesNotExist:
+                return False
+            else:
+                return True
 
-        return True
+        return False
 
 
 class AuthSession(models.Model):
