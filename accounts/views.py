@@ -90,7 +90,11 @@ class LoginView(TemplateView):
                 token = session.generate_access_token()
                 login_link = session.get_external_url(request)
 
-                subject = f"[{settings.EMAIL_PREFIX}] Your login token"
+                prefix_setting = getattr(settings, "EMAIL_PREFIX", "")
+                subject_prefix = f"[{prefix_setting}]" if not_empty(prefix_setting) else ""
+                subject_text = "Your login token"
+
+                subject = " ".join([subject_prefix, subject_text]).strip()
                 text_message = f'Your login token is {token}.\n' \
                                f'Enter it at the prompt, or visit {login_link} to log in.'
 

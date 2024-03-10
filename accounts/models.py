@@ -9,7 +9,7 @@ from django.contrib.sessions.models import Session
 from django.db import models
 from django.urls import reverse
 
-from accounts.lib_utils import aware_now, log_message
+from accounts.lib_utils import aware_now, log_message, not_empty
 
 
 class EmailDomain(models.Model):
@@ -67,7 +67,11 @@ class AuthSession(models.Model):
     def get_external_url(self, request):
         request_uri = request.build_absolute_uri()
         url = urlsplit(request_uri)
-        site_url = "%s://%s" % (url.scheme, url.hostname)
+
+        if not_empty(url.port) and url.port not in [80, 443]:
+            site_url = "{}://{}:{}".format(url.scheme, url.hostname, url.port)
+        else:
+            site_url = "{}://{}".format(url.scheme, url.hostname)
 
         external_url = "".join(
             [site_url, reverse("login-token", kwargs={"token": self.token})]

@@ -107,7 +107,6 @@ def send_multipart_email(subject_str, to_list, from_str, **kwargs):
     msg = EmailMultiAlternatives(subject_str, text_message, from_str, to_list)
 
     if not is_empty(html_message):
-        html_message = get_template(html_template_path).render(html_context)
         msg.attach_alternative(html_message, "text/html")
 
     if isinstance(attachments, list):
@@ -129,12 +128,13 @@ def send_push(message, title=None):
     url = getattr(settings, "GOTIFY_URL")
     token = getattr(settings, "GOTIFY_TOKEN")
 
-    if is_empty(title):
-        title = "Notification from {}".format(settings.SITE_NAME)
-
     if not_empty(url) and not_empty(token):
-        resp = requests.post(f'{url}/message?token={token}', json={
-            "message": message,
-            "priority": 2,
-            "title": title
-        })
+        if is_empty(title):
+            title = "Notification from {}".format(settings.SITE_NAME)
+
+        if not_empty(url) and not_empty(token):
+            resp = requests.post(f'{url}/message?token={token}', json={
+                "message": message,
+                "priority": 2,
+                "title": title
+            })
