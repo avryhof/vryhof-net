@@ -992,11 +992,16 @@ input[type=submit], .btn, button {
   }
 }
 @media (min-width: 768px) {
+  .sidebar {
+    min-width: 96px;
+  }
   .sidebar .sidebar-container {
     width: auto;
+    position: fixed;
     display: flex;
     flex-direction: column;
     justify-items: stretch;
+    align-items: center;
   }
   .sidebar .sidebar-container .sidebar-item, .sidebar .sidebar-container .sidebar-item a {
     display: flex;
