@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import logout, get_user_model
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import NoReverseMatch
 from django.utils.decorators import method_decorator
@@ -7,10 +8,11 @@ from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 
-from .forms import LoginForm, LoginTokenForm
+from .forms import LoginForm, LoginTokenForm, UserPreferencesEditForm
 from .lib_cookies import set_cookie_in_response, get_cookie_in_request
 from .lib_email_helpers import send_multipart_email, send_push
-from .lib_utils import load_model, not_empty, random_password, log_message, is_empty
+from .lib_utils import load_model, not_empty, random_password, log_message, is_empty, get_profile
+from .models import UserPrefs
 
 
 class LoginView(TemplateView):
@@ -203,3 +205,55 @@ def sign_out(request):
     request.session.flush()
 
     return redirect(settings.LOGIN_REDIRECT_URL)
+
+
+class AccountProfileView(TemplateView):
+    template_name = "accounts/profile.html"
+    extra_css = ["css/accounts/login.css"]
+    extra_javascript = []
+
+    name = "Account Profile"
+    request = None
+    profile = None
+    form = UserPreferencesEditForm
+
+    def get_context_data(self, **kwargs):
+        context = super(AccountProfileView, self).get_context_data(**kwargs)
+        context["page_title"] = self.name
+        context["extra_css"] = self.extra_css
+        context["extra_javascript"] = self.extra_javascript
+        context["request"] = self.request
+
+        self.profile = get_profile(self.request)
+        context["profile"] = self.profile
+        context["form"] = self.form(instance=self.profile)
+
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.request = request
+        context = self.get_context_data()
+
+        return render(request, self.template_name, context)
+
+    @method_decorator(csrf_protect)
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(AccountProfileView, self).dispatch(request, *args, **kwargs)
+
+
+class AccountProfileEditView(AccountProfileView):
+    template_name = "accounts/profile-edit.html"
+
+    def post(self, request, *args, **kwargs):
+        self.request = request
+        context = self.get_context_data()
+
+        self.form = self.form(request.POST, request.FILES, instance=self.profile)
+        if self.form.is_valid():
+            self.profile = self.form.save()
+            return redirect("account-profile")
+
+        context["form"] = self.form
+
+        return render(request, self.template_name, context)

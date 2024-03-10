@@ -9,7 +9,7 @@ from django.contrib.sessions.models import Session
 from django.db import models
 from django.urls import reverse
 
-from accounts.lib_utils import aware_now, log_message, not_empty
+from accounts.lib_utils import aware_now, log_message, not_empty, is_empty
 
 
 class EmailDomain(models.Model):
@@ -56,9 +56,7 @@ class AuthSession(models.Model):
         length = random.randint(8, 16)
 
         self.token = "".join(random.choice(valid_chars) for i in range(length))
-        self.expires_at = aware_now() + datetime.timedelta(
-            minutes=settings.AUTH_SESSION_LIFETIME
-        )
+        self.expires_at = aware_now() + datetime.timedelta(minutes=settings.AUTH_SESSION_LIFETIME)
         self.save()
 
         if settings.DEBUG:
@@ -75,9 +73,7 @@ class AuthSession(models.Model):
         else:
             site_url = "{}://{}".format(url.scheme, url.hostname)
 
-        external_url = "".join(
-            [site_url, reverse("login-token", kwargs={"token": self.token})]
-        )
+        external_url = "".join([site_url, reverse("login-token", kwargs={"token": self.token})])
 
         if settings.DEBUG:
             log_message(f"External login url: {external_url}.")
@@ -125,6 +121,56 @@ class UserPrefs(models.Model):
         primary_key=True,
         on_delete=models.CASCADE,
     )
+    first_name = models.CharField(max_length=150, blank=True, null=True)
+    last_name = models.CharField(max_length=150, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
     photo = models.ImageField(blank=True, null=True)
-    pages_open = models.BooleanField(default=True)
-    last_url = models.URLField(blank=True, null=True)
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None, **kwargs):
+        after_sync = kwargs.pop("after_sync", False)
+        if not after_sync:
+            self.sync_user()
+
+        super().save(force_insert, force_update, using, update_fields)
+
+    def sync_user(self):
+        self_changed = False
+        user_changed = False
+
+        if not_empty(self.user.email) and is_empty(self.email):
+            self_changed = True
+            self.email = self.user.email
+
+        if not_empty(self.email) and self.user.email != self.email:
+            user_changed = True
+            self.user.email = self.email
+
+        if not_empty(self.user.first_name) and is_empty(self.first_name):
+            self_changed = True
+            self.first_name = self.user.first_name
+
+        if not_empty(self.first_name) and self.user.first_name != self.first_name:
+            user_changed = True
+            self.user.first_name = self.first_name
+
+        if not_empty(self.user.last_name) and is_empty(self.last_name):
+            self_changed = True
+            self.last_name = self.user.last_name
+
+        if not_empty(self.last_name) and self.user.last_name != self.last_name:
+            user_changed = True
+            self.user.last_name = self.last_name
+
+        if self_changed:
+            self.save(after_sync=True)
+
+        if user_changed:
+            self.user.save()
+
+    @property
+    def name(self):
+        combined_name = " ".join([x for x in [self.first_name, self.last_name] if isinstance(x, str)]).strip()
+        if not_empty(combined_name):
+            return combined_name
+
+        return self.user.username

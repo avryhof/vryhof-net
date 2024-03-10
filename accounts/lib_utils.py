@@ -54,6 +54,14 @@ def load_model(app_name, model_name=None):
         )
 
 
+def get_profile(request):
+    profile_model = load_model("accounts.UserPrefs")
+    try:
+        return profile_model.objects.get(user=request.user)
+    except profile_model.DoesNotExist:
+        return profile_model.objects.create(user=request.user)
+
+
 def log_message(message, **kwargs):
     pretty = kwargs.get("pretty", False)
     ip_address = kwargs.get("ip_address", False)

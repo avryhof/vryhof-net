@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block page %}
+    <div id="login-container">
+        <div class="login-form-container">
+            <form action="{% url 'account-profile-edit' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-title">
+                    <div>{% trans 'Edit Profile' %}</div>
+                    <div>
+                        <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <div class="label">
+                        <label for="{{ form.first_name.id_for_label }}">
+                            {{ form.first_name.label }}
+                        </label>
+                    </div>
+                    <div class="field">
+                        {{ form.first_name }}
+                    </div>
+                    {% if form.first_name.errors %}
+                        <div class="error">
+                            {{ form.first_name.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="field-group">
+                    <div class="label">
+                        <label for="{{ form.last_name.id_for_label }}">
+                            {{ form.last_name.label }}
+                        </label>
+                    </div>
+                    <div class="field">
+                        {{ form.last_name }}
+                    </div>
+                    {% if form.last_name.errors %}
+                        <div class="error">
+                            {{ form.last_name.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="field-group">
+                    <div class="label">
+                        <label for="{{ form.email.id_for_label }}">
+                            {{ form.email.label }}
+                        </label>
+                    </div>
+                    <div class="field">
+                        {{ form.email }}
+                    </div>
+                    {% if form.email.errors %}
+                        <div class="error">
+                            {{ form.email.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="field-group">
+                    <div class="label">
+                        <label for="{{ form.photo.id_for_label }}">
+                            {{ form.photo.label }}
+                        </label>
+                    </div>
+                    <div class="field">
+                        {{ form.photo }}
+                    </div>
+                    {% if form.photo.errors %}
+                        <div class="error">
+                            {{ form.photo.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}

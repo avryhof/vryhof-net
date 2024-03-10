@@ -15,8 +15,5 @@ class AuthSessionAdmin(admin.ModelAdmin):
 
 
 @admin.register(UserPrefs)
-class UserPrefsAdmin(admin.ModelAdmin):
-    list_display = ["user"]
-
-
-
+class UserPreferencesAdmin(admin.ModelAdmin):
+    list_display = ["user", "first_name", "last_name", "email"]

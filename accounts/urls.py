@@ -9,4 +9,6 @@ urlpatterns = [
     path("login/token/", LoginTokenView.as_view(), name="login-token"),
     path("signout/", sign_out, name="logout"),
     path("sign-out/", RedirectView.as_view(pattern_name="logout"), name="signout"),
+    path("profile/edit/", AccountProfileEditView.as_view(), name="account-profile-edit"),
+    path("profile/", AccountProfileView.as_view(), name="account-profile"),
 ]

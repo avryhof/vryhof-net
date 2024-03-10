@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block page %}
+    <div id="login-container">
+        <div class="login-form-container">
+            <div class="form-title">
+                <div>{% trans 'Profile' %}</div>
+                <div><a href="{% url 'account-profile-edit' %}" class="btn btn-primary">{% trans 'Edit' %}</a></div>
+            </div>
+
+            <div class="field-group">
+                <div class="label">
+                    {% trans 'First Name' %}
+                </div>
+                <div class="field">
+                    {{ profile.first_name }}
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="label">
+                    {% trans 'Last Name' %}
+                </div>
+                <div class="field">
+                    {{ profile.last_name }}
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="label">
+                    {% trans 'Email Address' %}
+                </div>
+                <div class="field">
+                    {{ profile.email }}
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="label">
+                    {% trans 'Photo' %}
+                </div>
+                <div class="field">
+                    {% if profile.photo %}
+                        <img src="{{ profile.photo.url }}" class="profile-photo" alt="{{ profile.photo_alt }}">
+                    {% else %}
+                        {% trans 'No profile photo.' %}
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
