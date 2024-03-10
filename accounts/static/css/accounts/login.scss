@@ -15,7 +15,13 @@
     padding: 0;
 
     .form-title {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
       padding: 0.5em;
+      font-weight: bold;
       color: var(--body-bg);
       background: var(--body-fg);
     }
@@ -26,7 +32,7 @@
         width: 100%;
         padding: 0.5em;
 
-        input {
+        input, img {
           width: 100%;
           margin: 0;
         }

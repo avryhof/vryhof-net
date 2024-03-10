@@ -19,7 +19,12 @@
   padding: 0;
 }
 #login-container .login-form-container .form-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   padding: 0.5em;
+  font-weight: bold;
   color: var(--body-bg);
   background: var(--body-fg);
 }
@@ -30,7 +35,7 @@
   width: 100%;
   padding: 0.5em;
 }
-#login-container .login-form-container .field-group .label input, #login-container .login-form-container .field-group .field input, #login-container .login-form-container .btn-group .label input, #login-container .login-form-container .btn-group .field input {
+#login-container .login-form-container .field-group .label input, #login-container .login-form-container .field-group .label img, #login-container .login-form-container .field-group .field input, #login-container .login-form-container .field-group .field img, #login-container .login-form-container .btn-group .label input, #login-container .login-form-container .btn-group .label img, #login-container .login-form-container .btn-group .field input, #login-container .login-form-container .btn-group .field img {
   width: 100%;
   margin: 0;
 }
