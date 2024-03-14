@@ -1002,7 +1002,7 @@ input[type=submit], .btn, button {
     display: flex;
     flex-direction: column;
     justify-items: stretch;
-    align-items: center;
+    align-items: flex-start;
   }
   .sidebar .sidebar-container .sidebar-item, .sidebar .sidebar-container .sidebar-item a {
     display: flex;
