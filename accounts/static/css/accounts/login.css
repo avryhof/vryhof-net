@@ -35,7 +35,7 @@
   width: 100%;
   padding: 0.5em;
 }
-#login-container .login-form-container .field-group .label input, #login-container .login-form-container .field-group .label img, #login-container .login-form-container .field-group .field input, #login-container .login-form-container .field-group .field img, #login-container .login-form-container .btn-group .label input, #login-container .login-form-container .btn-group .label img, #login-container .login-form-container .btn-group .field input, #login-container .login-form-container .btn-group .field img {
+#login-container .login-form-container .field-group .label input, #login-container .login-form-container .field-group .field input, #login-container .login-form-container .btn-group .label input, #login-container .login-form-container .btn-group .field input {
   width: 100%;
   margin: 0;
 }
@@ -43,6 +43,19 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+}
+#login-container .login-form-container .profile-photo-field {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+}
+#login-container .login-form-container .profile-photo-field .profile-photo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 @media (max-width: 900px) {

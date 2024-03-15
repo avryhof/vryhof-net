@@ -28,20 +28,35 @@
 
     .field-group, .btn-group {
       padding: 0.5em 0.5em 0 0.5em;
+
       .label, .field {
         width: 100%;
         padding: 0.5em;
 
-        input, img {
+        input {
           width: 100%;
           margin: 0;
         }
       }
     }
+
     .btn-group {
       display: flex;
       flex-direction: row;
       justify-content: flex-end;
+    }
+
+    .profile-photo-field {
+      @include flex-center;
+      width: 100%;
+      margin: 0;
+
+      .profile-photo {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
     }
   }
 }
