@@ -1009,12 +1009,20 @@ input[type=submit], .btn, button {
     flex-direction: row;
     align-items: center;
   }
+  .sidebar .sidebar-container .sidebar-item .icon, .sidebar .sidebar-container .sidebar-item a .icon {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
   .sidebar .sidebar-container .sidebar-item .label, .sidebar .sidebar-container .sidebar-item a .label {
     display: none;
     white-space: nowrap;
   }
   .sidebar .sidebar-container .sidebar-item .label a, .sidebar .sidebar-container .sidebar-item a .label a {
     display: none;
+  }
+  .sidebar .sidebar-container .sidebar-item.user-sidebar-item {
+    align-items: flex-start !important;
   }
   .sidebar .sidebar-container hr {
     width: 100%;

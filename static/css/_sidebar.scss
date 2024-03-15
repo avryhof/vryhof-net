@@ -86,6 +86,12 @@
         flex-direction: row;
         align-items: center;
 
+        .icon {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
         .label {
           display: none;
           white-space: nowrap;
@@ -94,6 +100,10 @@
             display: none;
           }
         }
+      }
+
+      .sidebar-item.user-sidebar-item {
+        align-items: flex-start !important;
       }
 
       hr {
