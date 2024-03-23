@@ -1037,6 +1037,7 @@ input[type=submit], .btn, button {
   }
   .sidebar:hover .label .user-link {
     display: block;
+    padding: 0.5em 0 0.5em 0;
   }
   .sidebar:hover .label a {
     display: inline-block !important;
