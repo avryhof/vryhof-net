@@ -3,11 +3,14 @@ import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.timezone import make_aware
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
+
+from utilities.debugging import get_client_ip, get_ua_string
 
 from firefox.forms import SearchForm
 from firefox.models import NewsItem
@@ -127,3 +130,15 @@ class SignatureView(TemplateView):
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
         return super(SignatureView, self).dispatch(*args, **kwargs)
+
+
+def my_ip_address(request):
+    client_ip = get_client_ip(request)
+    ua_string = get_ua_string(request)
+
+    if request.user.is_authenticated:
+        log_exception(
+            request, None, message=f"IP Address for {request.user.username} ({request.user.email}): {client_ip}"
+        )
+
+    return HttpResponse(f"{client_ip}\n{ua_string}")

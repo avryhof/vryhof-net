@@ -81,3 +81,26 @@ def time_in_words(total_seconds):
         time_parts.append("%i seconds" % time_dict["seconds"])
 
     return ", ".join(time_parts)
+
+
+def get_ua_string(request):
+    if not hasattr(request, "META"):
+        return ""
+
+    ua_string = request.META.get("HTTP_USER_AGENT", "")
+    if not isinstance(ua_string, str):
+        ua_string = ua_string.decode("utf-8", "ignore")
+
+    return ua_string
+
+
+def get_client_ip(request):
+    """
+    Get Client IP from the HTTP Requst.
+    """
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(",")[0]
+    else:
+        ip = request.META.get("REMOTE_ADDR")
+    return ip
