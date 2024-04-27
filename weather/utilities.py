@@ -81,6 +81,7 @@ def get_weather():
                         windgustmph=current_conditions.get("windgustmph"),
                         windspeedmph=current_conditions.get("windspeedmph"),
                         windspdmph_avg10m=current_conditions.get("windspdmph_avg10m"),
+                        batt_co2=current_conditions.get("batt_co2")
                     )
                     log_message(
                         "Current weather data collected on %s from %s (%s)"
