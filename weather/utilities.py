@@ -122,6 +122,7 @@ def get_weather():
             log_message(weather_data)
         else:
             log_message("APRS Packet sent successfully.")
+            log_message(packet)
 
 
 def translate_datetime(date_string, time_string):
