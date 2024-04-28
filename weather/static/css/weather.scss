@@ -1,8 +1,96 @@
+@import "../../../static/css/_vars.scss";
+@import "../../../static/css/_mixins.scss";
+
 .leaflet-container {
-    width: 100% !important;
-    max-width: 600px !important;
-    height: 400px !important;
-    border: 1px solid #dcdcdc !important;
-    border-bottom: 5px solid #dcdcdc !important;
-    margin: 0 0 10px 0;
+  width: 100% !important;
+  max-width: 600px !important;
+  height: 400px !important;
+  border: 1px solid #dcdcdc !important;
+  border-bottom: 5px solid #dcdcdc !important;
+  margin: 0 0 10px 0;
+}
+
+.current-conditions {
+  width: 100% !important;
+  max-width: 300px !important;
+}
+
+.weather-table {
+  tr {
+    th, td {
+      vertical-align: top;
+      padding-bottom: 0.5em;
+    }
+  }
+
+}
+
+.forecast {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+
+  .forecast-day {
+    box-sizing: border-box;
+    width: calc(100% / 4);
+    padding: 0.25em;
+    border: 1px solid var(--body-quiet-color);
+
+    display: flex;
+    flex-direction: column;
+
+    .day-name, .icon, .temperature, .details {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0.5em;
+    }
+
+    .day-name, .icon, .temperature {
+      @include flex-center;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+
+      .field-title, .field-value {
+        @include flex-center;
+        padding: 0.25em;
+      }
+
+      .field-title {
+        font-weight: bold;
+        background-color: var(--body-quiet-color);
+      }
+    }
+
+    .day-name {
+      background-color: var(--body-quiet-color);
+    }
+
+    .icon {
+      img {
+        width: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .temperature {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    .forecast-row {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      box-sizing: border-box;
+
+      .field {
+        width: 50%;
+      }
+    }
+
+  }
 }

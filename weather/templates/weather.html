@@ -1,9 +1,8 @@
 {% extends 'page-base.html' %}
-{% load  static leaflet %}
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static "/leaflet/leaflet.css" %}"/>
-    <script src="{% static "/leaflet/leaflet.js" %}"></script>
-{#    {% leaflet_tiles %}#}
+{% load  static leaflet weather_tags %}
+{% block css %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 {% endblock %}
 {% block page_content %}
     <div class="container">
@@ -16,67 +15,95 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-8">
                     <h3>Current Conditions</h3>
-                    <table class="table">
-                        <tr>
-                            <td>
-                                Date:
-                            </td>
-                            <td>
+                    <div class="forecast">
+                        <div class="forecast-day current-conditions">
+                            <div class="day-name">
                                 {{ weather_station.data.date }}
-                            </td>
-                        </tr>
+                            </div>
+                            <div class="temperature">
+                                {{ weather_station.data.tempf }}&deg;F
+                            </div>
+                            <div class="forecast-row">
+                                <div class="field">
+                                    <div class="field-title">Feels Like</div>
+                                    <div class="field-value">
+                                        {{ weather_station.data.feels_like }}&deg;F
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="field-title">Indoor</div>
+                                    <div class="field-value">
+                                        {{ weather_station.data.tempinf }}&deg;F
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="forecast-row">
+                                <div class="dewpoint field">
+                                    <div class="field-title">Dewpoint</div>
+                                    <div class="field-value">{{ weather_station.data.dew_point|round_number:1 }}&deg;
+                                        C
+                                    </div>
+                                </div>
+                                <div class="relative_humidity field">
+                                    <div class="field-title">Humidity</div>
+                                    <div class="field-value">{{ weather_station.data.humidity|intval }}%</div>
+                                </div>
+                            </div>
+                            <div class="forecast-row">
+                                <div class="field">
+                                    <div class="field-title">
+                                        Wind Speed
+                                    </div>
+                                    <div class="field-value">
+                                        {{ weather_station.data.windspeedmph }} mph
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="field-title">
+                                        Wind Dir.
+                                    </div>
+                                    <div class="field-value">
+                                        {% calc_direction weather_station.data.winddir %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table weather-table">
                         <tr>
-                            <td>
-                                Temperature
-                            </td>
-                            <td>
-                                {{ weather_station.data.tempf }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Feels Like
-                            </td>
-                            <td>
-                                {{ weather_station.data.feels_like }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
+                            <th>
                                 Rain
-                            </td>
+                            </th>
                             <td>
-                                <p>
-                                    Last reported: {{ weather_station.data.last_rain }}<br>
-                                    Reported Amount: {{ weather_station.data.eventrainin }} in.<br>
-                                    Reported in the last 24 hours: {{ weather_station.data.dailyrainin }} in.<br>
-                                    Reported this week: {{ weather_station.data.weeklyrainin }} in.<br>
-                                </p>
+                                Last reported: {{ weather_station.data.last_rain }}<br>
+                                Reported Amount: {{ weather_station.data.eventrainin }} in.<br>
+                                Reported in the last 24 hours: {{ weather_station.data.dailyrainin }} in.<br>
+                                Reported this week: {{ weather_station.data.weeklyrainin }} in.<br>
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <th>
                                 Wind
-                            </td>
+                            </th>
                             <td>
-                                <p>
-                                    Current Wind Speed: {{ weather_station.data.windspeedmph }} mph<br>
-                                    Current Gust Speed: {{ weather_station.data.windgustmph }} mph<br>
-                                    Max Daily Gust speed: {{ weather_station.data.maxdailygust }} mph
-                                </p>
+                                Current Wind Speed: {{ weather_station.data.windspeedmph }} mph<br>
+                                Current Gust Speed: {{ weather_station.data.windgustmph }} mph<br>
+                                Max Daily Gust speed: {{ weather_station.data.maxdailygust }} mph
                             </td>
                         </tr>
                     </table>
-{#                    <hr>#}
-{#                    <img src="https://www.vryhofresearch.com/vryhof/media/weather/snapshot.jpg" alt="Weather Cam Image"#}
-{#                         class="img-responsive" width="100%">#}
+                    {#                    <hr>#}
+                    {#                    <img src="https://www.vryhofresearch.com/vryhof/media/weather/snapshot.jpg" alt="Weather Cam Image"#}
+                    {#                         class="img-responsive" width="100%">#}
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <div id="{{ weather_station.station.name }}_map"></div>
+                    <div id="{{ weather_station.station.name }}_map" class="leaflet-container"></div>
                     <script integrity="sha384-PWWwLiclKVytOQTW9jFkFGEcdQ4BlGqYY9CZ2QB8xCU1Vh9NwsbZEvhz1vfLodDy">
                         var {{ weather_station.station.name }}_coords = [{{ weather_station.station.latitude }}, {{ weather_station.station.longitude }}];
                         var {{ weather_station.station.name }}_marker_coords = [{{ weather_station.station.latitude }}, {{ weather_station.station.longitude }}];
                         var {{ weather_station.station.name }}_map = L.map('{{ weather_station.station.name }}_map').setView({{ weather_station.station.name }}_coords, 16);
+
                         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                             maxZoom: 18,
                             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ',
@@ -120,6 +147,15 @@
                             </li>
                         {% endif %}
                     </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="forecast">
+                        {% for forecast in weather_station.forecasts %}
+                            {% include "forecast-day.html" %}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         {% endfor %}

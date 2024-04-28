@@ -1,0 +1,48 @@
+{% load weather_tags %}
+
+<div class="forecast-day">
+    <div class="day-name">
+        {{ forecast.day_name }}
+    </div>
+    <div class="icon">
+        <img src="{{ forecast.icon }}" alt="{{ forecast.short }}">
+    </div>
+    <div class="temperature">
+        {{ forecast.temperature_value|intval }}&deg; {{ forecast.temperature_unit }}
+    </div>
+    <div class="rain-chance field">
+        <div class="field-title">Chance of Rain</div>
+        <div class="field-value">{{ forecast.precipitation_probability_value }}&percnt;</div>
+    </div>
+    <div class="forecast-row">
+        <div class="dewpoint field">
+            <div class="field-title">Dewpoint</div>
+            <div class="field-value">{{ forecast.dewpoint_value|round_number:1 }}&deg; C</div>
+        </div>
+        <div class="relative_humidity field">
+            <div class="field-title">Humidity</div>
+            <div class="field-value">{{ forecast.relative_humidity_value|intval }}%</div>
+        </div>
+    </div>
+    <div class="forecast-row">
+        <div class="field">
+            <div class="field-title">
+                Wind Speed
+            </div>
+            <div class="field-value">
+                {{ forecast.wind_speed }}
+            </div>
+        </div>
+        <div class="field">
+            <div class="field-title">
+                Wind Dir.
+            </div>
+            <div class="field-value">
+                {{ forecast.wind_direction }}
+            </div>
+        </div>
+    </div>
+    <div class="details">
+        {{ forecast.forecast_detailed }}
+    </div>
+</div>

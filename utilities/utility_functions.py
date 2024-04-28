@@ -284,3 +284,11 @@ def years_ago(years=18, end_date=False):
 
 def is_empty(value):
     return value in [False, None, "", {}, [], ()]
+
+
+def strip_trailing_zeroes(value):
+    value = str(value)
+    while value[-1] == "0":
+        value = value[:-1]
+
+    return value

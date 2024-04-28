@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import pprint
+
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -6,7 +8,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView
 
 from weather.models import WeatherData, WeatherStation, WeatherImages
-from weather.utilities import get_weather, translate_datetime, translate_date
+from weather.utilities import translate_datetime, translate_date
 
 
 class WeatherView(TemplateView):
@@ -37,11 +39,19 @@ class WeatherView(TemplateView):
             weatherdata = {"tempf": "--"}
 
             try:
-                weatherdata = WeatherData.objects.filter(station=station).latest("local_date")
+                weatherdata = WeatherData.objects.filter(station=station).latest(
+                    "local_date"
+                )
             except WeatherData.DoesNotExist:
                 pass
 
-            weather_stations.append({"station": station, "data": weatherdata})
+            weather_stations.append(
+                {
+                    "station": station,
+                    "data": weatherdata,
+                    "forecasts": station.nws_point.forecast_data,
+                }
+            )
 
         context["weather_stations"] = weather_stations
 
@@ -65,7 +75,10 @@ def weather_image(request, *args, **kwargs):
         if len(time) == 2:
             # newest image within an hour
             search_dict.update(
-                dict(time__gte=translate_datetime(date, ltimestring), time__lte=translate_datetime(date, utimestring))
+                dict(
+                    time__gte=translate_datetime(date, ltimestring),
+                    time__lte=translate_datetime(date, utimestring),
+                )
             )
 
         elif len(time) == 4:
