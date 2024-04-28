@@ -12,7 +12,6 @@
 
 .current-conditions {
   width: 100% !important;
-  max-width: 300px !important;
 }
 
 .weather-table {
@@ -27,15 +26,14 @@
 
 .forecast {
   display: flex;
-  flex-direction: row;
+  width: 100%;
+  flex-direction: column;
   flex-wrap: wrap;
   box-sizing: border-box;
 
   .forecast-day {
     box-sizing: border-box;
-    width: calc(100% / 4);
     padding: 0.25em;
-    border: 1px solid var(--body-quiet-color);
 
     display: flex;
     flex-direction: column;
@@ -91,6 +89,28 @@
         width: 50%;
       }
     }
-
   }
+}
+
+@media (max-width: $sm) {
+  .row {
+    flex-direction: column;
+  }
+}
+
+
+@media (min-width: $sm) {
+  .current-conditions {
+    max-width: 300px !important;
+  }
+
+  .forecast {
+    flex-direction: row;
+
+    .forecast-day {
+      width: calc(100% / 4);
+      border: 1px solid var(--body-quiet-color);
+    }
+  }
+
 }

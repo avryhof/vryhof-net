@@ -54,8 +54,12 @@ a:hover, a:active {
 }
 
 @media (max-width: $sm) {
-  .content-container {
-    margin-bottom: 150px;
+  .page-container {
+    .content-container {
+      margin-top: 70px;
+      margin-bottom: 150px;
+      padding: 0.5em;
+    }
   }
 }
 

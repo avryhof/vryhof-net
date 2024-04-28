@@ -87,8 +87,14 @@
   }
 
   .container {
-    margin-left: 10px;
-    margin-right: 10px;
+    .row {
+      width: 100%;
+
+      [class*=col-], .col {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
   }
 
   .hidden-xs {

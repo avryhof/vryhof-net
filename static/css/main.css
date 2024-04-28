@@ -113,9 +113,12 @@ h2, .h2 {
     margin: 0;
     padding: 0;
   }
-  .container {
-    margin-left: 10px;
-    margin-right: 10px;
+  .container .row {
+    width: 100%;
+  }
+  .container .row [class*=col-], .container .row .col {
+    padding-left: 0;
+    padding-right: 0;
   }
   .hidden-xs {
     display: none !important;

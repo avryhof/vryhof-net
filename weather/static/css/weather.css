@@ -16,7 +16,6 @@
 
 .current-conditions {
   width: 100% !important;
-  max-width: 300px !important;
 }
 
 .weather-table tr th, .weather-table tr td {
@@ -26,15 +25,14 @@
 
 .forecast {
   display: flex;
-  flex-direction: row;
+  width: 100%;
+  flex-direction: column;
   flex-wrap: wrap;
   box-sizing: border-box;
 }
 .forecast .forecast-day {
   box-sizing: border-box;
-  width: 25%;
   padding: 0.25em;
-  border: 1px solid var(--body-quiet-color);
   display: flex;
   flex-direction: column;
 }
@@ -81,6 +79,24 @@
 }
 .forecast .forecast-day .forecast-row .field {
   width: 50%;
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+}
+@media (min-width: 768px) {
+  .current-conditions {
+    max-width: 300px !important;
+  }
+  .forecast {
+    flex-direction: row;
+  }
+  .forecast .forecast-day {
+    width: 25%;
+    border: 1px solid var(--body-quiet-color);
+  }
 }
 
 /*# sourceMappingURL=weather.css.map */
