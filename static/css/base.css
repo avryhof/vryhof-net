@@ -121,9 +121,12 @@
     margin: 0;
     padding: 0;
   }
-  .container {
-    margin-left: 10px;
-    margin-right: 10px;
+  .container .row {
+    width: 100%;
+  }
+  .container .row [class*=col-], .container .row .col {
+    padding-left: 0;
+    padding-right: 0;
   }
   .hidden-xs {
     display: none !important;
@@ -1319,8 +1322,10 @@ a:hover, a:active {
 }
 
 @media (max-width: 768px) {
-  .content-container {
+  .page-container .content-container {
+    margin-top: 70px;
     margin-bottom: 150px;
+    padding: 0.5em;
   }
 }
 @media (min-width: 768px) {
