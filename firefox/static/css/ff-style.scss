@@ -9,6 +9,7 @@
 
 .post-container {
   width: 100%;
+  box-sizing: border-box;
 
   display: flex;
   flex-direction: column;
@@ -86,8 +87,11 @@
         display: none;
       }
 
-      img {
+      img, figure {
+        box-sizing: border-box;
         max-width: 100% !important;
+        object-fit: contain !important;
+        height: auto !important;
       }
     }
 

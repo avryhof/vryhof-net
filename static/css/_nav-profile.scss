@@ -34,3 +34,9 @@
     }
   }
 }
+
+@media (max-width: $sm) {
+  .nav-profile {
+    right: 70px;
+  }
+}

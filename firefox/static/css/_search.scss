@@ -21,13 +21,19 @@
 
     .form-group:first-of-type {
       flex: 3 0 0;
-        label {
-          flex: 1 0 0;
-          text-align: center;
-        }
-        .form-control {
-          flex: 9 0 0;
-        }
+
+      label {
+        flex: 1 0 0;
+        text-align: center;
+      }
+
+      label[for=id_search] {
+        display: none;
+      }
+
+      .form-control {
+        flex: 9 0 0;
+      }
     }
   }
 }
@@ -107,6 +113,10 @@
   .search-container {
     #search-form {
       max-width: 50%;
+
+      label[for=id_search] {
+        display: block;
+      }
     }
   }
 }

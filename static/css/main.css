@@ -522,6 +522,11 @@ input[type=submit], .btn, button {
   padding: 1em;
 }
 
+@media (max-width: 768px) {
+  .nav-profile {
+    right: 70px;
+  }
+}
 .login-container {
   display: flex;
   justify-items: center;
