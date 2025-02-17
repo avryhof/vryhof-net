@@ -66,7 +66,7 @@ INSTALLED_APPS = [
     "navbar",
     "firefox",
     "import_export",
-    # "livechat",
+    "livechat",
     "weather",
     "blog",
     "planner",
