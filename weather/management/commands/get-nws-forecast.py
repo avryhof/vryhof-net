@@ -1,9 +1,7 @@
-import pprint
-
 from dateutil.parser import parse
 from django.core.management import BaseCommand
 
-from utilities.utility_functions import aware_now
+from utilities.utility_functions import aware_now, is_empty
 from weather.models import WeatherStation, NWSPoint, NWSForecast
 
 
@@ -25,13 +23,13 @@ class Command(BaseCommand):
                 grid_y=point_data.get("properties", {}).get("gridY"),
                 radar_station=point_data.get("properties", {}).get("radarStation"),
                 city=point_data.get("properties", {})
-                .get("relativeLocation", {})
-                .get("properties", {})
-                .get("city"),
+                    .get("relativeLocation", {})
+                    .get("properties", {})
+                    .get("city"),
                 state=point_data.get("properties", {})
-                .get("relativeLocation", {})
-                .get("properties", {})
-                .get("state"),
+                    .get("relativeLocation", {})
+                    .get("properties", {})
+                    .get("state"),
             )
 
             nws_point.link_postal_code()
@@ -57,7 +55,7 @@ class Command(BaseCommand):
         except TypeError:
             print("updated", forecast.get("updated"))
 
-        if forecasts.count() == 0 or updated > last_updated:
+        if forecasts.count() == 0 or (is_empty(updated) or is_empty(last_updated)) or (updated > last_updated):
             NWSForecast.objects.filter(point=nws_point).delete()
 
             elevation_unit = forecast.get("elevation", {}).get("unitCode")
